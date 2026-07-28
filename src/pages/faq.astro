@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro'
+const faqs = [
+  { q: 'Where do sessions happen?', a: 'We can meet at the St. Paul Brantford Public Library Branch, your house, or even online (Google Meets). We confirm the exact meeting spot when we confirm your booking.' },
+  { q: 'How does payment work?', a: 'Cash, at the session. No deposit, nothing charged online, no card needed. Your first session is half price.' },
+  { q: 'What if I need to cancel?', a: 'Give us 24 hours notice and it is free. Inside 24 hours, or a no-show, we ask for half the session rate.' },
+  { q: 'Do you tutor groups?', a: 'Yes. Two or three friends can book one tutor together at the small group rate. For anything bigger, ask us first.' },
+  { q: 'Which grades do you teach?', a: 'Mostly grades 8 to 12. Coding and chess are open to younger students too. If you are unsure, just ask.' },
+  { q: 'Do parents need to stay?', a: 'That is up to you and your parents. Many students work fine on their own. Parents are always welcome to stay or to check in at the end.' },
+  { q: 'I am totally lost in class. Can you still help?', a: 'That is our specialty. We find the exact point where things stopped making sense and rebuild from there. Being behind is a starting point, not a problem.' },
+  { q: 'Test prep or homework help?', a: 'Both. Bring homework you are stuck on, or bring a test date and we will build a review plan around it.' },
+  { q: 'How fast do you confirm bookings?', a: 'Within a day, usually much faster. You will get a text or email confirming the time and place.' },
+  { q: 'Can I get the same tutor every week?', a: 'Yes, and we encourage it. Consistency is most of the battle. When you book, mention that you want a standing weekly slot.' },
+  { q: 'What should I bring?', a: 'Your textbook or notes, a recent quiz or test if you have one, and the specific problem or topic. Each subject page has a "what to bring" note.' },
+]
+---
+<Layout title="FAQ · StudyHall" description="Answers to the questions parents and students ask most about our tutoring.">
+  <section class="container">
+    <p class="section-label">FAQ</p>
+    <h1>Questions parents and students actually ask.</h1>
+
+    <div class="faq-list">
+      {faqs.map((f) => (
+        <details class="faq-item">
+          <summary>{f.q}</summary>
+          <div class="faq-body"><p>{f.a}</p></div>
+        </details>
+      ))}
+    </div>
+
+    <p style="margin-top: 3rem;">
+      Still curious? <a href="/contact">Send us a message</a> and we will answer within a day.
+    </p>
+  </section>
+</Layout>

@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+<Layout title="Pricing · StudyHall" description="Simple cash pricing for one-on-one and small group tutoring. No online fees, no card on file.">
+  <section class="container">
+    <p class="section-label">Pricing</p>
+    <h1>One rate. Paid in cash. No surprises.</h1>
+    <p class="lead" style="margin-top: 1rem;">
+      We keep it simple because we are students too. You pay at the session, in cash.
+      No accounts, no card on file, no online fees.
+    </p>
+
+    <div class="rate-card">
+      <!-- CHANGE THESE PRICES before launch. They are placeholders. -->
+      <div class="rate-row">
+        <div><span class="rate-name">One-on-one, 1 hour</span><span class="rate-desc">Any subject, just you and your tutor.</span></div>
+        <span class="rate-dots"></span>
+        <span class="rate-price">$15</span>
+      </div>
+      <div class="rate-row">
+        <div><span class="rate-name">One-on-one, 90 minutes</span><span class="rate-desc">For deeper work or exam review.</span></div>
+        <span class="rate-dots"></span>
+        <span class="rate-price">$22</span>
+      </div>
+      <div class="rate-row">
+        <div><span class="rate-name">Pack of 5 sessions</span><span class="rate-desc">Five one-hour sessions, paid up front. Save $10.</span></div>
+        <span class="rate-dots"></span>
+        <span class="rate-price">$65</span>
+      </div>
+      <div class="rate-row">
+        <div><span class="rate-name">Small group, per student</span><span class="rate-desc">Two or three friends, one tutor, split the cost.</span></div>
+        <span class="rate-dots"></span>
+        <span class="rate-price">$10<small>/hr</small></span>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="callout-num">50%</span>
+      <p><strong>Your first session is half price.</strong> Try us out. If it is not a fit, it barely cost you anything.</p>
+    </div>
+
+    <div class="cancellation-section" style="margin-top: 3rem;">
+      <h2>Cancellations</h2>
+      <p class="lead" style="margin-top: 0.5rem;">
+        Need to reschedule? Give us at least 24 hours' notice and you won't be charged a thing. Cancellations within 24 hours or no-shows are billed at 50% of the session rate. Just text or email us as soon as your plans change!
+      </p>
+    </div>
+
+    <div style="margin-top: 3rem;">
+      <a href="/book" class="btn">Book a Session</a>
+      <a href="/faq" class="btn btn-ghost" style="margin-left: .8rem;">Read the FAQ</a>
+    </div>
+  </section>
+</Layout>

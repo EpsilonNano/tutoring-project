@@ -1,0 +1,60 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import { getCollection, render } from 'astro:content'
+
+export async function getStaticPaths() {
+  const subjects = await getCollection('subjects')
+  return subjects.map((s) => ({ params: { slug: s.id }, props: { subject: s } }))
+}
+
+const { subject } = Astro.props
+const { Content } = await render(subject)
+
+const teaching = (await getCollection('tutors'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .filter((t) => t.data.subjects.some((s) => s === subject.id))
+---
+<Layout title={`${subject.data.title} Tutoring · StudyHall`}>
+  <section class="container">
+    <a href="/subjects" class="back-link">← All subjects</a>
+
+    <p class="num" style="font-size: 3rem;">{String(subject.data.order).padStart(2, '0')}</p>
+    <h1>{subject.data.title}</h1>
+    <p class="lead" style="margin-top: .8rem;">{subject.data.tagline}</p>
+
+    <div class="split" style="margin-top: 2.5rem;">
+      <div>
+        <div class="prose"><Content /></div>
+
+        <h2 style="margin-top: 2.5rem;">What we cover</h2>
+        <ul class="topics">
+          {subject.data.topics.map((topic) => <li>{topic}</li>)}
+        </ul>
+
+        <div style="margin-top: 2rem; display: grid; gap: .8rem;">
+          <p><strong>Good for:</strong> {subject.data.levels}</p>
+          <p><strong>What to bring:</strong> {subject.data.bring}</p>
+        </div>
+
+        <div style="margin-top: 2.5rem;">
+          <a href={`/book?subject=${subject.id}`} class="btn">Book {subject.data.title}</a>
+        </div>
+      </div>
+
+      <aside>
+        <p class="section-label">Your tutors for {subject.data.title}</p>
+        <div class="mini-tutors" style="grid-template-columns: 1fr;">
+          {teaching.map((t) => (
+            <a href={`/tutors/${t.id}`} class={`mini-tutor ac-${t.data.accent}`}>
+              <div class="avatar avatar-sm">{t.data.name.charAt(0)}</div>
+              <div>
+                <strong>{t.data.name}</strong>
+                <p class="meta">{t.data.blurb}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </aside>
+    </div>
+  </section>
+</Layout>

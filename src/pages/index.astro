@@ -1,17 +1,41 @@
 ---
+import Layout from '../layouts/Layout.astro'
+import { getCollection } from 'astro:content'
 
+const subjects = (await getCollection('subjects')).sort((a, b) => a.data.order - b.data.order)
+const tutors = await getCollection('tutors')
 ---
+<Layout title="StudyHall · Peer Tutoring by Students">
+  <section class="hero container">
+    <h1>Get unstuck, with tutors who have a proven track record.</h1>
+    <p class="lead">
+      We are Ethan, Liam, and Daniel, three high school students offering affordable,
+      in-person tutoring. No apps, no subscriptions. Just show up and learn.
+    </p>
+    <div class="hero-actions">
+      <a href="/book" class="btn">Book a Session</a>
+      <a href="/tutors" class="btn btn-ghost">Meet the Tutors</a>
+    </div>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+    <div class="stat-strip">
+      <div class="stat"><div class="stat-num">{tutors.length}</div><div class="stat-label">Tutors</div></div>
+      <div class="stat"><div class="stat-num">{subjects.length}</div><div class="stat-label">Subjects</div></div>
+      <div class="stat"><div class="stat-num">95%+</div><div class="stat-label">Our Average</div></div>
+      <div class="stat"><div class="stat-num">$0</div><div class="stat-label">Online fees</div></div>
+    </div>
+  </section>
+
+  <section class="container">
+    <p class="section-label">What we teach</p>
+    <h2>Five subjects, one table.</h2>
+    <div class="card-grid" style="margin-top: 1.5rem;">
+      {subjects.map((s) => (
+        <a href={`/subjects/${s.id}`} class="card">
+          <span class="card-num">{String(s.data.order).padStart(2, '0')}</span>
+          <h3>{s.data.title}</h3>
+          <p>{s.data.tagline}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>

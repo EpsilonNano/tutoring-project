@@ -1,0 +1,233 @@
+---
+import Layout from '../layouts/Layout.astro'
+import { getCollection } from 'astro:content'
+
+const subjects = (await getCollection('subjects')).sort((a, b) => a.data.order - b.data.order)
+const tutors = (await getCollection('tutors')).sort((a, b) => a.data.order - b.data.order)
+const countFor = (id: string) => tutors.filter((t) => t.data.subjects.some((x) => x === id)).length
+---
+<Layout title="Book a Session · StudyHall" description="Pick a subject, choose a tutor, and tell us when. We confirm within a day. Cash at the session.">
+  <section class="container wizard">
+    <p class="section-label">Book a session</p>
+    <h1>Let's find your tutor.</h1>
+
+    <div class="wiz-progress">
+      <div class="wiz-bar"><div class="wiz-fill" id="wizFill"></div></div>
+      <p class="wiz-count" id="wizCount">Step 1 of 4</p>
+    </div>
+
+    <!-- Step 1: subject -->
+    <div class="wiz-step" data-step="1">
+      <h2>What do you need help with?</h2>
+      <div class="subject-tiles">
+        {subjects.map((s) => (
+          <button class="subject-tile" data-subject={s.id} data-title={s.data.title}>
+            <span class="tile-num">{String(s.data.order).padStart(2, '0')}</span>
+            <span class="tile-title">{s.data.title}</span>
+            <span class="tile-tag">{countFor(s.id)} tutors available</span>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Step 2: tutor -->
+    <div class="wiz-step" data-step="2" hidden>
+      <h2>Who would you like to work with?</h2>
+      <p class="wiz-hint">Showing tutors for <strong id="hintSubject"></strong>.</p>
+      <div class="tutor-options">
+        {tutors.map((t) => (
+          <button class={`tutor-option ac-${t.data.accent}`} data-tutor={t.id} data-title={t.data.name} data-subjects={t.data.subjects.join(',')}>
+            <span class="avatar avatar-sm">{t.data.name.charAt(0)}</span>
+            <span class="tutor-option-body">
+              <strong>{t.data.name}</strong>
+              <span class="meta">{t.data.blurb}</span>
+            </span>
+          </button>
+        ))}
+        <button class="tutor-option" data-tutor="any" data-title="First available" data-subjects="math,science,french,coding,chess">
+          <span class="avatar avatar-sm ac-amber">★</span>
+          <span class="tutor-option-body">
+            <strong>First available</strong>
+            <span class="meta">We will match you with whoever is free soonest.</span>
+          </span>
+        </button>
+      </div>
+      <div class="wiz-nav"><button class="wiz-back" data-back="1">← Back to subjects</button></div>
+    </div>
+
+    <!-- Step 3: timing -->
+    <div class="wiz-step" data-step="3" hidden>
+      <h2>When works for you?</h2>
+      <p class="wiz-sub">Pick all that apply. We will confirm a specific time by text or email.</p>
+
+      <div class="chip-group">
+        <p class="chip-label">Days</p>
+        <div class="chip-row" id="dayChips">
+          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d) => (
+            <button class="pick-chip" data-value={d}>{d}</button>
+          ))}
+        </div>
+      </div>
+
+      <div class="chip-group">
+        <p class="chip-label">Time of day</p>
+        <div class="chip-row" id="timeChips">
+          {['After-school (3-6)', 'Evening (6-9)', 'Weekend morning', 'Weekend afternoon'].map((t) => (
+            <button class="pick-chip" data-value={t}>{t}</button>
+          ))}
+        </div>
+      </div>
+
+      <div class="chip-group">
+        <p class="chip-label">What do you want to work on? <span class="opt">(optional)</span></p>
+        <textarea id="notesBox" rows="3" placeholder="e.g. Unit 4 trig test, or my French oral coming up"></textarea>
+      </div>
+
+      <p class="wiz-warn" id="timingWarn" hidden>Pick at least one day and one time so we can schedule you.</p>
+      <div class="wiz-nav">
+        <button class="wiz-back" data-back="2">← Back to tutors</button>
+        <button class="btn" id="toReview">Review booking →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: confirm -->
+    <div class="wiz-step" data-step="4" hidden>
+      <h2>Almost there.</h2>
+      <p class="wiz-sub">
+        Here is your request. The next button opens our booking form with all of this filled in.
+        You just add your name and contact info and hit send.
+      </p>
+
+      <div class="receipt">
+        <div class="sum-row"><span>Subject</span><span class="dots"></span><strong id="sumSubject"></strong></div>
+        <div class="sum-row"><span>Tutor</span><span class="dots"></span><strong id="sumTutor"></strong></div>
+        <div class="sum-row"><span>Days</span><span class="dots"></span><strong id="sumDays"></strong></div>
+        <div class="sum-row"><span>Time</span><span class="dots"></span><strong id="sumTimes"></strong></div>
+        <div class="sum-row"><span>Notes</span><span class="dots"></span><strong id="sumNotes"></strong></div>
+        <div class="sum-row sum-total"><span>Payment</span><span class="dots"></span><strong>Cash at the session</strong></div>
+      </div>
+
+      <div class="wiz-nav">
+        <button class="wiz-back" data-back="3">← Make changes</button>
+        <button class="btn btn-big" id="openForm">Open booking form →</button>
+      </div>
+      <p class="wiz-fine">By sending this you agree to our 24-hour cancellation policy.</p>
+    </div>
+  </section>
+
+  <script>
+    const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScIxaMb0pNIrZlyBY1QA1W48byz7h_WdjTlVUP3lFyMtR-4oA/viewform'
+    const ENTRY = {
+      subject: 'entry.1150953150',
+      tutor:   'entry.2082813739',
+      days:    'entry.104149159',
+      time:    'entry.1438766178',
+      notes:   'entry.64265001',
+    }
+    // ------------------------------------------------------------
+
+    type ChipKey = 'days' | 'times'
+
+    const state = {
+      subjectTitle: '',
+      tutorTitle: '',
+      days: [] as string[],
+      times: [] as string[],
+      notes: '',
+    }
+
+    // The "!" after getElementById means "this element definitely exists."
+    const steps = document.querySelectorAll<HTMLElement>('.wiz-step')
+    const fill = document.getElementById('wizFill')!
+    const count = document.getElementById('wizCount')!
+
+    function go(n: number) {
+      steps.forEach((s) => { s.hidden = Number(s.dataset.step) !== n })
+      fill.style.width = (n / 4) * 100 + '%'
+      count.textContent = 'Step ' + n + ' of 4'
+      const active = document.querySelector<HTMLElement>('.wiz-step[data-step="' + n + '"]')!
+      window.scrollTo({ top: active.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' })
+    }
+
+    // Step 1: choose a subject, then show only tutors who teach it
+    document.querySelectorAll<HTMLElement>('.subject-tile').forEach((tile) => {
+      tile.addEventListener('click', () => {
+        state.subjectTitle = tile.dataset.title ?? ''
+        const subjectId = tile.dataset.subject ?? ''
+        document.querySelectorAll<HTMLElement>('.tutor-option').forEach((opt) => {
+          opt.hidden = !(opt.dataset.subjects ?? '').split(',').includes(subjectId)
+        })
+        document.getElementById('hintSubject')!.textContent = state.subjectTitle
+        go(2)
+      })
+    })
+
+    // Step 2: choose a tutor
+    document.querySelectorAll<HTMLElement>('.tutor-option').forEach((opt) => {
+      opt.addEventListener('click', () => {
+        state.tutorTitle = opt.dataset.title ?? ''
+        go(3)
+      })
+    })
+
+    // Step 3: toggle day and time chips
+    function wireChips(rowId: string, key: ChipKey) {
+      document.querySelectorAll<HTMLElement>('#' + rowId + ' .pick-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          chip.classList.toggle('on')
+          const v = chip.dataset.value ?? ''
+          state[key] = state[key].includes(v) ? state[key].filter((x) => x !== v) : [...state[key], v]
+        })
+      })
+    }
+    wireChips('dayChips', 'days')
+    wireChips('timeChips', 'times')
+
+    // Step 3 to 4: validate, then fill the receipt
+    document.getElementById('toReview')!.addEventListener('click', () => {
+      if (state.days.length === 0 || state.times.length === 0) {
+        document.getElementById('timingWarn')!.hidden = false
+        return
+      }
+      document.getElementById('timingWarn')!.hidden = true
+      state.notes = (document.getElementById('notesBox') as HTMLTextAreaElement).value.trim()
+      document.getElementById('sumSubject')!.textContent = state.subjectTitle
+      document.getElementById('sumTutor')!.textContent = state.tutorTitle
+      document.getElementById('sumDays')!.textContent = state.days.join(', ')
+      document.getElementById('sumTimes')!.textContent = state.times.join(', ')
+      document.getElementById('sumNotes')!.textContent = state.notes || 'Not specified'
+      go(4)
+    })
+
+    // Back buttons
+    document.querySelectorAll<HTMLElement>('.wiz-back').forEach((b) => {
+      b.addEventListener('click', () => go(Number(b.dataset.back)))
+    })
+
+    // Step 4: open the prefilled Google Form in a new tab
+    document.getElementById('openForm')!.addEventListener('click', () => {
+      const params = new URLSearchParams()
+      params.set(ENTRY.subject, state.subjectTitle)
+      params.set(ENTRY.tutor, state.tutorTitle)
+      params.set(ENTRY.days, state.days.join(', '))
+      params.set(ENTRY.time, state.times.join(', '))
+      if (state.notes) params.set(ENTRY.notes, state.notes)
+      window.open(FORM_URL + '?' + params.toString(), '_blank')
+    })
+
+    // Deep links: /book?subject=math and /book?subject=math&tutor=ethan
+    const qs = new URLSearchParams(window.location.search)
+    const preSubject = qs.get('subject')
+    const preTutor = qs.get('tutor')
+    if (preSubject) {
+      const tile = document.querySelector<HTMLElement>('.subject-tile[data-subject="' + preSubject + '"]')
+      if (tile) {
+        tile.click()
+        if (preTutor) {
+          const opt = document.querySelector<HTMLElement>('.tutor-option[data-tutor="' + preTutor + '"]:not([hidden])')
+          if (opt) opt.click()
+        }
+      }
+    }
+  </script>
+</Layout>

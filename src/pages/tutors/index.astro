@@ -1,0 +1,34 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import { getCollection } from 'astro:content'
+
+const tutors = (await getCollection('tutors')).sort((a, b) => a.data.order - b.data.order)
+const subjectTitles = Object.fromEntries(
+  (await getCollection('subjects')).map((s) => [s.id, s.data.title])
+)
+---
+<Layout title="Meet the Tutors · StudyHall" description="Three Grade 12 students with 96%+ averages, tutoring Math, Science, French, Coding, and Chess.">
+  <section class="container">
+    <p class="section-label">Meet the tutors</p>
+    <h1>Three students. One standard.</h1>
+    <p class="lead" style="margin-top: 1rem;">
+      Open a profile to see exactly what each of us teaches.
+    </p>
+
+    <div class="tutor-panels">
+      {tutors.map((t) => (
+        <a href={`/tutors/${t.id}`} class={`tutor-panel ac-${t.data.accent}`}>
+          <div class="avatar">{t.data.name.charAt(0)}</div>
+          <div>
+            <h3>{t.data.name}</h3>
+            <p class="meta">{t.data.grade} · <strong>{t.data.average} average</strong></p>
+            <p style="margin-top: .6rem;">{t.data.blurb}</p>
+            <div class="chips" style="margin-top: .9rem;">
+              {t.data.subjects.map((s) => <span class="chip">{subjectTitles[s]}</span>)}
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>

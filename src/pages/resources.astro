@@ -1,0 +1,128 @@
+---
+import Layout from '../layouts/Layout.astro'
+const sections = [
+  { id: 'math', label: 'Math' },
+  { id: 'science', label: 'Science' },
+  { id: 'french', label: 'French' },
+  { id: 'coding', label: 'Coding' },
+  { id: 'chess', label: 'Chess' },
+  { id: 'study', label: 'Study techniques' },
+]
+---
+<Layout title="Free Resources · StudyHall" description="The free tools and sites we actually use to study, for math, science, French, coding, chess, and study skills.">
+  <section class="container">
+    <p class="section-label">Resources</p>
+    <h1>Free stuff we actually use.</h1>
+    <p class="lead" style="margin-top: 1rem;">
+      Everything here is free and everything here has earned its place.
+    </p>
+
+    <nav class="anchor-nav">
+      {sections.map((s) => <a href={`#${s.id}`}>{s.label}</a>)}
+    </nav>
+
+    <div class="resource-section" id="math">
+      <h2>Math</h2>
+      <div class="resource-list">
+        <a class="resource-link" href="https://www.khanacademy.org" target="_blank" rel="noopener">
+          <span class="r-name">Khan Academy</span><span class="r-desc">Video lessons and practice for every topic from algebra to calculus.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://www.desmos.com" target="_blank" rel="noopener">
+          <span class="r-name">Desmos</span><span class="r-desc">A free graphing calculator in the browser. Great for seeing what an equation actually looks like.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://www.wolframalpha.com" target="_blank" rel="noopener">
+          <span class="r-name">Wolfram Alpha</span><span class="r-desc">Type in a problem and get the steps. Use it to check your work, not to skip it.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://tutorial.math.lamar.edu" target="_blank" rel="noopener">
+          <span class="r-name">Paul's Online Math Notes</span><span class="r-desc">Clear written notes and worked examples, algebra through calculus.</span><span class="r-arrow">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="resource-section" id="science">
+      <h2>Science</h2>
+      <div class="resource-list">
+        <a class="resource-link" href="https://phet.colorado.edu" target="_blank" rel="noopener">
+          <span class="r-name">PhET Simulations</span><span class="r-desc">Interactive simulations for physics, chemistry, and biology. See the concept move.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://www.khanacademy.org/science" target="_blank" rel="noopener">
+          <span class="r-name">Khan Academy Science</span><span class="r-desc">Full courses in biology, chemistry, and physics.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://chem.libretexts.org" target="_blank" rel="noopener">
+          <span class="r-name">LibreTexts Chemistry</span><span class="r-desc">A free, thorough chemistry textbook online.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://www.youtube.com/@crashcourse" target="_blank" rel="noopener">
+          <span class="r-name">Crash Course</span><span class="r-desc">Fast, entertaining overviews. Good for the big picture before the details.</span><span class="r-arrow">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="resource-section" id="french">
+      <h2>French</h2>
+      <div class="resource-list">
+        <a class="resource-link" href="https://www.wordreference.com" target="_blank" rel="noopener">
+          <span class="r-name">WordReference</span><span class="r-desc">The dictionary we use. Its forums answer the "why is it phrased like that" questions.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://www.lawlessfrench.com" target="_blank" rel="noopener">
+          <span class="r-name">Lawless French</span><span class="r-desc">Clear grammar explanations with practice, organized by topic.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://apprendre.tv5monde.com" target="_blank" rel="noopener">
+          <span class="r-name">TV5MONDE</span><span class="r-desc">Learn French with real videos and news, leveled from beginner up.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://francais.lingolia.com" target="_blank" rel="noopener">
+          <span class="r-name">Lingolia French</span><span class="r-desc">Quick grammar reference with exercises and answers.</span><span class="r-arrow">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="resource-section" id="coding">
+      <h2>Coding</h2>
+      <div class="resource-list">
+        <a class="resource-link" href="https://www.freecodecamp.org" target="_blank" rel="noopener">
+          <span class="r-name">freeCodeCamp</span><span class="r-desc">Hands-on, project-based coding curriculum. Completely free.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://cs50.harvard.edu" target="_blank" rel="noopener">
+          <span class="r-name">CS50</span><span class="r-desc">Harvard's intro to computer science. The best starting point if you want to go deep.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://docs.python.org/3/tutorial" target="_blank" rel="noopener">
+          <span class="r-name">Python Tutorial</span><span class="r-desc">The official Python tutorial, straight from the source.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://exercism.org" target="_blank" rel="noopener">
+          <span class="r-name">Exercism</span><span class="r-desc">Practice problems in dozens of languages, with free mentor feedback.</span><span class="r-arrow">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="resource-section" id="chess">
+      <h2>Chess</h2>
+      <div class="resource-list">
+        <a class="resource-link" href="https://lichess.org" target="_blank" rel="noopener">
+          <span class="r-name">Lichess</span><span class="r-desc">Free play, puzzles, and lessons. The best free chess site, full stop.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://lichess.org/training" target="_blank" rel="noopener">
+          <span class="r-name">Lichess Puzzles</span><span class="r-desc">Tactics puzzles that build pattern recognition fast.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://www.chess.com/lessons" target="_blank" rel="noopener">
+          <span class="r-name">Chess.com Lessons</span><span class="r-desc">Structured video lessons. Some free, some premium.</span><span class="r-arrow">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="resource-section" id="study">
+      <h2>Study techniques</h2>
+      <p style="margin-top: .8rem; color: var(--muted); max-width: 65ch;">
+        Three ideas beat all the tricks: <strong>active recall</strong> (test yourself instead of rereading),
+        <strong> spaced repetition</strong> (review on a schedule, not in one cram), and
+        <strong> past papers</strong> (practice the exact format you will be tested on). These two tools do the heavy lifting.
+      </p>
+      <div class="resource-list">
+        <a class="resource-link" href="https://apps.ankiweb.net" target="_blank" rel="noopener">
+          <span class="r-name">Anki</span><span class="r-desc">Flashcards with spaced repetition built in. The single most effective memorization tool.</span><span class="r-arrow">↗</span>
+        </a>
+        <a class="resource-link" href="https://pomofocus.io" target="_blank" rel="noopener">
+          <span class="r-name">Pomofocus</span><span class="r-desc">A simple Pomodoro timer. 25 minutes on, 5 minutes off.</span><span class="r-arrow">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
