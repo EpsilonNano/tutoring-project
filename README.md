@@ -1,2 +1,0 @@
-# tutoring-project
-Tutoring project
