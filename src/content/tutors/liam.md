@@ -1,11 +1,11 @@
 ---
 name: Liam
 order: 2
-grade: Grade 11, heading into 12
+grade: Grade 12
 average: 95%+
 accent: amber
 subjects: [math, science, coding]
-specialties: [Calculus, Algebra, Biology, Chemistry, Physics, French, Python]
+specialties: [Geometry, Game Design, Algebra, Chemistry, Physics, Python, Godot, Trigonometry]
 blurb: Science and code specialist. Explains Python like he just learned it himself.
 photo:
 ---
