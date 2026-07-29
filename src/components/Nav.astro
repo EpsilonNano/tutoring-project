@@ -1,22 +1,23 @@
 ---
+import { href } from '../lib/link'
 const links = [
-  { href: '/tutors',    text: 'Tutors' },
-  { href: '/subjects',  text: 'Subjects' },
-  { href: '/pricing',   text: 'Pricing' },
-  { href: '/resources', text: 'Resources' },
-  { href: '/faq',       text: 'FAQ' },
-  { href: '/contact',   text: 'Contact' },
+  { path: '/tutors', text: 'Tutors' },
+  { path: '/subjects', text: 'Subjects' },
+  { path: '/pricing', text: 'Pricing' },
+  { path: '/resources', text: 'Resources' },
+  { path: '/faq', text: 'FAQ' },
+  { path: '/contact', text: 'Contact' },
 ]
 const current = Astro.url.pathname
 ---
 <header class="site-nav">
   <div class="container nav-inner">
-    <a href="/" class="wordmark">StudyHall<span class="dot">.</span></a>
+    <a href={href('/')} class="wordmark">Brantford Tutors<span class="dot">.</span></a>
     <nav>
       {links.map((l) => (
-        <a href={l.href} class:list={{ active: current.startsWith(l.href) }}>{l.text}</a>
+        <a href={href(l.path)} class:list={{ active: current.startsWith(href(l.path)) }}>{l.text}</a>
       ))}
-      <a href="/book" class="btn btn-small">Book a Session</a>
+      <a href={href('/book')} class="btn btn-small">Book a Session</a>
     </nav>
   </div>
 </header>

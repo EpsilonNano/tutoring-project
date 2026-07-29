@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import { href } from '../lib/link'
 ---
-<Layout title="Pricing · StudyHall" description="Simple cash pricing for one-on-one and small group tutoring. No online fees, no card on file.">
+<Layout title="Pricing · Brantford Tutors" description="Simple cash pricing for one-on-one and small group tutoring. No online fees, no card on file.">
   <section class="container">
     <p class="section-label">Pricing</p>
     <h1>One rate. Paid in cash. No surprises.</h1>
@@ -47,8 +48,8 @@ import Layout from '../layouts/Layout.astro'
     </div>
 
     <div style="margin-top: 3rem;">
-      <a href="/book" class="btn">Book a Session</a>
-      <a href="/faq" class="btn btn-ghost" style="margin-left: .8rem;">Read the FAQ</a>
+      <a href={href('/book')} class="btn">Book a Session</a>
+      <a href={href('/faq')} class="btn btn-ghost" style="margin-left: .8rem;">Read the FAQ</a>
     </div>
   </section>
 </Layout>

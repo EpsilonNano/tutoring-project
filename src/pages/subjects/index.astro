@@ -1,19 +1,20 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
+import { href } from '../../lib/link'
 
 const subjects = (await getCollection('subjects')).sort((a, b) => a.data.order - b.data.order)
 const tutors = (await getCollection('tutors')).sort((a, b) => a.data.order - b.data.order)
 const tutorsFor = (id: string) => tutors.filter((t) => t.data.subjects.some((s) => s === id))
 ---
-<Layout title="Subjects · StudyHall" description="Math, Science, French, Coding, and Chess tutoring from students who just aced these courses.">
+<Layout title="Subjects · Brantford Tutors" description="Math, Science, French, Coding, and Chess tutoring from students who just aced these courses.">
   <section class="container">
     <p class="section-label">What we teach</p>
     <h1>Five subjects, taught by people who just aced them.</h1>
 
     <div style="margin-top: 2.5rem;">
       {subjects.map((s) => (
-        <a href={`/subjects/${s.id}`} class="subject-row">
+        <a href={href(`/subjects/${s.id}`)} class="subject-row">
           <span class="num">{String(s.data.order).padStart(2, '0')}</span>
           <span>
             <h3>{s.data.title}</h3>

@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getCollection, render } from 'astro:content'
+import { href } from '../../lib/link'
 
 export async function getStaticPaths() {
   const tutors = await getCollection('tutors')
@@ -14,9 +15,9 @@ const others = (await getCollection('tutors'))
   .sort((a, b) => a.data.order - b.data.order)
   .filter((t) => t.id !== tutor.id)
 ---
-<Layout title={`${tutor.data.name}, Tutor · StudyHall`}>
+<Layout title={`${tutor.data.name}, Tutor · Brantford Tutors`}>
   <section class="container">
-    <a href="/tutors" class="back-link">← All tutors</a>
+    <a href={href('/tutors')} class="back-link">← All tutors</a>
 
     <div class={`profile-head ac-${tutor.data.accent}`}>
       <div class="avatar avatar-lg">{tutor.data.name.charAt(0)}</div>
@@ -38,7 +39,7 @@ const others = (await getCollection('tutors'))
       <p class="section-label">Also available</p>
       <div class="mini-tutors">
         {others.map((t) => (
-          <a href={`/tutors/${t.id}`} class={`mini-tutor ac-${t.data.accent}`}>
+          <a href={href(`/tutors/${t.id}`)} class={`mini-tutor ac-${t.data.accent}`}>
             <div class="avatar avatar-sm">{t.data.name.charAt(0)}</div>
             <div>
               <strong>{t.data.name}</strong>

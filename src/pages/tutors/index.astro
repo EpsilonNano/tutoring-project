@@ -1,13 +1,14 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
+import { href } from '../../lib/link'
 
 const tutors = (await getCollection('tutors')).sort((a, b) => a.data.order - b.data.order)
 const subjectTitles = Object.fromEntries(
   (await getCollection('subjects')).map((s) => [s.id, s.data.title])
 )
 ---
-<Layout title="Meet the Tutors · StudyHall" description="Three Grade 12 students with 96%+ averages, tutoring Math, Science, French, Coding, and Chess.">
+<Layout title="Meet the Tutors · Brantford Tutors" description="Three Grade 12 students with 96%+ averages, tutoring Math, Science, French, Coding, and Chess.">
   <section class="container">
     <p class="section-label">Meet the tutors</p>
     <h1>Three students. One standard.</h1>
@@ -17,7 +18,7 @@ const subjectTitles = Object.fromEntries(
 
     <div class="tutor-panels">
       {tutors.map((t) => (
-        <a href={`/tutors/${t.id}`} class={`tutor-panel ac-${t.data.accent}`}>
+        <a href={href(`/tutors/${t.id}`)} class={`tutor-panel ac-${t.data.accent}`}>
           <div class="avatar">{t.data.name.charAt(0)}</div>
           <div>
             <h3>{t.data.name}</h3>

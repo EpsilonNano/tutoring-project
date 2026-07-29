@@ -1,11 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
+import { href } from '../lib/link'
 
 const subjects = (await getCollection('subjects')).sort((a, b) => a.data.order - b.data.order)
 const tutors = await getCollection('tutors')
 ---
-<Layout title="StudyHall · Peer Tutoring by Students">
+<Layout title="Brantford Tutors · Peer Tutoring by Students">
   <section class="hero container">
     <h1>Get unstuck, with tutors who have a proven track record.</h1>
     <p class="lead">
@@ -13,8 +14,8 @@ const tutors = await getCollection('tutors')
       in-person tutoring. No apps, no subscriptions. Just show up and learn.
     </p>
     <div class="hero-actions">
-      <a href="/book" class="btn">Book a Session</a>
-      <a href="/tutors" class="btn btn-ghost">Meet the Tutors</a>
+      <a href={href('/book')} class="btn">Book a Session</a>
+      <a href={href('/tutors')} class="btn btn-ghost">Meet the Tutors</a>
     </div>
 
     <div class="stat-strip">
@@ -30,7 +31,7 @@ const tutors = await getCollection('tutors')
     <h2>Five subjects, one table.</h2>
     <div class="card-grid" style="margin-top: 1.5rem;">
       {subjects.map((s) => (
-        <a href={`/subjects/${s.id}`} class="card">
+        <a href={href(`/subjects/${s.id}`)} class="card">
           <span class="card-num">{String(s.data.order).padStart(2, '0')}</span>
           <h3>{s.data.title}</h3>
           <p>{s.data.tagline}</p>

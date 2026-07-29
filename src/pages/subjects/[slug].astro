@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getCollection, render } from 'astro:content'
+import { href } from '../../lib/link'
 
 export async function getStaticPaths() {
   const subjects = await getCollection('subjects')
@@ -14,9 +15,9 @@ const teaching = (await getCollection('tutors'))
   .sort((a, b) => a.data.order - b.data.order)
   .filter((t) => t.data.subjects.some((s) => s === subject.id))
 ---
-<Layout title={`${subject.data.title} Tutoring · StudyHall`}>
+<Layout title={`${subject.data.title} Tutoring · Brantford Tutors`}>
   <section class="container">
-    <a href="/subjects" class="back-link">← All subjects</a>
+    <a href={href('/subjects')} class="back-link">← All subjects</a>
 
     <p class="num" style="font-size: 3rem;">{String(subject.data.order).padStart(2, '0')}</p>
     <h1>{subject.data.title}</h1>
@@ -37,7 +38,7 @@ const teaching = (await getCollection('tutors'))
         </div>
 
         <div style="margin-top: 2.5rem;">
-          <a href={`/book?subject=${subject.id}`} class="btn">Book {subject.data.title}</a>
+          <a href={href(`/book?subject=${subject.id}`)} class="btn">Book {subject.data.title}</a>
         </div>
       </div>
 
@@ -45,7 +46,7 @@ const teaching = (await getCollection('tutors'))
         <p class="section-label">Your tutors for {subject.data.title}</p>
         <div class="mini-tutors" style="grid-template-columns: 1fr;">
           {teaching.map((t) => (
-            <a href={`/tutors/${t.id}`} class={`mini-tutor ac-${t.data.accent}`}>
+            <a href={href(`/tutors/${t.id}`)} class={`mini-tutor ac-${t.data.accent}`}>
               <div class="avatar avatar-sm">{t.data.name.charAt(0)}</div>
               <div>
                 <strong>{t.data.name}</strong>

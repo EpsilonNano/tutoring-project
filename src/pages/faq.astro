@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import { href } from '../lib/link'
 const faqs = [
   { q: 'Where do sessions happen?', a: 'We can meet at the St. Paul Brantford Public Library Branch, your house, or even online (Google Meets). We confirm the exact meeting spot when we confirm your booking.' },
   { q: 'How does payment work?', a: 'Cash, at the session. No deposit, nothing charged online, no card needed. Your first session is half price.' },
@@ -14,7 +15,7 @@ const faqs = [
   { q: 'What should I bring?', a: 'Your textbook or notes, a recent quiz or test if you have one, and the specific problem or topic. Each subject page has a "what to bring" note.' },
 ]
 ---
-<Layout title="FAQ · StudyHall" description="Answers to the questions parents and students ask most about our tutoring.">
+<Layout title="FAQ · Brantford Tutors" description="Answers to the questions parents and students ask most about our tutoring.">
   <section class="container">
     <p class="section-label">FAQ</p>
     <h1>Questions parents and students actually ask.</h1>
@@ -29,7 +30,7 @@ const faqs = [
     </div>
 
     <p style="margin-top: 3rem;">
-      Still curious? <a href="/contact">Send us a message</a> and we will answer within a day.
+      Still curious? <a href={href('/contact')}>Send us a message</a> and we will answer within a day.
     </p>
   </section>
 </Layout>
