@@ -1,19 +1,19 @@
 /* ============ tokens — change these to retheme everything ============ */
 :root {
-  --ink:          #1b1b18;   /* warm near-black text */
-  --paper:        #faf8f2;   /* warm cream background */
+  --ink:          #000000;   /* warm near-black text */
+  --paper:        #ffffff;   /* warm cream background */
   --paper-raised: #ffffff;   /* cards */
-  --accent:       #2d6a4f;   /* deep sage green */
-  --accent-dark:  #1e4d39;
-  --warm:         #c97b2d;   /* amber — buttons & highlights */
-  --warm-dark:    #a8621d;
-  --muted:        #6f6b62;   /* secondary text */
-  --border:       #e5e1d8;
+  --accent:       #38a8ac;   /* deep sage green */
+  --accent-dark:  #00666b;
+  --warm:         #38a8ac;   /* amber — buttons & highlights */
+  --warm-dark:    #00666b;
+  --muted:        #013239;   /* secondary text */
+  --border:       #013239;
 
   --font-display: 'Fraunces', Georgia, serif;
   --font-body:    'Atkinson Hyperlegible', system-ui, sans-serif;
   --radius: 10px;
-  --shadow: 0 1px 3px rgba(27,27,24,.06), 0 8px 24px rgba(27,27,24,.06);
+  --shadow: 0 1px 3px rgba(24,24,27,.06), 0 8px 24px rgba(24,24,27,.06);
 }
 
 /* ============ reset ============ */
