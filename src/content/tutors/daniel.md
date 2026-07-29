@@ -1,9 +1,9 @@
 ---
 name: Daniel
 order: 3
-grade: Grade 11, heading into 12
+grade: Grade 12
 average: 95%+
-accent: ink
+accent: sage
 subjects: [math, science, french, coding, chess]
 specialties: [Algebra, Biology, Chemistry, Physics, French, Python]
 blurb: Patient across all five subjects. Explains things three ways until one sticks.
