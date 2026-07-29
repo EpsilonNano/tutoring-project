@@ -2,8 +2,9 @@
 title: Coding
 order: 4
 tagline: Learn to program by building small things that actually run.
-levels: Grades 7 to 12, no experience needed
+levels: Grades 5 to 12, no experience needed
 topics:
+  - Game development with Godot
   - Python from absolute zero
   - Scratch, Java, and Rust fundamentals
   - Data structures and algorithm basics
