@@ -8,7 +8,6 @@ topics:
   - Python from absolute zero
   - Scratch, Java, and Rust fundamentals
   - Data structures and algorithm basics
-  - Debugging and reading error messages
   - Support for school CS courses
 bring: Bring a laptop if you have one. We can share ours if you do not.
 ---
