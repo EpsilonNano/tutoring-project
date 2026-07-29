@@ -1,7 +1,7 @@
 ---
 name: Ethan
 order: 1
-grade: Grade 11, heading into 12
+grade: Grade 12
 average: 95%+
 accent: sage
 subjects: [math, science, french, coding, chess]
