@@ -1,6 +1,6 @@
 # Brantford Tutors
 
-A fast, lightweight peer-tutoring website for high school students, built with [Astro](https://astro.build/). Find the live site [here](https://epsilonnano.github.io/tutoring-project).
+A fast, lightweight peer-tutoring website for high school students, built with [Astro](https://astro.build/). Find the live site [here](https://brantfordtutors.ca).
 
 ## Getting Started
 
@@ -10,7 +10,7 @@ Run these commands in your terminal to work on the site locally:
 # 1. Install dependencies
 npm install
 
-# 2. Start local dev server (http://localhost:4321/tutoring-project/)
+# 2. Start local dev server (http://localhost:4321/)
 npm run dev
 
 # 3. Build static files for production
