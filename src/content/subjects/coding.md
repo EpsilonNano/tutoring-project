@@ -1,7 +1,7 @@
 ---
 title: Coding
 order: 4
-tagline: Learn to program by building small things that actually run.
+tagline: Learn programming by building real projects from scratch.
 levels: Grades 5 to 12, no experience needed
 topics:
   - Game development with Godot
