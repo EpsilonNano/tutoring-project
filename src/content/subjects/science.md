@@ -1,7 +1,7 @@
 ---
 title: Science
 order: 2
-tagline: Biology, chemistry, and physics with real examples instead of pure memorization.
+tagline: Biology, chemistry, and physics made easier to understand.
 levels: Grades 8 to 12
 topics:
   - Biology, from cells to genetics
