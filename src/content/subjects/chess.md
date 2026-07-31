@@ -1,7 +1,7 @@
 ---
 title: Chess
 order: 5
-tagline: Openings, endgames, and the thinking in between.
+tagline: Master openings, tactics, endgames, and strategic thinking.
 levels: All levels, complete beginners welcome
 topics:
   - Opening principles, not memorization
