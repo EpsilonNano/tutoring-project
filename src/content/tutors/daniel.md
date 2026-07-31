@@ -6,7 +6,7 @@ average: 95%+
 accent: sage
 subjects: [math, science, french, coding, chess]
 specialties: [Algebra, Biology, Chemistry, Physics, French, Python]
-blurb: Patient across all five subjects. Explains things three ways until one sticks.
+blurb: Strong across math, science, French, and coding. Enjoys helping students work through problems and find a better way to understand the material.
 photo:
 ---
 
