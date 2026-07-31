@@ -6,7 +6,7 @@ average: 95%+
 accent: sage
 subjects: [math, science, french, coding, chess]
 specialties: [Calculus, Algebra, Biology, Chemistry, Physics, French, Python]
-blurb: Tutors all five subjects and stays calm when the material does not.
+blurb: Experienced across all five subjects, with a focus on math and science. Brings a structured approach to solving problems and preparing for tests.
 photo:
 ---
 
