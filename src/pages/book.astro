@@ -1,233 +1,690 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
+import availability from '../data/availability.json'
 
-const subjects = (await getCollection('subjects')).sort((a, b) => a.data.order - b.data.order)
-const tutors = (await getCollection('tutors')).sort((a, b) => a.data.order - b.data.order)
-const countFor = (id: string) => tutors.filter((t) => t.data.subjects.some((x) => x === id)).length
+const subjects = (await getCollection('subjects'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((s) => ({ id: s.id, title: s.data.title, order: s.data.order }))
+
+const tutors = (await getCollection('tutors'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((t) => ({
+    id: t.id,
+    name: t.data.name,
+    accent: t.data.accent,
+    subjects: t.data.subjects,
+    blurb: t.data.blurb,
+  }))
+
+const boardData = JSON.stringify({
+  subjects,
+  tutors,
+  config: availability.config,
+  schedules: availability.schedules,
+})
 ---
-<Layout title="Book a Session · Brantford Tutors" description="Pick a subject, choose a tutor, and tell us when. We confirm within a day. Cash at the session.">
-  <section class="container wizard">
+
+<Layout
+  title="Book a Session · Brantford Tutors"
+  description="Pick a subject, a time, and a tutor. We confirm within a day. Cash at the session."
+>
+  <section class="container board-wrap">
     <p class="section-label">Book a session</p>
-    <h1>Let's find your tutor.</h1>
+    <h1>Build your session.</h1>
+    <p class="lead board-intro">
+      Tap anything, in any order.
+    </p>
 
-    <div class="wiz-progress">
-      <div class="wiz-bar"><div class="wiz-fill" id="wizFill"></div></div>
-      <p class="wiz-count" id="wizCount">Step 1 of 4</p>
-    </div>
-
-    <!-- Step 1: subject -->
-    <div class="wiz-step" data-step="1">
-      <h2>What do you need help with?</h2>
-      <div class="subject-tiles">
-        {subjects.map((s) => (
-          <button class="subject-tile" data-subject={s.id} data-title={s.data.title}>
-            <span class="tile-num">{String(s.data.order).padStart(2, '0')}</span>
-            <span class="tile-title">{s.data.title}</span>
-            <span class="tile-tag">{countFor(s.id)} tutors available</span>
-          </button>
-        ))}
-      </div>
-    </div>
-
-    <!-- Step 2: tutor -->
-    <div class="wiz-step" data-step="2" hidden>
-      <h2>Who would you like to work with?</h2>
-      <p class="wiz-hint">Showing tutors for <strong id="hintSubject"></strong>.</p>
-      <div class="tutor-options">
-        {tutors.map((t) => (
-          <button class={`tutor-option ac-${t.data.accent}`} data-tutor={t.id} data-title={t.data.name} data-subjects={t.data.subjects.join(',')}>
-            <span class="avatar avatar-sm">{t.data.name.charAt(0)}</span>
-            <span class="tutor-option-body">
-              <strong>{t.data.name}</strong>
-              <span class="meta">{t.data.blurb}</span>
-            </span>
-          </button>
-        ))}
-        <button class="tutor-option" data-tutor="any" data-title="First available" data-subjects="math,science,french,coding,chess">
-          <span class="avatar avatar-sm ac-amber">★</span>
-          <span class="tutor-option-body">
-            <strong>First available</strong>
-            <span class="meta">We will match you with whoever is free soonest.</span>
-          </span>
-        </button>
-      </div>
-      <div class="wiz-nav"><button class="wiz-back" data-back="1">← Back to subjects</button></div>
-    </div>
-
-    <!-- Step 3: timing -->
-    <div class="wiz-step" data-step="3" hidden>
-      <h2>When works for you?</h2>
-      <p class="wiz-sub">Pick all that apply. We will confirm a specific time by text or email.</p>
-
-      <div class="chip-group">
-        <p class="chip-label">Days</p>
-        <div class="chip-row" id="dayChips">
-          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d) => (
-            <button class="pick-chip" data-value={d}>{d}</button>
-          ))}
-        </div>
-      </div>
-
-      <div class="chip-group">
-        <p class="chip-label">Time of day</p>
-        <div class="chip-row" id="timeChips">
-          {['After-school (3-6)', 'Evening (6-9)', 'Weekend morning', 'Weekend afternoon'].map((t) => (
-            <button class="pick-chip" data-value={t}>{t}</button>
-          ))}
-        </div>
-      </div>
-
-      <div class="chip-group">
-        <p class="chip-label">What do you want to work on? <span class="opt">(optional)</span></p>
-        <textarea id="notesBox" rows="3" placeholder="e.g. Unit 4 trig test, or my French oral coming up"></textarea>
-      </div>
-
-      <p class="wiz-warn" id="timingWarn" hidden>Pick at least one day and one time so we can schedule you.</p>
-      <div class="wiz-nav">
-        <button class="wiz-back" data-back="2">← Back to tutors</button>
-        <button class="btn" id="toReview">Review booking →</button>
-      </div>
-    </div>
-
-    <!-- Step 4: confirm -->
-    <div class="wiz-step" data-step="4" hidden>
-      <h2>Almost there.</h2>
-      <p class="wiz-sub">
-        Here is your request. The next button opens our booking form with all of this filled in.
-        You just add your name and contact info and hit send.
+    <!-- Full-week banner (shown if zero bookings possible) -->
+    <div id="fullBanner" class="full-banner" hidden>
+      <h2>We're fully booked right now.</h2>
+      <p>
+        Every slot for the next few weeks is taken. Check back soon, or
+        <a href="/contact">send us a message</a> and we'll add you to the waitlist.
       </p>
-
-      <div class="receipt">
-        <div class="sum-row"><span>Subject</span><span class="dots"></span><strong id="sumSubject"></strong></div>
-        <div class="sum-row"><span>Tutor</span><span class="dots"></span><strong id="sumTutor"></strong></div>
-        <div class="sum-row"><span>Days</span><span class="dots"></span><strong id="sumDays"></strong></div>
-        <div class="sum-row"><span>Time</span><span class="dots"></span><strong id="sumTimes"></strong></div>
-        <div class="sum-row"><span>Notes</span><span class="dots"></span><strong id="sumNotes"></strong></div>
-        <div class="sum-row sum-total"><span>Payment</span><span class="dots"></span><strong>Cash at the session</strong></div>
-      </div>
-
-      <div class="wiz-nav">
-        <button class="wiz-back" data-back="3">← Make changes</button>
-        <button class="btn btn-big" id="openForm">Open booking form →</button>
-      </div>
-      <p class="wiz-fine">By sending this you agree to our 24-hour cancellation policy.</p>
     </div>
+
+    <!-- The reactive board -->
+    <div id="board" class="board">
+      <!-- Row: Subject -->
+      <div class="board-row">
+        <div class="board-row-head">
+          <span class="board-row-label">Subject</span>
+          <span class="board-row-hint" id="hint-subject"></span>
+        </div>
+        <div class="board-chips" id="chips-subject"></div>
+      </div>
+
+      <!-- Row: Duration -->
+      <div class="board-row">
+        <div class="board-row-head">
+          <span class="board-row-label">Length</span>
+          <span class="board-row-hint" id="hint-duration"></span>
+        </div>
+        <div class="board-chips" id="chips-duration"></div>
+      </div>
+
+      <!-- Row: Day -->
+      <div class="board-row">
+        <div class="board-row-head">
+          <span class="board-row-label">Day</span>
+          <span class="board-row-hint" id="hint-day"></span>
+        </div>
+        <div class="day-strip" id="chips-day"></div>
+      </div>
+
+      <!-- Row: Time -->
+      <div class="board-row">
+        <div class="board-row-head">
+          <span class="board-row-label">Start time</span>
+          <span class="board-row-hint" id="hint-time"></span>
+        </div>
+        <div class="board-chips" id="chips-time">
+          <p class="row-placeholder">Pick a day to see times.</p>
+        </div>
+      </div>
+
+      <!-- Row: Tutor -->
+      <div class="board-row">
+        <div class="board-row-head">
+          <span class="board-row-label">Tutor</span>
+          <span class="board-row-hint" id="hint-tutor"></span>
+        </div>
+        <div class="board-chips tutor-chips" id="chips-tutor"></div>
+      </div>
+
+      <!-- Receipt + contact + submit -->
+      <div class="board-footer">
+        <div class="receipt" id="receipt">
+          <div class="sum-row"><span>Subject</span><span class="dots"></span><strong id="r-subject">—</strong></div>
+          <div class="sum-row"><span>Length</span><span class="dots"></span><strong id="r-duration">—</strong></div>
+          <div class="sum-row"><span>Day</span><span class="dots"></span><strong id="r-date">—</strong></div>
+          <div class="sum-row"><span>Start time</span><span class="dots"></span><strong id="r-time">—</strong></div>
+          <div class="sum-row"><span>Tutor</span><span class="dots"></span><strong id="r-tutor">—</strong></div>
+          <div class="sum-row sum-total"><span>Price</span><span class="dots"></span><strong id="r-price">—</strong></div>
+        </div>
+
+        <p class="board-status" id="statusLine"></p>
+
+        <div class="contact-fields">
+          <div class="field-row">
+            <label for="f-name">Your name <span class="req">*</span></label>
+            <input type="text" id="f-name" class="board-input" placeholder="e.g. Sarah M." autocomplete="name" />
+          </div>
+          <div class="field-row">
+            <label for="f-phone">Phone number <span class="req">*</span></label>
+            <input type="tel" id="f-phone" class="board-input" placeholder="e.g. (519) 555-0123" autocomplete="tel" />
+          </div>
+          <div class="field-row">
+            <label for="f-email">Email <span class="opt">(optional)</span></label>
+            <input type="email" id="f-email" class="board-input" placeholder="e.g. sarah@gmail.com" autocomplete="email" />
+          </div>
+          <div class="field-row">
+            <label for="f-notes">What do you want to work on? <span class="req">*</span></label>
+            <textarea id="f-notes" class="board-input" rows="3" placeholder="e.g. Unit 4 trig test Thursday, or my French oral coming up"></textarea>
+          </div>
+          <!-- Honeypot: hidden from humans, bots fill it -->
+          <div class="hp-field" aria-hidden="true">
+            <label for="f-honey">Leave this empty</label>
+            <input type="text" id="f-honey" tabindex="-1" autocomplete="off" />
+          </div>
+        </div>
+
+        <p class="form-error" id="formError" hidden></p>
+
+        <button class="btn btn-big book-btn" id="bookBtn" disabled>
+          Send booking request
+        </button>
+        <p class="wiz-fine">
+          Cash or e-Transfer at the session. 24-hour cancellation policy applies.
+        </p>
+      </div>
+    </div>
+
+    <!-- Success state -->
+    <div id="done" class="done-state" hidden></div>
   </section>
 
+  <!-- Data island: the client script reads this -->
+  <script id="board-data" type="application/json" set:html={boardData}></script>
+
   <script>
-    const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScIxaMb0pNIrZlyBY1QA1W48byz7h_WdjTlVUP3lFyMtR-4oA/viewform'
-    const ENTRY = {
-      subject: 'entry.1150953150',
-      tutor:   'entry.2082813739',
-      days:    'entry.104149159',
-      time:    'entry.1438766178',
-      notes:   'entry.64265001',
+    // ================================================================
+    // CONFIG — change this email to yours
+    // ================================================================
+    const ENDPOINT = 'https://formsubmit.co/ajax/tutors.brantford@gmail.com'
+
+    // ================================================================
+    // TYPES
+    // ================================================================
+    interface Win { start: string; end: string }
+    interface Cfg {
+      horizonDays: number
+      gridMinutes: number
+      gapMinutes: number
+      durations: number[]
+      prices: Record<string, number>
+      sameDayCutoffMinutes: number
     }
-    // ------------------------------------------------------------
-
-    type ChipKey = 'days' | 'times'
-
-    const state = {
-      subjectTitle: '',
-      tutorTitle: '',
-      days: [] as string[],
-      times: [] as string[],
-      notes: '',
+    interface Tutor { id: string; name: string; accent: string; subjects: string[]; blurb: string }
+    interface Subject { id: string; title: string; order: number }
+    interface DateInfo {
+      iso: string; dow: string; dowFull: string; dayNum: number
+      month: string; year: number; isToday: boolean
     }
-
-    // The "!" after getElementById means "this element definitely exists."
-    const steps = document.querySelectorAll<HTMLElement>('.wiz-step')
-    const fill = document.getElementById('wizFill')!
-    const count = document.getElementById('wizCount')!
-
-    function go(n: number) {
-      steps.forEach((s) => { s.hidden = Number(s.dataset.step) !== n })
-      fill.style.width = (n / 4) * 100 + '%'
-      count.textContent = 'Step ' + n + ' of 4'
-      const active = document.querySelector<HTMLElement>('.wiz-step[data-step="' + n + '"]')!
-      window.scrollTo({ top: active.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' })
+    interface State {
+      subject: string | null
+      duration: number | null
+      date: string | null
+      time: number | null
+      tutor: string | null
     }
 
-    // Step 1: choose a subject, then show only tutors who teach it
-    document.querySelectorAll<HTMLElement>('.subject-tile').forEach((tile) => {
-      tile.addEventListener('click', () => {
-        state.subjectTitle = tile.dataset.title ?? ''
-        const subjectId = tile.dataset.subject ?? ''
-        document.querySelectorAll<HTMLElement>('.tutor-option').forEach((opt) => {
-          opt.hidden = !(opt.dataset.subjects ?? '').split(',').includes(subjectId)
-        })
-        document.getElementById('hintSubject')!.textContent = state.subjectTitle
-        go(2)
+    // ================================================================
+    // PARSE DATA
+    // ================================================================
+    const raw = JSON.parse(document.getElementById('board-data')!.textContent!)
+    const subjects: Subject[] = raw.subjects
+    const tutors: Tutor[] = raw.tutors
+    const config: Cfg = raw.config
+    const schedules: Record<string, Record<string, Win[]>> = raw.schedules
+
+    // ================================================================
+    // DATE GENERATION (client-side, always accurate)
+    // ================================================================
+    const DOW_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+    const DOW_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    const DOW_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    const MONTHS_FULL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+    const pad = (n: number) => String(n).padStart(2, '0')
+    const base = new Date()
+    base.setHours(0, 0, 0, 0)
+
+    const dates: DateInfo[] = []
+    for (let i = 0; i < config.horizonDays; i++) {
+      const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + i)
+      dates.push({
+        iso: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`,
+        dow: DOW_KEYS[d.getDay()],
+        dowFull: DOW_FULL[d.getDay()],
+        dayNum: d.getDate(),
+        month: MONTHS[d.getMonth()],
+        year: d.getFullYear(),
+        isToday: i === 0,
       })
-    })
-
-    // Step 2: choose a tutor
-    document.querySelectorAll<HTMLElement>('.tutor-option').forEach((opt) => {
-      opt.addEventListener('click', () => {
-        state.tutorTitle = opt.dataset.title ?? ''
-        go(3)
-      })
-    })
-
-    // Step 3: toggle day and time chips
-    function wireChips(rowId: string, key: ChipKey) {
-      document.querySelectorAll<HTMLElement>('#' + rowId + ' .pick-chip').forEach((chip) => {
-        chip.addEventListener('click', () => {
-          chip.classList.toggle('on')
-          const v = chip.dataset.value ?? ''
-          state[key] = state[key].includes(v) ? state[key].filter((x) => x !== v) : [...state[key], v]
-        })
-      })
     }
-    wireChips('dayChips', 'days')
-    wireChips('timeChips', 'times')
 
-    // Step 3 to 4: validate, then fill the receipt
-    document.getElementById('toReview')!.addEventListener('click', () => {
-      if (state.days.length === 0 || state.times.length === 0) {
-        document.getElementById('timingWarn')!.hidden = false
-        return
+    // ================================================================
+    // ENGINE HELPERS
+    // ================================================================
+    const toMin = (hhmm: string): number => {
+      const [h, m] = hhmm.split(':').map(Number)
+      return h * 60 + m
+    }
+
+    const fmtTime = (mins: number): string => {
+      const h = Math.floor(mins / 60)
+      const m = mins % 60
+      const ap = h >= 12 ? 'PM' : 'AM'
+      const h12 = h % 12 || 12
+      return `${h12}:${pad(m)} ${ap}`
+    }
+
+    const windowsFor = (tutorId: string, date: DateInfo): Win[] =>
+      (schedules[tutorId] && schedules[tutorId][date.dow]) || []
+
+    const teaches = (tutorId: string, subjectId: string): boolean => {
+      const t = tutors.find((x) => x.id === tutorId)
+      return t ? t.subjects.includes(subjectId) : false
+    }
+
+    /** All valid grid-aligned start times for one tutor on one date at one duration */
+    const validStarts = (tutorId: string, date: DateInfo, dur: number): number[] => {
+      const ws = windowsFor(tutorId, date)
+      const grid = config.gridMinutes
+      const set = new Set<number>()
+      for (const w of ws) {
+        const s0 = Math.ceil(toMin(w.start) / grid) * grid
+        const end = toMin(w.end)
+        for (let t = s0; t + dur <= end; t += grid) set.add(t)
       }
-      document.getElementById('timingWarn')!.hidden = true
-      state.notes = (document.getElementById('notesBox') as HTMLTextAreaElement).value.trim()
-      document.getElementById('sumSubject')!.textContent = state.subjectTitle
-      document.getElementById('sumTutor')!.textContent = state.tutorTitle
-      document.getElementById('sumDays')!.textContent = state.days.join(', ')
-      document.getElementById('sumTimes')!.textContent = state.times.join(', ')
-      document.getElementById('sumNotes')!.textContent = state.notes || 'Not specified'
-      go(4)
-    })
+      let arr = [...set]
+      // Same-day cutoff: slots must be at least N minutes in the future
+      if (date.isToday) {
+        const now = new Date()
+        const cutoff = now.getHours() * 60 + now.getMinutes() + config.sameDayCutoffMinutes
+        arr = arr.filter((t) => t >= cutoff)
+      }
+      return arr.sort((a, b) => a - b)
+    }
 
-    // Back buttons
-    document.querySelectorAll<HTMLElement>('.wiz-back').forEach((b) => {
-      b.addEventListener('click', () => go(Number(b.dataset.back)))
-    })
+    // ================================================================
+    // THE DEEP CHECK — the heart of the system
+    // Returns true if at least one complete booking is still possible
+    // given the partial state p.
+    // ================================================================
+    const hasCompletion = (p: State): boolean => {
+      const tutorList = p.tutor ? [p.tutor] : tutors.map((t) => t.id)
+      const dateList = p.date ? dates.filter((d) => d.iso === p.date) : dates
+      const durList = p.duration ? [p.duration] : config.durations
 
-    // Step 4: open the prefilled Google Form in a new tab
-    document.getElementById('openForm')!.addEventListener('click', () => {
-      const params = new URLSearchParams()
-      params.set(ENTRY.subject, state.subjectTitle)
-      params.set(ENTRY.tutor, state.tutorTitle)
-      params.set(ENTRY.days, state.days.join(', '))
-      params.set(ENTRY.time, state.times.join(', '))
-      if (state.notes) params.set(ENTRY.notes, state.notes)
-      window.open(FORM_URL + '?' + params.toString(), '_blank')
-    })
-
-    // Deep links: /book?subject=math and /book?subject=math&tutor=ethan
-    const qs = new URLSearchParams(window.location.search)
-    const preSubject = qs.get('subject')
-    const preTutor = qs.get('tutor')
-    if (preSubject) {
-      const tile = document.querySelector<HTMLElement>('.subject-tile[data-subject="' + preSubject + '"]')
-      if (tile) {
-        tile.click()
-        if (preTutor) {
-          const opt = document.querySelector<HTMLElement>('.tutor-option[data-tutor="' + preTutor + '"]:not([hidden])')
-          if (opt) opt.click()
+      for (const tid of tutorList) {
+        if (p.subject && !teaches(tid, p.subject)) continue
+        for (const date of dateList) {
+          const ws = windowsFor(tid, date)
+          if (!ws.length) continue
+          for (const dur of durList) {
+            const starts = validStarts(tid, date, dur)
+            if (p.time != null) {
+              if (starts.includes(p.time)) return true
+            } else {
+              if (starts.length > 0) return true
+            }
+          }
         }
       }
+      return false
+    }
+
+    // ================================================================
+    // STATE
+    // ================================================================
+    const state: State = { subject: null, duration: null, date: null, time: null, tutor: null }
+
+    // ================================================================
+    // DOM REFERENCES
+    // ================================================================
+    const $ = (id: string) => document.getElementById(id)!
+    const boardEl = $('board')
+    const doneEl = $('done')
+    const bannerEl = $('fullBanner')
+    const bookBtn = $('bookBtn') as HTMLButtonElement
+    const statusLine = $('statusLine')
+    const formError = $('formError')
+
+    // ================================================================
+    // RENDERING
+    // ================================================================
+    function makeChip(label: string, opts: {
+      selected: boolean; disabled: boolean; onClick: () => void
+    }): HTMLButtonElement {
+      const btn = document.createElement('button')
+      btn.className = 'board-chip'
+      if (opts.selected) btn.classList.add('is-selected')
+      if (opts.disabled) btn.classList.add('is-disabled')
+      if (opts.selected) {
+        btn.innerHTML = '<span class="chip-x" aria-hidden="true">×</span>' + label
+      } else {
+        btn.textContent = label
+      }
+      btn.disabled = opts.disabled && !opts.selected
+      btn.addEventListener('click', opts.onClick)
+      return btn
+    }
+
+    function renderSubjects() {
+      const c = $('chips-subject')
+      c.innerHTML = ''
+      for (const s of subjects) {
+        const isSelected = state.subject === s.id
+        const live = isSelected || hasCompletion({ ...state, subject: s.id })
+        c.appendChild(makeChip(s.title, {
+          selected: isSelected,
+          disabled: !live,
+          onClick: () => { state.subject = isSelected ? null : s.id; recompute() },
+        }))
+      }
+      const liveCount = subjects.filter((s) => hasCompletion({ ...state, subject: s.id })).length
+      $('hint-subject').textContent = state.subject ? '' : `${liveCount} available`
+    }
+
+    function renderDurations() {
+      const c = $('chips-duration')
+      c.innerHTML = ''
+      for (const dur of config.durations) {
+        const isSelected = state.duration === dur
+        const live = isSelected || hasCompletion({ ...state, duration: dur })
+        const price = config.prices[String(dur)]
+        const label = dur === 60 ? `1 hour · $${price}` : `90 min · $${price}`
+        c.appendChild(makeChip(label, {
+          selected: isSelected,
+          disabled: !live,
+          onClick: () => { state.duration = isSelected ? null : dur; recompute() },
+        }))
+      }
+    }
+
+    function dayDensity(date: DateInfo): number {
+      const set = new Set<number>()
+      const tutorList = tutors.filter((t) => !state.subject || teaches(t.id, state.subject))
+      const durList = state.duration ? [state.duration] : config.durations
+      for (const t of tutorList) {
+        for (const dur of durList) {
+          for (const s of validStarts(t.id, date, dur)) set.add(s)
+        }
+      }
+      return set.size
+    }
+
+    function renderDays() {
+      const c = $('chips-day')
+      c.innerHTML = ''
+      let prevMonth = ''
+      for (const date of dates) {
+        const isSelected = state.date === date.iso
+        const live = isSelected || hasCompletion({ ...state, date: date.iso })
+        const density = live ? dayDensity(date) : 0
+
+        const chip = document.createElement('button')
+        chip.className = 'day-chip'
+        if (isSelected) chip.classList.add('is-selected')
+        if (!live && !isSelected) chip.classList.add('is-disabled')
+        if (date.isToday) chip.classList.add('is-today')
+        chip.disabled = !live && !isSelected
+
+        // Month separator label
+        const monthTag = date.month !== prevMonth ? date.month : ''
+        prevMonth = date.month
+
+        // Dots
+        const dotCount = Math.min(density, 4)
+        const dotsHtml = live && density > 0
+          ? '<span class="day-dots">' + '•'.repeat(dotCount) + (density > 4 ? '+' : '') + '</span>'
+          : '<span class="day-dots"></span>'
+
+        chip.innerHTML =
+          (isSelected ? '<span class="chip-x-day" aria-hidden="true">×</span>' : '') +
+          (monthTag ? `<span class="day-month">${monthTag}</span>` : '<span class="day-month">&nbsp;</span>') +
+          `<span class="day-dow">${DOW_SHORT[dates.indexOf(date) % 7 === 0 ? new Date(date.year, dates.indexOf(date) % 30, date.dayNum).getDay() : 0]}</span>` +
+          `<span class="day-num">${date.dayNum}</span>` +
+          dotsHtml
+
+        // Fix: use the actual dow from date info
+        chip.querySelector('.day-dow')!.textContent = DOW_SHORT[['sun','mon','tue','wed','thu','fri','sat'].indexOf(date.dow)]
+
+        chip.addEventListener('click', () => {
+          if (isSelected) { state.date = null; state.time = null }
+          else { state.date = date.iso; state.time = null }
+          recompute()
+        })
+        c.appendChild(chip)
+      }
+      $('hint-day').textContent = state.date ? '' : 'Next 30 days'
+    }
+
+    function renderTimes() {
+      const c = $('chips-time')
+      c.innerHTML = ''
+
+      if (!state.date) {
+        c.innerHTML = '<p class="row-placeholder">Pick a day to see times.</p>'
+        $('hint-time').textContent = ''
+        return
+      }
+
+      const date = dates.find((d) => d.iso === state.date)!
+      const qualTutors = tutors.filter((t) => !state.subject || teaches(t.id, state.subject))
+      const grid = config.gridMinutes
+
+      // Find the full window range for this day
+      let minS = Infinity
+      let maxE = -Infinity
+      for (const t of qualTutors) {
+        for (const w of windowsFor(t.id, date)) {
+          minS = Math.min(minS, toMin(w.start))
+          maxE = Math.max(maxE, toMin(w.end))
+        }
+      }
+
+      if (minS === Infinity) {
+        c.innerHTML = '<p class="row-placeholder">No openings this day for this subject.</p>'
+        return
+      }
+
+      // Generate all grid times in the range (gaps show as grey)
+      const s0 = Math.ceil(minS / grid) * grid
+      let liveCount = 0
+      for (let t = s0; t < maxE; t += grid) {
+        const isSelected = state.time === t
+        const live = isSelected || hasCompletion({ ...state, time: t })
+        if (live) liveCount++
+        c.appendChild(makeChip(fmtTime(t), {
+          selected: isSelected,
+          disabled: !live,
+          onClick: () => { state.time = isSelected ? null : t; recompute() },
+        }))
+      }
+      $('hint-time').textContent = state.time ? '' : `${liveCount} openings`
+    }
+
+    function renderTutors() {
+      const c = $('chips-tutor')
+      c.innerHTML = ''
+      const liveTutors: string[] = []
+
+      for (const t of tutors) {
+        const isSelected = state.tutor === t.id
+        const live = isSelected || hasCompletion({ ...state, tutor: t.id })
+        if (live) liveTutors.push(t.id)
+
+        const chip = document.createElement('button')
+        chip.className = `board-chip tutor-chip ac-${t.accent}`
+        if (isSelected) chip.classList.add('is-selected')
+        if (!live && !isSelected) chip.classList.add('is-disabled')
+        chip.disabled = !live && !isSelected
+
+        const subjectList = t.subjects
+          .map((s) => subjects.find((x) => x.id === s)?.title ?? s)
+          .join(', ')
+
+        chip.innerHTML =
+          (isSelected ? '<span class="chip-x" aria-hidden="true">×</span>' : '') +
+          `<span class="avatar avatar-sm">${t.name.charAt(0)}</span>` +
+          `<span class="tutor-chip-body"><strong>${t.name}</strong><span class="tutor-chip-subjects">${subjectList}</span></span>`
+
+        chip.addEventListener('click', () => {
+          state.tutor = isSelected ? null : t.id
+          recompute()
+        })
+        c.appendChild(chip)
+      }
+
+      $('hint-tutor').textContent = state.tutor
+        ? ''
+        : liveTutors.length === tutors.length ? '' : `${liveTutors.length} free`
+    }
+
+    function renderReceipt() {
+      const subj = subjects.find((s) => s.id === state.subject)
+      const tutor = tutors.find((t) => t.id === state.tutor)
+      const date = dates.find((d) => d.iso === state.date)
+
+      $('r-subject').textContent = subj ? subj.title : '—'
+      $('r-duration').textContent = state.duration ? `${state.duration} minutes` : '—'
+      $('r-date').textContent = date ? `${date.dowFull.slice(0, 3)}, ${date.month} ${date.dayNum}` : '—'
+      $('r-time').textContent = state.time != null ? fmtTime(state.time) : '—'
+      $('r-tutor').textContent = tutor ? tutor.name : '—'
+      $('r-price').textContent = state.duration ? `$${config.prices[String(state.duration)]}` : '—'
+
+      // Status line
+      const missing: string[] = []
+      if (!state.subject) missing.push('subject')
+      if (!state.duration) missing.push('length')
+      if (!state.date) missing.push('day')
+      if (state.time == null) missing.push('time')
+      if (!state.tutor) missing.push('tutor')
+
+      if (missing.length === 0) {
+        statusLine.textContent = 'All set! Add your information, then send.'
+        statusLine.classList.add('is-ready')
+      } else {
+        statusLine.textContent = `Still need: ${missing.join(', ')}.`
+        statusLine.classList.remove('is-ready')
+      }
+
+      bookBtn.disabled = missing.length > 0
+    }
+
+    // ================================================================
+    // MASTER RECOMPUTE
+    // ================================================================
+    function recompute() {
+      renderSubjects()
+      renderDurations()
+      renderDays()
+      renderTimes()
+      renderTutors()
+      renderReceipt()
+    }
+
+    // ================================================================
+    // SUBMISSION
+    // ================================================================
+    bookBtn.addEventListener('click', async () => {
+      formError.hidden = true
+
+      const name = ($('f-name') as HTMLInputElement).value.trim()
+      const phone = ($('f-phone') as HTMLInputElement).value.trim()
+      const email = ($('f-email') as HTMLInputElement).value.trim()
+      const notes = ($('f-notes') as HTMLTextAreaElement).value.trim()
+      const honey = ($('f-honey') as HTMLInputElement).value
+
+      // Honeypot: bots fill this; silently pretend success
+      if (honey) { showDone(); return }
+
+      if (!name || !phone) {
+        formError.textContent = 'Please add your name and phone number so we can confirm your booking.'
+        formError.hidden = false
+        if (!name) ($('f-name') as HTMLInputElement).focus()
+        else ($('f-phone') as HTMLInputElement).focus()
+        return
+      }
+
+      if (!notes) {
+        formError.textContent = 'Tell us what you want to work on so your tutor can come prepared.'
+        formError.hidden = false;
+        ($('f-notes') as HTMLTextAreaElement).focus()
+        return
+      }
+
+      // Build labels
+      const subj = subjects.find((s) => s.id === state.subject)!
+      const tutor = tutors.find((t) => t.id === state.tutor)!
+      const date = dates.find((d) => d.iso === state.date)!
+      const timeLabel = fmtTime(state.time!)
+      const dateLabel = `${date.dowFull}, ${MONTHS_FULL[dates.indexOf(date) % 12 === 0 ? new Date(date.year, 0, 1).getMonth() : 0]} ${date.dayNum}`
+      const dateShort = `${date.dowFull.slice(0, 3)} ${date.month} ${date.dayNum}`
+      const price = config.prices[String(state.duration)]
+
+      // Sending state
+      bookBtn.disabled = true
+      bookBtn.textContent = 'Sending…'
+      bookBtn.classList.add('is-sending')
+
+      const body = {
+        _subject: `New booking — ${subj.title}, ${dateShort}, ${timeLabel}`,
+        _template: 'table',
+        _captcha: 'false',
+        'Subject': subj.title,
+        'Length': `${state.duration} minutes ($${price})`,
+        'Date': `${date.dowFull}, ${date.month} ${date.dayNum}, ${date.year}`,
+        'Start Time': timeLabel,
+        'Tutor': tutor.name,
+        'Student Name': name,
+        'Phone': phone,
+        'Email': email || '—',
+        'Notes': notes || '—',
+      }
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(body),
+        })
+        const json = await res.json()
+        if (res.ok && (json.success === 'true' || json.success === true)) {
+          showDone()
+        } else {
+          throw new Error('bad response')
+        }
+      } catch {
+        bookBtn.disabled = false
+        bookBtn.textContent = 'Send booking request'
+        bookBtn.classList.remove('is-sending')
+        formError.textContent = 'Something went wrong sending your request. Please try again, or email us at tutors.brantford@gmail.com.'
+        formError.hidden = false
+      }
+    })
+
+    // ================================================================
+    // DONE STATE
+    // ================================================================
+    function showDone() {
+      const subj = subjects.find((s) => s.id === state.subject)
+      const tutor = tutors.find((t) => t.id === state.tutor)
+      const date = dates.find((d) => d.iso === state.date)
+      const phone = ($('f-phone') as HTMLInputElement).value.trim()
+
+      const summary = subj && tutor && date && state.time != null
+        ? `<strong>${subj.title}</strong> · ${state.duration} min · ${date.dowFull.slice(0, 3)} ${date.month} ${date.dayNum} · ${fmtTime(state.time)} · with ${tutor.name}`
+        : 'Your booking request'
+
+      doneEl.innerHTML = `
+        <div class="done-inner">
+          <div class="done-check">✓</div>
+          <h2>Request sent.</h2>
+          <p class="lead">${summary}</p>
+          <p class="done-note">
+            One of us will text <strong>${phone || 'you'}</strong> within a day to confirm.
+            Pay cash or e-Transfer at the session.
+          </p>
+          <button class="btn btn-ghost" id="againBtn">Make another booking</button>
+        </div>
+      `
+      boardEl.hidden = true
+      doneEl.hidden = false
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+
+      document.getElementById('againBtn')!.addEventListener('click', () => {
+        state.subject = null; state.duration = null; state.date = null
+        state.time = null; state.tutor = null
+        ;($('f-name') as HTMLInputElement).value = ''
+        ;($('f-phone') as HTMLInputElement).value = ''
+        ;($('f-email') as HTMLInputElement).value = ''
+        ;($('f-notes') as HTMLTextAreaElement).value = ''
+        formError.hidden = true
+        bookBtn.textContent = 'Send booking request'
+        bookBtn.classList.remove('is-sending')
+        doneEl.hidden = true
+        boardEl.hidden = false
+        recompute()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      })
+    }
+
+    // ================================================================
+    // INIT
+    // ================================================================
+
+    // Full-week check
+    if (!hasCompletion({ subject: null, duration: null, date: null, time: null, tutor: null })) {
+      boardEl.hidden = true
+      bannerEl.hidden = false
+    } else {
+      // Deep link: /book?subject=math
+      const qs = new URLSearchParams(window.location.search)
+      const preSubject = qs.get('subject')
+      if (preSubject) {
+        const match = subjects.find((s) => s.id === preSubject)
+        if (match && hasCompletion({ ...state, subject: match.id })) {
+          state.subject = match.id
+        }
+      }
+      recompute()
     }
   </script>
 </Layout>
