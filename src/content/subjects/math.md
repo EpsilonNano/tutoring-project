@@ -1,7 +1,7 @@
 ---
 title: Math
 order: 1
-tagline: From algebra basics to Calculus, without the panic.
+tagline: From algebra to calculus.
 levels: Grades 8 to 12
 topics:
   - Geometry and trigonometry
