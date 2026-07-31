@@ -22,9 +22,3 @@ npm run build
 * **Framework:** [Astro v5+](https://astro.build/)
 * **Languages:** TypeScript, HTML, CSS
 * **Deployment:** GitHub Pages via GitHub Actions
-
-## Features
-
-* Multi-step booking wizard pre-filling a Google Form response.
-* Dynamic subject and tutor pages powered by Astro Content Collections.
-* Fully static, responsive design with zero client-side framework overhead.
