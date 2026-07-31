@@ -1,7 +1,7 @@
 ---
 title: French
 order: 3
-tagline: Grammar that makes sense and conversation that does not feel scripted.
+tagline: Improve your grammar, speaking, reading, and writing skills.
 levels: Grades 8 to 12, beginner to advanced
 topics:
   - Core grammar and verb tenses
