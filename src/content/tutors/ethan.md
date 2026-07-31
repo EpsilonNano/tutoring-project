@@ -2,7 +2,7 @@
 name: Ethan
 order: 1
 grade: Grade 12
-average: 95%+
+average: 97%+
 accent: sage
 subjects: [math, science, french, coding, chess]
 specialties: [Calculus, Algebra, Biology, Chemistry, Physics, French, Python]

@@ -2,7 +2,7 @@
 name: Daniel
 order: 3
 grade: Grade 12
-average: 95%+
+average: 97%+
 accent: sage
 subjects: [math, science, french, coding, chess]
 specialties: [Algebra, Biology, Chemistry, Physics, French, Python]
