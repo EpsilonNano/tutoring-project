@@ -1,7 +1,7 @@
 ---
 title: Math
 order: 1
-tagline: From algebra to calculus.
+tagline: Learn subjects from algebra to calculus.
 levels: Grades 8 to 12
 topics:
   - Geometry and trigonometry
