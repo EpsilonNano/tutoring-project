@@ -6,7 +6,7 @@ average: 95%+
 accent: amber
 subjects: [math, science, coding]
 specialties: [Geometry, Game Design, Algebra, Chemistry, Physics, Python, Godot, Trigonometry]
-blurb: Focused on science, math, and coding. Loves building projects and connecting what you learn in school to the real world.
+blurb: Focused on science, math, and coding. Loves building projects that connect what is taught in school to the real world.
 photo:
 ---
 
