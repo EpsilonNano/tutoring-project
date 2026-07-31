@@ -6,8 +6,10 @@ average: 95%+
 accent: amber
 subjects: [math, science, coding]
 specialties: [Geometry, Game Design, Algebra, Chemistry, Physics, Python, Godot, Trigonometry]
-blurb: Science and code specialist. Explains Python like he just learned it himself.
+blurb: Focused on science, math, and coding. Loves building projects and connecting what you learn in school to the real world.
 photo:
 ---
 
-Liam is heading into Grade 12 with an average above 95%. He lives for the sciences and for clean code, and he has been writing Python long enough to remember exactly which parts are confusing at first. His sessions move at your pace, heavy on practice problems and light on judgment. If you are stuck, he has been stuck in the same spot and knows the way out.
+Hi, I'm Liam! I'm a Grade 12 student passionate about science, engineering, and computer science. I've spent years building projects with code and electronics, from programming games to creating science experiments and engineering projects. These experiences have taught me how to approach difficult problems, troubleshoot mistakes, and explain ideas clearly.
+
+I tutor math, science, and coding. My goal as a tutor is to help students not just get the right answer, but understand why it works.
