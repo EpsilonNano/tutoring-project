@@ -22,9 +22,13 @@ const tutorsFor = (id: string) => tutors.filter((t) => t.data.subjects.some((s) 
           </span>
           <span class="who">
             {tutorsFor(s.id).map((t) => (
-              <span class={`avatar avatar-sm ac-${t.data.accent}`} title={t.data.name}>
-                {t.data.name.charAt(0)}
-              </span>
+              t.data.photo ? (
+                <img src={t.data.photo} alt={t.data.name} class="avatar avatar-sm" title={t.data.name} loading="lazy" />
+              ) : (
+                <span class={`avatar avatar-sm ac-${t.data.accent}`} title={t.data.name}>
+                  {t.data.name.charAt(0)}
+                </span>
+              )
             ))}
           </span>
         </a>

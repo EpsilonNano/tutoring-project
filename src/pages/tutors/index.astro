@@ -19,7 +19,11 @@ const subjectTitles = Object.fromEntries(
     <div class="tutor-panels">
       {tutors.map((t) => (
         <a href={href(`/tutors/${t.id}`)} class={`tutor-panel ac-${t.data.accent}`}>
-          <div class="avatar">{t.data.name.charAt(0)}</div>
+          {t.data.photo ? (
+            <img src={t.data.photo} alt={t.data.name} class="avatar" loading="lazy" />
+          ) : (
+            <div class="avatar">{t.data.name.charAt(0)}</div>
+          )}
           <div>
             <h3>{t.data.name}</h3>
             <p class="meta">{t.data.grade} · <strong>{t.data.average} average</strong></p>

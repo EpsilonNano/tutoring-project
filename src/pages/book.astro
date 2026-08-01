@@ -15,6 +15,7 @@ const tutors = (await getCollection('tutors'))
     accent: t.data.accent,
     subjects: t.data.subjects,
     blurb: t.data.blurb,
+    photo: t.data.photo,
   }))
 
 const boardData = JSON.stringify({
@@ -172,7 +173,7 @@ const boardData = JSON.stringify({
       prices: Record<string, number>
       sameDayCutoffMinutes: number
     }
-    interface Tutor { id: string; name: string; accent: string; subjects: string[]; blurb: string }
+    interface Tutor { id: string; name: string; accent: string; subjects: string[]; blurb: string; photo?: string | null }
     interface Subject { id: string; title: string; order: number }
     interface DateInfo {
       iso: string; dow: string; dowFull: string; dayNum: number
@@ -461,9 +462,13 @@ const boardData = JSON.stringify({
           .map((s) => subjects.find((x) => x.id === s)?.title ?? s)
           .join(', ')
 
+        const avatarHTML = t.photo 
+          ? `<img src="${t.photo}" alt="${t.name}" class="avatar avatar-sm" loading="lazy" />`
+          : `<span class="avatar avatar-sm">${t.name.charAt(0)}</span>`;
+
         chip.innerHTML =
           (isSelected ? '<span class="chip-x" aria-hidden="true">×</span>' : '') +
-          `<span class="avatar avatar-sm">${t.name.charAt(0)}</span>` +
+          avatarHTML +
           `<span class="tutor-chip-body"><strong>${t.name}</strong><span class="tutor-chip-subjects">${subjectList}</span></span>`
 
         chip.addEventListener('click', () => {

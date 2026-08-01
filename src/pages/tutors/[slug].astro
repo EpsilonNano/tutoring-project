@@ -20,7 +20,11 @@ const others = (await getCollection('tutors'))
     <a href={href('/tutors')} class="back-link">← All tutors</a>
 
     <div class={`profile-head ac-${tutor.data.accent}`}>
-      <div class="avatar avatar-lg">{tutor.data.name.charAt(0)}</div>
+      {tutor.data.photo ? (
+        <img src={tutor.data.photo} alt={tutor.data.name} class="avatar avatar-lg" loading="lazy" />
+      ) : (
+        <div class="avatar avatar-lg">{tutor.data.name.charAt(0)}</div>
+      )}
       <div>
         <h1>{tutor.data.name}</h1>
         <p class="meta">{tutor.data.grade} · <strong>{tutor.data.average} average</strong></p>
@@ -40,7 +44,11 @@ const others = (await getCollection('tutors'))
       <div class="mini-tutors">
         {others.map((t) => (
           <a href={href(`/tutors/${t.id}`)} class={`mini-tutor ac-${t.data.accent}`}>
-            <div class="avatar avatar-sm">{t.data.name.charAt(0)}</div>
+            {t.data.photo ? (
+              <img src={t.data.photo} alt={t.data.name} class="avatar avatar-sm" loading="lazy" />
+            ) : (
+              <div class="avatar avatar-sm">{t.data.name.charAt(0)}</div>
+            )}
             <div>
               <strong>{t.data.name}</strong>
               <p class="meta">{t.data.blurb}</p>
