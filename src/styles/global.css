@@ -11,7 +11,7 @@
   --border:       #013239;
 
   --font-display: 'Fraunces', Georgia, serif;
-  --font-body:    'Atkinson Hyperlegible', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
   --radius: 10px;
   --shadow: 0 1px 3px rgba(24,24,27,.06), 0 8px 24px rgba(24,24,27,.06);
 }
@@ -431,18 +431,15 @@ section { padding-block: 3.5rem; }
   border: 1.5px solid var(--border); background: var(--paper-raised);
   cursor: pointer; font: inherit; text-align: center; flex-shrink: 0;
   scroll-snap-align: start; transition: all .15s ease;
+  color: var(--ink);
 }
 .day-chip:hover:not(:disabled) { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
 .day-chip.is-selected { background: var(--accent); border-color: var(--accent); color: #fff; }
 .day-chip.is-selected .day-dow, .day-chip.is-selected .day-num { color: #fff; }
-.day-chip.is-selected .day-dots { color: rgba(255,255,255,.7); }
 .day-chip.is-disabled { opacity: .28; cursor: not-allowed; border-style: dashed; transform: none !important; }
-.day-chip.is-today { border-color: var(--warm); }
-.day-chip.is-today .day-dow { color: var(--warm); }
 .day-month { font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); min-height: .8em; }
 .day-dow { font-size: .72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
 .day-num { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; line-height: 1.1; }
-.day-dots { font-size: .6rem; letter-spacing: 1px; color: var(--accent); min-height: .8em; }
 
 /* --- Time chips --- */
 .row-placeholder { color: var(--muted); font-size: .92rem; font-style: italic; padding-block: .3rem; }

@@ -364,52 +364,26 @@ const boardData = JSON.stringify({
       }
     }
 
-    function dayDensity(date: DateInfo): number {
-      const set = new Set<number>()
-      const tutorList = tutors.filter((t) => !state.subject || teaches(t.id, state.subject))
-      const durList = state.duration ? [state.duration] : config.durations
-      for (const t of tutorList) {
-        for (const dur of durList) {
-          for (const s of validStarts(t.id, date, dur)) set.add(s)
-        }
-      }
-      return set.size
-    }
-
     function renderDays() {
       const c = $('chips-day')
       c.innerHTML = ''
-      let prevMonth = ''
       for (const date of dates) {
         const isSelected = state.date === date.iso
         const live = isSelected || hasCompletion({ ...state, date: date.iso })
-        const density = live ? dayDensity(date) : 0
 
         const chip = document.createElement('button')
         chip.className = 'day-chip'
         if (isSelected) chip.classList.add('is-selected')
         if (!live && !isSelected) chip.classList.add('is-disabled')
-        if (date.isToday) chip.classList.add('is-today')
         chip.disabled = !live && !isSelected
-
-        // Month separator label
-        const monthTag = date.month !== prevMonth ? date.month : ''
-        prevMonth = date.month
-
-        // Dots
-        const dotCount = Math.min(density, 4)
-        const dotsHtml = live && density > 0
-          ? '<span class="day-dots">' + '•'.repeat(dotCount) + (density > 4 ? '+' : '') + '</span>'
-          : '<span class="day-dots"></span>'
 
         chip.innerHTML =
           (isSelected ? '<span class="chip-x-day" aria-hidden="true">×</span>' : '') +
-          (monthTag ? `<span class="day-month">${monthTag}</span>` : '<span class="day-month">&nbsp;</span>') +
+          `<span class="day-month">${date.month}</span>` +
           `<span class="day-dow">${DOW_SHORT[dates.indexOf(date) % 7 === 0 ? new Date(date.year, dates.indexOf(date) % 30, date.dayNum).getDay() : 0]}</span>` +
-          `<span class="day-num">${date.dayNum}</span>` +
-          dotsHtml
+          `<span class="day-num">${date.dayNum}</span>`
 
-        // Fix: use the actual dow from date info
+        // Use the actual dow from date info
         chip.querySelector('.day-dow')!.textContent = DOW_SHORT[['sun','mon','tue','wed','thu','fri','sat'].indexOf(date.dow)]
 
         chip.addEventListener('click', () => {
