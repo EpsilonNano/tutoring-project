@@ -485,6 +485,18 @@ textarea.board-input { resize: vertical; }
 .book-btn.is-sending { opacity: .7; cursor: wait; }
 .form-error { margin-top: 1rem; color: #c0392b; font-weight: 700; font-size: .9rem; }
 
+/* --- Confirmation checkbox --- */
+.ack-row {
+  display: flex; align-items: flex-start; gap: .7rem;
+  margin-top: 1.5rem; max-width: 480px; cursor: pointer;
+  font-size: .9rem; color: var(--muted); line-height: 1.5;
+}
+.ack-row strong { color: var(--ink); }
+.ack-box {
+  flex-shrink: 0; width: 18px; height: 18px; margin-top: .15rem;
+  accent-color: var(--accent); cursor: pointer;
+}
+
 /* --- Done state --- */
 .done-state { padding-block: 4rem; }
 .done-inner { text-align: center; max-width: 520px; margin-inline: auto; }

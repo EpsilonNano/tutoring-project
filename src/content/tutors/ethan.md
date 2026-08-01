@@ -10,4 +10,6 @@ blurb: Experienced across all five subjects, with a focus on math and science. B
 photo:
 ---
 
-Ethan is heading into Grade 12 with an average above 95% across every course he takes. He tutors all five of our subjects, and he is the friend people call the night before a math test. His sessions are calm and structured, built around worked examples and plenty of practice. Away from the desk he is usually halfway through a chess puzzle or a small Python project.
+Hello, I'm Ethan! I'm currently in grade 12 and I love science, math, coding, and game development! From making a headset to help visually impaired individuals navigate using LiDAR and sonar, or creating a strong chess engine in Scratch, I'm always eager to learn new things and help others succeed in their studies!
+
+I currently tutor math, science, french, coding and chess, and my mission as a tutor is not just to help students memorize the material, but to help them understand why it works.

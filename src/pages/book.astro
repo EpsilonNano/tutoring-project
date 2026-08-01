@@ -105,8 +105,6 @@ const boardData = JSON.stringify({
           <div class="sum-row sum-total"><span>Price</span><span class="dots"></span><strong id="r-price">—</strong></div>
         </div>
 
-        <p class="board-status" id="statusLine"></p>
-
         <div class="contact-fields">
           <div class="field-row">
             <label for="f-name">Your name <span class="req">*</span></label>
@@ -132,6 +130,13 @@ const boardData = JSON.stringify({
         </div>
 
         <p class="form-error" id="formError" hidden></p>
+
+        <label class="ack-row" for="f-ack">
+          <input type="checkbox" id="f-ack" class="ack-box" />
+          <span>I understand this is a <strong>request</strong>, not a confirmed booking. Real confirmation comes by text or email.</span>
+        </label>
+
+        <p class="board-status" id="statusLine"></p>
 
         <button class="btn btn-big book-btn" id="bookBtn" disabled>
           Send booking request
@@ -304,6 +309,8 @@ const boardData = JSON.stringify({
     const bookBtn = $('bookBtn') as HTMLButtonElement
     const statusLine = $('statusLine')
     const formError = $('formError')
+    const ackBox = $('f-ack') as HTMLInputElement
+    ackBox.addEventListener('change', () => renderReceipt())
 
     // ================================================================
     // RENDERING
@@ -517,15 +524,20 @@ const boardData = JSON.stringify({
       if (state.time == null) missing.push('time')
       if (!state.tutor) missing.push('tutor')
 
-      if (missing.length === 0) {
-        statusLine.textContent = 'All set! Add your information, then send.'
-        statusLine.classList.add('is-ready')
-      } else {
+      const acked = ackBox.checked
+
+      if (missing.length > 0) {
         statusLine.textContent = `Still need: ${missing.join(', ')}.`
         statusLine.classList.remove('is-ready')
+      } else if (!acked) {
+        statusLine.textContent = 'All set! Tick the confirmation box above, add your details, and send.'
+        statusLine.classList.remove('is-ready')
+      } else {
+        statusLine.textContent = 'All set! Add your details, then send.'
+        statusLine.classList.add('is-ready')
       }
 
-      bookBtn.disabled = missing.length > 0
+      bookBtn.disabled = missing.length > 0 || !acked
     }
 
     // ================================================================
@@ -656,6 +668,7 @@ const boardData = JSON.stringify({
         ;($('f-phone') as HTMLInputElement).value = ''
         ;($('f-email') as HTMLInputElement).value = ''
         ;($('f-notes') as HTMLTextAreaElement).value = ''
+        ackBox.checked = false
         formError.hidden = true
         bookBtn.textContent = 'Send booking request'
         bookBtn.classList.remove('is-sending')
