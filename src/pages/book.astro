@@ -137,14 +137,16 @@ const boardData = JSON.stringify({
           <span>I understand this is a <strong>request</strong>, not a confirmed booking. Real confirmation comes by text or email.</span>
         </label>
 
+        <label class="ack-row" for="f-cancel-ack">
+          <input type="checkbox" id="f-cancel-ack" class="ack-box" />
+          <span>I understand that payment is by <strong>cash or e‑Transfer</strong> at the session, and that if I cancel within <strong>24 hours</strong> of the confirmed time, I will still be charged <strong>50%</strong>.</span>
+        </label>
+
         <p class="board-status" id="statusLine"></p>
 
         <button class="btn btn-big book-btn" id="bookBtn" disabled>
           Send booking request
         </button>
-        <p class="wiz-fine">
-          Cash or e-Transfer at the session. 24-hour cancellation policy applies.
-        </p>
       </div>
     </div>
 
@@ -311,7 +313,17 @@ const boardData = JSON.stringify({
     const statusLine = $('statusLine')
     const formError = $('formError')
     const ackBox = $('f-ack') as HTMLInputElement
+    const cancelAckBox = $('f-cancel-ack') as HTMLInputElement
     ackBox.addEventListener('change', () => renderReceipt())
+    cancelAckBox.addEventListener('change', () => renderReceipt())
+
+    const nameInput = $('f-name') as HTMLInputElement
+    const phoneInput = $('f-phone') as HTMLInputElement
+    const notesInput = $('f-notes') as HTMLTextAreaElement
+
+    nameInput.addEventListener('input', renderReceipt)
+    phoneInput.addEventListener('input', renderReceipt)
+    notesInput.addEventListener('input', renderReceipt)
 
     // ================================================================
     // RENDERING
@@ -482,7 +494,7 @@ const boardData = JSON.stringify({
         ? ''
         : liveTutors.length === tutors.length ? '' : `${liveTutors.length} free`
     }
-
+    
     function renderReceipt() {
       const subj = subjects.find((s) => s.id === state.subject)
       const tutor = tutors.find((t) => t.id === state.tutor)
@@ -495,28 +507,40 @@ const boardData = JSON.stringify({
       $('r-tutor').textContent = tutor ? tutor.name : '—'
       $('r-price').textContent = state.duration ? `$${config.prices[String(state.duration)]}` : '—'
 
-      // Status line
+      // Gather required field values
+      const name = nameInput.value.trim()
+      const phone = phoneInput.value.trim()
+      const notes = notesInput.value.trim()
+
+      // Build missing list
       const missing: string[] = []
       if (!state.subject) missing.push('subject')
       if (!state.duration) missing.push('length')
       if (!state.date) missing.push('day')
       if (state.time == null) missing.push('time')
       if (!state.tutor) missing.push('tutor')
+      if (!name) missing.push('your name')
+      if (!phone) missing.push('phone number')
+      if (!notes) missing.push('what you want to work on')
 
       const acked = ackBox.checked
+      const cancelAcked = cancelAckBox.checked
 
       if (missing.length > 0) {
-        statusLine.textContent = `Still need: ${missing.join(', ')}.`
+        statusLine.textContent = `Please fill out: ${missing.join(', ')}.`
         statusLine.classList.remove('is-ready')
       } else if (!acked) {
-        statusLine.textContent = 'All set! Tick the confirmation box above, add your details, and send.'
+        statusLine.textContent = 'All set! Tick the request confirmation box above.'
+        statusLine.classList.remove('is-ready')
+      } else if (!cancelAcked) {
+        statusLine.textContent = 'All set! Tick the payment & cancellation policy box.'
         statusLine.classList.remove('is-ready')
       } else {
         statusLine.textContent = 'All set! Add your details, then send.'
         statusLine.classList.add('is-ready')
       }
 
-      bookBtn.disabled = missing.length > 0 || !acked
+      bookBtn.disabled = missing.length > 0 || !acked || !cancelAcked
     }
 
     // ================================================================
@@ -648,6 +672,7 @@ const boardData = JSON.stringify({
         ;($('f-email') as HTMLInputElement).value = ''
         ;($('f-notes') as HTMLTextAreaElement).value = ''
         ackBox.checked = false
+        cancelAckBox.checked = false
         formError.hidden = true
         bookBtn.textContent = 'Send booking request'
         bookBtn.classList.remove('is-sending')
