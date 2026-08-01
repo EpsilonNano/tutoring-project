@@ -47,7 +47,11 @@ const teaching = (await getCollection('tutors'))
         <div class="mini-tutors" style="grid-template-columns: 1fr;">
           {teaching.map((t) => (
             <a href={href(`/tutors/${t.id}`)} class={`mini-tutor ac-${t.data.accent}`}>
-              <div class="avatar avatar-sm">{t.data.name.charAt(0)}</div>
+              {t.data.photo ? (
+                <img src={t.data.photo} alt={t.data.name} class="avatar avatar-sm" loading="lazy" />
+              ) : (
+                <div class="avatar avatar-sm">{t.data.name.charAt(0)}</div>
+              )}
               <div>
                 <strong>{t.data.name}</strong>
                 <p class="meta">{t.data.blurb}</p>
