@@ -2,7 +2,7 @@
 title: Science
 order: 2
 tagline: Biology, chemistry, and physics made easier to understand.
-levels: Grades 8 to 12
+levels: Kindergarten to Grade 11
 topics:
   - Biology, from cells to genetics
   - Chemistry, including stoichiometry and reactions

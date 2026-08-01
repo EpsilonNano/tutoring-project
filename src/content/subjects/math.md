@@ -2,7 +2,7 @@
 title: Math
 order: 1
 tagline: Learn subjects from algebra to calculus.
-levels: Grades 8 to 12
+levels: Kindergarten to Grade 12
 topics:
   - Geometry and trigonometry
   - Functions & Advanced Functions

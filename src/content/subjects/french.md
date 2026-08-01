@@ -2,13 +2,12 @@
 title: French
 order: 3
 tagline: Improve your grammar, speaking, reading, and writing skills.
-levels: Grades 8 to 12, beginner to advanced
+levels: Kindergarten to Grade 12, beginner to advanced
 topics:
   - Core grammar and verb tenses
   - Reading comprehension
   - Writing and essay structure
   - Speaking practice and pronunciation
-  - Exam and DELF style prep
 bring: Bring your course reader or workbook, and one thing you would like to say out loud.
 ---
 
