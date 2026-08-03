@@ -126,7 +126,7 @@ const boardData = JSON.stringify({
           <!-- Honeypot: hidden from humans, bots fill it -->
           <div class="hp-field" aria-hidden="true">
             <label for="f-honey">Leave this empty</label>
-            <input type="text" id="f-honey" tabindex="-1" autocomplete="off" />
+            <input type="text" id="f-honey" name="_honey" tabindex="-1" autocomplete="off" />
           </div>
         </div>
 
@@ -603,6 +603,7 @@ const boardData = JSON.stringify({
         _subject: `New booking — ${subj.title}, ${dateShort}, ${timeLabel}`,
         _template: 'table',
         _captcha: 'false',
+        _honey: honey,
         'Subject': subj.title,
         'Length': `${state.duration} minutes ($${price})`,
         'Date': `${date.dowFull}, ${date.month} ${date.dayNum}, ${date.year}`,
@@ -648,18 +649,25 @@ const boardData = JSON.stringify({
         ? `<strong>${subj.title}</strong> · ${state.duration} min · ${date.dowFull.slice(0, 3)} ${date.month} ${date.dayNum} · ${fmtTime(state.time)} · with ${tutor.name}`
         : 'Your booking request'
 
+      // 1. Render the static HTML structure, leaving an empty <strong> tag with an ID
       doneEl.innerHTML = `
         <div class="done-inner">
           <div class="done-check">✓</div>
           <h2>Request sent.</h2>
           <p class="lead">${summary}</p>
           <p class="done-note">
-            One of us will text <strong>${phone || 'you'}</strong> within a day to confirm.
+            One of us will text <strong id="done-phone"></strong> within a day to confirm.
             Pay cash or e-Transfer at the session.
           </p>
           <button class="btn btn-ghost" id="againBtn">Make another booking</button>
         </div>
       `
+
+      // 2. Safely inject the user-provided phone number using textContent
+      const donePhoneEl = document.getElementById('done-phone')
+      if (donePhoneEl) {
+        donePhoneEl.textContent = phone || 'you'
+      }
       boardEl.hidden = true
       doneEl.hidden = false
       window.scrollTo({ top: 0, behavior: 'smooth' })
