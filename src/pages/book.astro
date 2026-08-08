@@ -23,6 +23,7 @@ const boardData = JSON.stringify({
   tutors,
   config: availability.config,
   schedules: availability.schedules,
+  exceptions: availability.exceptions || [],
 })
 ---
 
@@ -158,15 +159,13 @@ const boardData = JSON.stringify({
   <script id="board-data" type="application/json" set:html={boardData}></script>
 
   <script>
-    // ================================================================
-    // CONFIG — change this email to yours
-    // ================================================================
     const ENDPOINT = 'https://formsubmit.co/ajax/tutors.brantford@gmail.com'
 
     // ================================================================
     // TYPES
     // ================================================================
     interface Win { start: string; end: string }
+    interface Exception { tutor: string; date: string; note?: string; windows: Win[] }
     interface Cfg {
       horizonDays: number
       gridMinutes: number
@@ -197,6 +196,7 @@ const boardData = JSON.stringify({
     const tutors: Tutor[] = raw.tutors
     const config: Cfg = raw.config
     const schedules: Record<string, Record<string, Win[]>> = raw.schedules
+    const exceptions: Exception[] = raw.exceptions || []
 
     // ================================================================
     // DATE GENERATION (client-side, always accurate)
@@ -241,8 +241,20 @@ const boardData = JSON.stringify({
       return `${h12}:${pad(m)} ${ap}`
     }
 
-    const windowsFor = (tutorId: string, date: DateInfo): Win[] =>
-      (schedules[tutorId] && schedules[tutorId][date.dow]) || []
+    const windowsFor = (tutorId: string, date: DateInfo): Win[] => {
+      // 1. Check if there is a specific override for this tutor on this exact date
+      const exception = exceptions.find(
+        (e) => e.tutor === tutorId && e.date === date.iso
+      );
+      
+      // 2. If an exception exists, it completely overrides the recurring schedule
+      if (exception) {
+        return exception.windows;
+      }
+      
+      // 3. Otherwise, fallback to the normal weekly schedule
+      return (schedules[tutorId] && schedules[tutorId][date.dow]) || [];
+    }
 
     const teaches = (tutorId: string, subjectId: string): boolean => {
       const t = tutors.find((x) => x.id === tutorId)

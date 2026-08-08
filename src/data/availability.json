@@ -9,20 +9,14 @@
   },
   "schedules": {
     "ethan": {
-      "mon": [],
-      "tue": [],
-      "wed": [],
-      "thu": [],
+      "mon": [], "tue": [], "wed": [], "thu": [],
       "fri": [{ "start": "16:00", "end": "21:00" }],
       "sat": [{ "start": "09:00", "end": "17:00" }],
       "sun": [{ "start": "09:00", "end": "17:00" }]
     },
     "liam": {
       "mon": [{ "start": "16:00", "end": "21:00" }],
-      "tue": [],
-      "wed": [],
-      "thu": [],
-      "fri": [],
+      "tue": [], "wed": [], "thu": [], "fri": [],
       "sat": [{ "start": "09:00", "end": "17:00" }],
       "sun": [{ "start": "09:00", "end": "17:00" }]
     },
@@ -31,9 +25,18 @@
       "tue": [{ "start": "16:00", "end": "21:00" }],
       "wed": [{ "start": "16:00", "end": "21:00" }],
       "thu": [{ "start": "16:00", "end": "21:00" }],
-      "fri": [],
-      "sat": [],
-      "sun": []
+      "fri": [], "sat": [], "sun": []
     }
-  }
+  },
+  "exceptions": [
+    {
+      "tutor": "ethan",
+      "date": "2026-08-10",
+      "note": "demo note",
+      "windows": [
+        { "start": "16:00", "end": "17:00" },
+        { "start": "18:00", "end": "21:00" }
+      ]
+    }
+  ]
 }
