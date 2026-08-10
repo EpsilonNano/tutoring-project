@@ -1,329 +1,449 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from '../layouts/Layout.astro'
+import { getCollection } from 'astro:content'
+import availability from '../data/availability.json'
+
+// Safely fetch collections with fallback
+let subjects = []
+let tutors = []
+try {
+  subjects = (await getCollection('subjects'))
+    .sort((a, b) => a.data.order - b.data.order)
+    .map((s) => ({ id: s.id, title: s.data.title, order: s.data.order }))
+} catch (e) {
+  subjects = [{ id: 'math', title: 'Math', order: 1 }]
+}
+
+try {
+  tutors = (await getCollection('tutors'))
+    .sort((a, b) => a.data.order - b.data.order)
+    .map((t) => ({
+      id: t.id,
+      name: t.data.name,
+      accent: t.data.accent || 'blue',
+      subjects: t.data.subjects,
+      blurb: t.data.blurb,
+      photo: t.data.photo,
+    }))
+} catch (e) {
+  tutors = []
+}
+
+const boardData = JSON.stringify({
+  subjects,
+  tutors,
+  config: availability?.config || { horizonDays: 30, gridMinutes: 30, durations: [60, 90], prices: { '60': 40, '90': 60 }, sameDayCutoffMinutes: 120 },
+  schedules: availability?.schedules || {},
+  exceptions: availability?.exceptions || [],
+})
 ---
 
-<Layout 
-  title="Free Math Readiness Test | Brantford Tutors" 
-  description="Take our free 10–15 minute math readiness test for Grades 1–12. Find out which math skills are strong, which need review, and how prepared you are for the upcoming school year."
+<Layout
+  title="Math Session Booking Test · Brantford Tutors"
+  description="Test page for math tutoring sessions."
 >
-  <main class="max-w-2xl mx-auto px-4 py-12 md:py-20 min-h-[70vh] flex flex-col justify-center">
-    
-    <!-- STATE 1: Introduction -->
-    <div id="view-intro" class="text-center space-y-8 animate-fade-in bg-white border border-gray-100 shadow-sm rounded-2xl p-8 md:p-12">
-      <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">How ready are you for next year's math?</h1>
-      <p class="text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">Take our free 10–15 minute assessment to find out what you're ready for — and what might be worth reviewing before school starts.</p>
+  <section class="container board-wrap" style="max-width: 800px; margin: 40px auto; padding: 20px; font-family: system-ui, sans-serif;">
+    <div style="background: #eef2ff; border: 1px solid #c7d2fe; padding: 12px 16px; border-radius: 8px; margin-bottom: 24px;">
+      <strong style="color: #4338ca;">🧪 Diagnostic Math Test Page</strong>
+      <p style="margin: 4px 0 0; font-size: 14px; color: #3730a3;">This page forces the <strong>Math</strong> subject pre-selected and includes visible debug fallbacks so the UI never renders blank.</p>
+    </div>
+
+    <div id="debug-banner" style="display: none; background: #fef2f2; border: 1px solid #fecaca; padding: 16px; border-radius: 8px; margin-bottom: 20px; color: #991b1b;">
+      <h3>⚠️ Availability Notice</h3>
+      <p id="debug-msg">No active booking slots were found in availability.json or content collections.</p>
+    </div>
+
+    <!-- The reactive board -->
+    <div id="board" class="board">
       
-      <div class="grid sm:grid-cols-3 gap-4 my-8 text-left">
-        <div class="p-5 bg-gray-50 rounded-xl border border-gray-100">
-          <h3 class="font-bold text-base mb-1 text-gray-900">⏱ 10–15 mins</h3>
-          <p class="text-gray-600 text-sm">Respects your time.</p>
+      <!-- Row: Subject -->
+      <div class="board-row" style="margin-bottom: 20px;">
+        <div class="board-row-head" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span class="board-row-label" style="font-weight: 600;">Subject</span>
+          <span class="board-row-hint" id="hint-subject" style="color: #6b7280; font-size: 14px;"></span>
         </div>
-        <div class="p-5 bg-gray-50 rounded-xl border border-gray-100">
-          <h3 class="font-bold text-base mb-1 text-gray-900">🎓 Grades 1–12</h3>
-          <p class="text-gray-600 text-sm">Adjusts to your grade.</p>
-        </div>
-        <div class="p-5 bg-gray-50 rounded-xl border border-gray-100">
-          <h3 class="font-bold text-base mb-1 text-gray-900">📊 Useful results</h3>
-          <p class="text-gray-600 text-sm">Clear skill breakdown.</p>
-        </div>
+        <div class="board-chips" id="chips-subject" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
       </div>
-      
-      <button id="btn-start" class="w-full sm:w-auto px-8 py-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors text-lg shadow-sm">
-        Start the Test
-      </button>
-    </div>
 
-    <!-- STATE 2: Grade Selection -->
-    <div id="view-grade" class="hidden animate-fade-in bg-white border border-gray-100 shadow-sm rounded-2xl p-8 md:p-12">
-      <h2 class="text-2xl md:text-3xl font-extrabold text-center mb-6 text-gray-900">What grade are you entering?</h2>
-      <p class="text-center text-gray-500 mb-8">Select your upcoming grade level to tailor the questions.</p>
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="grade-grid">
-        <!-- Generated by JS -->
-      </div>
-    </div>
-
-    <!-- STATE 3: Instructions -->
-    <div id="view-instructions" class="hidden animate-fade-in bg-white border border-gray-100 shadow-sm rounded-2xl p-8 md:p-12 text-center space-y-6">
-      <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">A few things before you start</h2>
-      <ul class="text-left space-y-3 text-base text-gray-700 bg-gray-50 p-6 rounded-xl border border-gray-100">
-        <li class="flex gap-3 items-center"><span>✅</span> Take your time on each question.</li>
-        <li class="flex gap-3 items-center"><span>✅</span> Don't use outside help or calculators (Grades 1–8).</li>
-        <li class="flex gap-3 items-center"><span>✅</span> Most questions take under a minute.</li>
-        <li class="flex gap-3 items-center"><span>✅</span> Results are an informal estimate of skills tested.</li>
-      </ul>
-      <button id="btn-begin-test" class="w-full py-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors text-lg shadow-sm">
-        Begin Assessment →
-      </button>
-    </div>
-
-    <!-- STATE 4: The Question UI -->
-    <div id="view-question" class="hidden animate-fade-in">
-      <div class="mb-6">
-        <div class="flex justify-between items-center text-sm font-bold text-gray-500 mb-2">
-          <span id="question-counter">Question 1</span>
+      <!-- Row: Duration -->
+      <div class="board-row" style="margin-bottom: 20px;">
+        <div class="board-row-head" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span class="board-row-label" style="font-weight: 600;">Length</span>
+          <span class="board-row-hint" id="hint-duration" style="color: #6b7280; font-size: 14px;"></span>
         </div>
-        <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-          <div id="progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+        <div class="board-chips" id="chips-duration" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
+      </div>
+
+      <!-- Row: Day -->
+      <div class="board-row" style="margin-bottom: 20px;">
+        <div class="board-row-head" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span class="board-row-label" style="font-weight: 600;">Day</span>
+          <span class="board-row-hint" id="hint-day" style="color: #6b7280; font-size: 14px;"></span>
+        </div>
+        <div class="day-strip" id="chips-day" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px;"></div>
+      </div>
+
+      <!-- Row: Time -->
+      <div class="board-row" style="margin-bottom: 20px;">
+        <div class="board-row-head" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span class="board-row-label" style="font-weight: 600;">Start time</span>
+          <span class="board-row-hint" id="hint-time" style="color: #6b7280; font-size: 14px;"></span>
+        </div>
+        <div class="board-chips" id="chips-time" style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <p class="row-placeholder" style="color: #9ca3af; font-style: italic;">Pick a day to see times.</p>
         </div>
       </div>
 
-      <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6 md:p-10 mb-6">
-        <p id="question-text" class="text-xl md:text-2xl font-semibold text-gray-900 mb-8 leading-snug" aria-live="polite"></p>
-        
-        <div id="options-container" class="space-y-3">
-          <!-- Populated by JS -->
+      <!-- Row: Tutor -->
+      <div class="board-row" style="margin-bottom: 20px;">
+        <div class="board-row-head" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span class="board-row-label" style="font-weight: 600;">Tutor</span>
+          <span class="board-row-hint" id="hint-tutor" style="color: #6b7280; font-size: 14px;"></span>
         </div>
+        <div class="board-chips tutor-chips" id="chips-tutor" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
       </div>
 
-      <div class="flex justify-end">
-        <button id="btn-next" class="w-full sm:w-auto px-8 py-3.5 bg-gray-200 text-gray-400 font-bold rounded-xl cursor-not-allowed transition-colors" disabled>
-          Next Question →
+      <!-- Receipt + contact + submit -->
+      <div class="board-footer" style="background: #f9fafb; padding: 20px; border-radius: 12px; border: 1px solid #e5e7eb; margin-top: 24px;">
+        <div class="receipt" id="receipt" style="margin-bottom: 16px;">
+          <div class="sum-row" style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>Subject</span><strong id="r-subject">—</strong></div>
+          <div class="sum-row" style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>Length</span><strong id="r-duration">—</strong></div>
+          <div class="sum-row" style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>Day</span><strong id="r-date">—</strong></div>
+          <div class="sum-row" style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>Start time</span><strong id="r-time">—</strong></div>
+          <div class="sum-row" style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>Tutor</span><strong id="r-tutor">—</strong></div>
+          <div class="sum-row sum-total" style="display: flex; justify-content: space-between; margin-top: 10px; border-top: 1px solid #e5e7eb; padding-top: 8px;"><span>Price</span><strong id="r-price">—</strong></div>
+        </div>
+
+        <div class="contact-fields" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+          <div>
+            <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 4px;" for="f-name">Your name *</label>
+            <input type="text" id="f-name" class="board-input" placeholder="e.g. Sarah M." style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px;" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 4px;" for="f-phone">Phone number *</label>
+            <input type="tel" id="f-phone" class="board-input" placeholder="e.g. (519) 555-0123" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px;" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 14px; font-weight: 500; margin-bottom: 4px;" for="f-notes">What do you want to work on? *</label>
+            <textarea id="f-notes" class="board-input" rows="3" placeholder="e.g. Unit 4 trig test Thursday" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px;"></textarea>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+          <label style="display: flex; gap: 8px; font-size: 14px; align-items: center;">
+            <input type="checkbox" id="f-ack" />
+            <span>I understand this is a request, not a confirmed booking.</span>
+          </label>
+          <label style="display: flex; gap: 8px; font-size: 14px; align-items: center;">
+            <input type="checkbox" id="f-cancel-ack" />
+            <span>I understand payment is by cash or e-Transfer at the session.</span>
+          </label>
+        </div>
+
+        <p class="board-status" id="statusLine" style="font-weight: 500; margin-bottom: 12px; color: #dc2626;"></p>
+
+        <button class="btn btn-big book-btn" id="bookBtn" disabled style="width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; opacity: 0.5;">
+          Send booking request
         </button>
       </div>
     </div>
 
-    <!-- STATE 5: Results -->
-    <div id="view-results" class="hidden animate-fade-in space-y-8 bg-white border border-gray-100 shadow-sm rounded-2xl p-6 md:p-10">
-      <div class="text-center space-y-3 border-b border-gray-100 pb-8">
-        <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">Your Math Readiness</h2>
-        <div class="inline-block px-6 py-4 bg-blue-50 border border-blue-100 rounded-2xl mt-2">
-          <p class="text-4xl md:text-5xl font-black text-blue-600 mb-1"><span id="result-score">0</span>% <span class="text-2xl font-bold text-blue-800">— <span id="result-readiness"></span></span></p>
-          <p class="text-gray-600 font-medium text-sm md:text-base mt-2">Estimated level: <span id="result-level" class="text-gray-900 font-bold"></span></p>
-        </div>
-        <p class="text-xs text-gray-400 max-w-md mx-auto mt-3">This is an informal skills assessment, not an official school placement test. Your results are based only on the skills tested here.</p>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-4">
-        <div class="bg-emerald-50/50 border border-emerald-100 p-5 rounded-xl">
-          <h3 class="text-lg font-bold text-emerald-800 mb-3 flex items-center gap-2"><span>✓</span> Your strongest areas</h3>
-          <ul id="list-strengths" class="space-y-1.5 text-gray-700 text-sm"></ul>
-        </div>
-        <div class="bg-amber-50/50 border border-amber-100 p-5 rounded-xl">
-          <h3 class="text-lg font-bold text-amber-800 mb-3 flex items-center gap-2"><span>△</span> Worth reviewing</h3>
-          <ul id="list-review" class="space-y-1.5 text-gray-700 text-sm"></ul>
-        </div>
-      </div>
-
-      <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 text-center space-y-4">
-        <h3 class="text-xl font-bold text-gray-900">Before school starts</h3>
-        <p id="result-recommendation" class="text-base text-gray-700 max-w-xl mx-auto leading-relaxed"></p>
-        
-        <div class="flex flex-col sm:flex-row justify-center gap-3 pt-2">
-          <a href="/book" class="px-6 py-3.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors shadow-sm text-center">
-            Book a Tutoring Session →
-          </a>
-          <button id="btn-retake" class="px-6 py-3.5 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-colors text-center">
-            Take the Test Again
-          </button>
-        </div>
-      </div>
+    <div id="done" class="done-state" style="display: none; text-align: center; padding: 40px 20px;">
+      <h2>Request sent successfully!</h2>
+      <p>We'll confirm shortly.</p>
+      <button id="againBtn" style="margin-top: 16px; padding: 8px 16px; background: #4f46e5; color: white; border: none; border-radius: 6px; cursor: pointer;">Make another booking</button>
     </div>
-  </main>
-</Layout>
+  </section>
 
-<style>
-  .animate-fade-in { animation: fadeIn 0.25s ease-out forwards; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  <script id="board-data" type="application/json" set:html={boardData}></script>
 
-  /* Option Feedback States */
-  .option-btn.correct {
-    background-color: #ecfdf5 !important;
-    border-color: #10b981 !important;
-    color: #065f46 !important;
-  }
+  <script>
+    try {
+      const raw = JSON.parse(document.getElementById('board-data')?.textContent || '{}')
+      const subjects = raw.subjects || []
+      const tutors = raw.tutors || []
+      const config = raw.config || { horizonDays: 30, gridMinutes: 30, durations: [60], prices: { '60': 40 }, sameDayCutoffMinutes: 0 }
+      const schedules = raw.schedules || {}
+      const exceptions = raw.exceptions || []
 
-  .option-btn.incorrect {
-    background-color: #fef2f2 !important;
-    border-color: #ef4444 !important;
-    color: #991b1b !important;
-  }
+      const DOW_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+      const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-  .option-btn:disabled {
-    cursor: default;
-  }
-</style>
+      const pad = (n: number) => String(n).padStart(2, '0')
+      const base = new Date()
+      base.setHours(0, 0, 0, 0)
 
-<script>
-  import { getNextQuestion, updateStateAfterAnswer, calculateResults, MAX_QUESTIONS, type TestState } from '../lib/mathTest';
-  import type { MathQuestion } from '../data/mathTest';
+      const dates = []
+      for (let i = 0; i < (config.horizonDays || 30); i++) {
+        const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + i)
+        dates.push({
+          iso: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`,
+          dow: DOW_KEYS[d.getDay()],
+          dayNum: d.getDate(),
+          month: MONTHS[d.getMonth()],
+          year: d.getFullYear(),
+          isToday: i === 0,
+        })
+      }
 
-  let state: TestState = {
-    targetGrade: 0,
-    currentDifficulty: 3,
-    askedQuestionIds: [],
-    responses: []
-  };
-  
-  let currentQuestion: MathQuestion | null = null;
-  let selectedOptionIndex: number | null = null;
-  let hasAnswered = false;
+      const toMin = (hhmm: string): number => {
+        const [h, m] = (hhmm || '0:0').split(':').map(Number)
+        return h * 60 + m
+      }
 
-  const views = {
-    intro: document.getElementById('view-intro'),
-    grade: document.getElementById('view-grade'),
-    instructions: document.getElementById('view-instructions'),
-    question: document.getElementById('view-question'),
-    results: document.getElementById('view-results')
-  };
+      const fmtTime = (mins: number): string => {
+        const h = Math.floor(mins / 60)
+        const m = mins % 60
+        const ap = h >= 12 ? 'PM' : 'AM'
+        const h12 = h % 12 || 12
+        return `${h12}:${pad(m)} ${ap}`
+      }
 
-  const btnNext = document.getElementById('btn-next') as HTMLButtonElement;
-  const optionsContainer = document.getElementById('options-container');
+      const windowsFor = (tutorId: string, date: any) => {
+        const exc = exceptions.find((e: any) => e.tutor === tutorId && e.date === date.iso)
+        if (exc) return exc.windows || []
+        return (schedules[tutorId] && schedules[tutorId][date.dow]) || []
+      }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const saved = sessionStorage.getItem('brantfordMathTestState');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (parsed.askedQuestionIds && parsed.askedQuestionIds.length > 0 && parsed.askedQuestionIds.length < MAX_QUESTIONS) {
-        if(confirm("You have a test in progress. Would you like to continue?")) {
-          state = parsed;
-          loadNextQuestion();
-          return;
-        } else {
-          sessionStorage.removeItem('brantfordMathTestState');
+      const teaches = (tutorId: string, subjectId: string) => {
+        const t = tutors.find((x: any) => x.id === tutorId)
+        return t ? t.subjects?.includes(subjectId) : false
+      }
+
+      const validStarts = (tutorId: string, date: any, dur: number) => {
+        const ws = windowsFor(tutorId, date)
+        const grid = config.gridMinutes || 30
+        const set = new Set<number>()
+        for (const w of ws) {
+          const s0 = Math.ceil(toMin(w.start) / grid) * grid
+          const end = toMin(w.end)
+          for (let t = s0; t + dur <= end; t += grid) set.add(t)
+        }
+        return [...set].sort((a, b) => a - b)
+      }
+
+      const hasCompletion = (p: any) => {
+        const tutorList = p.tutor ? [p.tutor] : tutors.map((t: any) => t.id)
+        const dateList = p.date ? dates.filter((d: any) => d.iso === p.date) : dates
+        const durList = p.duration ? [p.duration] : (config.durations || [60])
+
+        for (const tid of tutorList) {
+          if (p.subject && !teaches(tid, p.subject)) continue
+          for (const date of dateList) {
+            const ws = windowsFor(tid, date)
+            if (!ws.length) continue
+            for (const dur of durList) {
+              const starts = validStarts(tid, date, dur)
+              if (p.time != null) {
+                if (starts.includes(p.time)) return true
+              } else {
+                if (starts.length > 0) return true
+              }
+            }
+          }
+        }
+        return false
+      }
+
+      const state = { subject: 'math', duration: null, date: null, time: null, tutor: null }
+
+      const $ = (id: string) => document.getElementById(id)
+      const boardEl = $('board')
+      const doneEl = $('done')
+      const bookBtn = $('bookBtn') as HTMLButtonElement
+      const statusLine = $('statusLine')
+
+      $('f-ack')?.addEventListener('change', renderReceipt)
+      $('f-cancel-ack')?.addEventListener('change', renderReceipt)
+      $('f-name')?.addEventListener('input', renderReceipt)
+      $('f-phone')?.addEventListener('input', renderReceipt)
+      $('f-notes')?.addEventListener('input', renderReceipt)
+
+      function makeChip(label: string, opts: { selected: boolean; disabled: boolean; onClick: () => void }) {
+        const btn = document.createElement('button')
+        btn.type = 'button'
+        btn.style.cssText = `padding: 8px 14px; border-radius: 6px; border: 1px solid ${opts.selected ? '#2563eb' : '#d1d5db'}; background: ${opts.selected ? '#eff6ff' : '#fff'}; color: ${opts.disabled ? '#9ca3af' : '#1f2937'}; cursor: ${opts.disabled ? 'not-allowed' : 'pointer'}; opacity: ${opts.disabled ? 0.5 : 1}; font-weight: ${opts.selected ? '600' : '400'};`
+        btn.textContent = label
+        btn.disabled = opts.disabled && !opts.selected
+        btn.addEventListener('click', opts.onClick)
+        return btn
+      }
+
+      function renderSubjects() {
+        const c = $('chips-subject')
+        if (!c) return
+        c.innerHTML = ''
+        for (const s of subjects) {
+          const isSelected = state.subject === s.id
+          const live = isSelected || hasCompletion({ ...state, subject: s.id })
+          c.appendChild(makeChip(s.title, {
+            selected: isSelected,
+            disabled: !live,
+            onClick: () => { state.subject = isSelected ? null : s.id; recompute() }
+          }))
         }
       }
-    }
 
-    const gradeGrid = document.getElementById('grade-grid');
-    if(gradeGrid) {
-      for (let i = 1; i <= 12; i++) {
-        const btn = document.createElement('button');
-        btn.className = "p-3.5 border border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50/50 font-bold text-base transition-colors bg-white text-gray-800 shadow-sm";
-        btn.innerText = `Grade ${i}`;
-        btn.onclick = () => selectGrade(i);
-        gradeGrid.appendChild(btn);
+      function renderDurations() {
+        const c = $('chips-duration')
+        if (!c) return
+        c.innerHTML = ''
+        for (const dur of (config.durations || [60])) {
+          const isSelected = state.duration === dur
+          const live = isSelected || hasCompletion({ ...state, duration: dur })
+          const price = config.prices?.[String(dur)] || 40
+          c.appendChild(makeChip(`${dur} min · $${price}`, {
+            selected: isSelected,
+            disabled: !live,
+            onClick: () => { state.duration = isSelected ? null : dur; recompute() }
+          }))
+        }
       }
-    }
-  });
 
-  function showView(viewName: keyof typeof views) {
-    Object.values(views).forEach(v => v?.classList.add('hidden'));
-    views[viewName]?.classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  document.getElementById('btn-start')?.addEventListener('click', () => showView('grade'));
-
-  function selectGrade(grade: number) {
-    state.targetGrade = grade;
-    state.currentDifficulty = 3;
-    state.askedQuestionIds = [];
-    state.responses = [];
-    showView('instructions');
-  }
-
-  document.getElementById('btn-begin-test')?.addEventListener('click', () => {
-    loadNextQuestion();
-  });
-
-  function loadNextQuestion() {
-    currentQuestion = getNextQuestion(state);
-    
-    if (!currentQuestion) {
-      finishTest();
-      return;
-    }
-
-    selectedOptionIndex = null;
-    hasAnswered = false;
-    showView('question');
-    
-    const counter = document.getElementById('question-counter');
-    const progressBar = document.getElementById('progress-bar');
-    const questionText = document.getElementById('question-text');
-    
-    if (counter) counter.innerText = `Question ${state.askedQuestionIds.length + 1} of ${MAX_QUESTIONS}`;
-    if (progressBar) progressBar.style.width = `${((state.askedQuestionIds.length) / MAX_QUESTIONS) * 100}%`;
-    if (questionText) questionText.innerHTML = currentQuestion.question;
-
-    if (optionsContainer) {
-      optionsContainer.innerHTML = '';
-      currentQuestion.options.forEach((opt, index) => {
-        const btn = document.createElement('button');
-        btn.className = "w-full text-left p-4 border border-gray-200 rounded-xl hover:border-blue-400 hover:bg-blue-50/50 text-base md:text-lg transition-colors option-btn bg-white shadow-sm flex items-center";
-        btn.innerHTML = `<span class="font-bold mr-3 text-gray-400 w-6">${String.fromCharCode(65 + index)}.</span> <span class="flex-1">${opt}</span>`;
-        btn.onclick = () => selectOption(btn, index);
-        optionsContainer.appendChild(btn);
-      });
-    }
-
-    btnNext.disabled = true;
-    btnNext.className = "w-full sm:w-auto px-8 py-3.5 bg-gray-200 text-gray-400 font-bold rounded-xl cursor-not-allowed transition-colors";
-  }
-
-  function selectOption(clickedBtn: HTMLButtonElement, index: number) {
-    if (hasAnswered || !currentQuestion) return;
-    
-    hasAnswered = true;
-    selectedOptionIndex = index;
-    const isCorrect = index === currentQuestion.correctAnswerIndex;
-
-    const optionButtons = document.querySelectorAll('.option-btn') as NodeListOf<HTMLButtonElement>;
-    optionButtons.forEach((btn, idx) => {
-      btn.disabled = true;
-      if (idx === currentQuestion!.correctAnswerIndex) {
-        btn.classList.add('correct');
-      } else if (idx === index && !isCorrect) {
-        btn.classList.add('incorrect');
+      function renderDays() {
+        const c = $('chips-day')
+        if (!c) return
+        c.innerHTML = ''
+        for (const date of dates) {
+          const isSelected = state.date === date.iso
+          const live = isSelected || hasCompletion({ ...state, date: date.iso })
+          const chip = document.createElement('button')
+          chip.type = 'button'
+          chip.style.cssText = `padding: 8px 12px; border-radius: 6px; border: 1px solid ${isSelected ? '#2563eb' : '#d1d5db'}; background: ${isSelected ? '#eff6ff' : '#fff'}; color: ${!live && !isSelected ? '#9ca3af' : '#1f2937'}; cursor: ${!live && !isSelected ? 'not-allowed' : 'pointer'}; min-width: 60px; text-align: center;`
+          chip.innerHTML = `<div style="font-size: 11px; color: #6b7280;">${date.month}</div><div style="font-weight: 600; font-size: 16px;">${date.dayNum}</div>`
+          chip.disabled = !live && !isSelected
+          chip.addEventListener('click', () => {
+            state.date = isSelected ? null : date.iso
+            state.time = null
+            recompute()
+          })
+          c.appendChild(chip)
+        }
       }
-    });
 
-    btnNext.disabled = false;
-    btnNext.className = "w-full sm:w-auto px-8 py-3.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors shadow-sm cursor-pointer";
-  }
+      function renderTimes() {
+        const c = $('chips-time')
+        if (!c) return
+        c.innerHTML = ''
+        if (!state.date) {
+          c.innerHTML = '<p style="color: #9ca3af; font-style: italic;">Pick a day to see times.</p>'
+          return
+        }
+        const date = dates.find(d => d.iso === state.date)
+        const qualTutors = tutors.filter((t: any) => !state.subject || teaches(t.id, state.subject))
+        let minS = Infinity, maxE = -Infinity
+        for (const t of qualTutors) {
+          for (const w of windowsFor(t.id, date)) {
+            minS = Math.min(minS, toMin(w.start))
+            maxE = Math.max(maxE, toMin(w.end))
+          }
+        }
+        if (minS === Infinity) {
+          c.innerHTML = '<p style="color: #9ca3af; font-style: italic;">No openings this day.</p>'
+          return
+        }
+        const grid = config.gridMinutes || 30
+        const s0 = Math.ceil(minS / grid) * grid
+        for (let t = s0; t < maxE; t += grid) {
+          const isSelected = state.time === t
+          const live = isSelected || hasCompletion({ ...state, time: t })
+          c.appendChild(makeChip(fmtTime(t), {
+            selected: isSelected,
+            disabled: !live,
+            onClick: () => { state.time = isSelected ? null : t; recompute() }
+          }))
+        }
+      }
 
-  btnNext.addEventListener('click', () => {
-    if (selectedOptionIndex === null || !currentQuestion) return;
+      function renderTutors() {
+        const c = $('chips-tutor')
+        if (!c) return
+        c.innerHTML = ''
+        for (const t of tutors) {
+          const isSelected = state.tutor === t.id
+          const live = isSelected || hasCompletion({ ...state, tutor: t.id })
+          c.appendChild(makeChip(t.name, {
+            selected: isSelected,
+            disabled: !live,
+            onClick: () => { state.tutor = isSelected ? null : t.id; recompute() }
+          }))
+        }
+      }
 
-    const isCorrect = selectedOptionIndex === currentQuestion.correctAnswerIndex;
-    state = updateStateAfterAnswer(state, currentQuestion, isCorrect);
-    
-    sessionStorage.setItem('brantfordMathTestState', JSON.stringify(state));
+      function renderReceipt() {
+        const subj = subjects.find((s: any) => s.id === state.subject)
+        const tutor = tutors.find((t: any) => t.id === state.tutor)
+        const date = dates.find(d => d.iso === state.date)
 
-    if (state.askedQuestionIds.length >= MAX_QUESTIONS) {
-      finishTest();
-    } else {
-      loadNextQuestion();
+        if ($('r-subject')) $('r-subject').textContent = subj ? subj.title : '—'
+        if ($('r-duration')) $('r-duration').textContent = state.duration ? `${state.duration} minutes` : '—'
+        if ($('r-date')) $('r-date').textContent = date ? `${date.month} ${date.dayNum}` : '—'
+        if ($('r-time')) $('r-time').textContent = state.time != null ? fmtTime(state.time) : '—'
+        if ($('r-tutor')) $('r-tutor').textContent = tutor ? tutor.name : '—'
+        if ($('r-price')) $('r-price').textContent = state.duration ? `$${config.prices?.[String(state.duration)] || 40}` : '—'
+
+        const name = (document.getElementById('f-name') as HTMLInputElement)?.value.trim()
+        const phone = (document.getElementById('f-phone') as HTMLInputElement)?.value.trim()
+        const notes = (document.getElementById('f-notes') as HTMLTextAreaElement)?.value.trim()
+        const acked = (document.getElementById('f-ack') as HTMLInputElement)?.checked
+        const cancelAcked = (document.getElementById('f-cancel-ack') as HTMLInputElement)?.checked
+
+        const missing = []
+        if (!state.subject) missing.push('subject')
+        if (!state.duration) missing.push('length')
+        if (!state.date) missing.push('day')
+        if (state.time == null) missing.push('time')
+        if (!state.tutor) missing.push('tutor')
+        if (!name) missing.push('your name')
+        if (!phone) missing.push('phone number')
+        if (!notes) missing.push('what to work on')
+
+        if (statusLine) {
+          if (missing.length > 0) {
+            statusLine.textContent = `Please fill out: ${missing.join(', ')}.`
+            statusLine.style.color = '#dc2626'
+          } else if (!acked || !cancelAcked) {
+            statusLine.textContent = 'Please check both confirmation checkboxes.'
+            statusLine.style.color = '#dc2626'
+          } else {
+            statusLine.textContent = 'All set to send!'
+            statusLine.style.color = '#16a34a'
+          }
+        }
+
+        if (bookBtn) {
+          bookBtn.disabled = missing.length > 0 || !acked || !cancelAcked
+          bookBtn.style.opacity = bookBtn.disabled ? '0.5' : '1'
+        }
+      }
+
+      function recompute() {
+        renderSubjects()
+        renderDurations()
+        renderDays()
+        renderTimes()
+        renderTutors()
+        renderReceipt()
+      }
+
+      bookBtn?.addEventListener('click', () => {
+        if (boardEl) boardEl.style.display = 'none'
+        if (doneEl) doneEl.style.display = 'block'
+      })
+
+      document.getElementById('againBtn')?.addEventListener('click', () => {
+        if (doneEl) doneEl.style.display = 'none'
+        if (boardEl) boardEl.style.display = 'block'
+        recompute()
+      })
+
+      recompute()
+    } catch (err) {
+      console.error('Math test page error:', err)
+      const banner = document.getElementById('debug-banner')
+      const msg = document.getElementById('debug-msg')
+      if (banner) banner.style.display = 'block'
+      if (msg) msg.textContent = 'Error executing script: ' + (err as Error).message
     }
-  });
-
-  function finishTest() {
-    sessionStorage.removeItem('brantfordMathTestState');
-    const results = calculateResults(state);
-    
-    document.getElementById('result-score')!.innerText = results.overallScore.toString();
-    document.getElementById('result-readiness')!.innerText = results.readiness;
-    document.getElementById('result-level')!.innerText = results.estimatedLevel;
-
-    const ulStrengths = document.getElementById('list-strengths')!;
-    ulStrengths.innerHTML = '';
-    if(results.strengths.length > 0) {
-      results.strengths.forEach(s => ulStrengths.innerHTML += `<li class="flex items-center gap-2"><span>•</span> ${s}</li>`);
-    } else {
-      ulStrengths.innerHTML = `<li class="text-gray-500 italic">Keep practicing to build distinct strengths!</li>`;
-    }
-
-    const ulReview = document.getElementById('list-review')!;
-    ulReview.innerHTML = '';
-    if(results.reviewAreas.length > 0) {
-      results.reviewAreas.forEach(s => ulReview.innerHTML += `<li class="flex items-center gap-2"><span>•</span> ${s}</li>`);
-    } else {
-      ulReview.innerHTML = `<li class="text-gray-500 italic">No major review areas detected!</li>`;
-    }
-
-    const recText = document.getElementById('result-recommendation')!;
-    if (results.overallScore >= 80) {
-      recText.innerText = "You're in a great position for the upcoming year. A quick review before school starts should be enough to keep things fresh.";
-    } else if (results.overallScore >= 60) {
-      recText.innerText = "You understand many of the fundamentals, but reviewing the areas above before school starts would give you a stronger start.";
-    } else {
-      recText.innerText = "You have some important gaps worth addressing before the school year begins. Focusing on the areas above is a great place to start.";
-    }
-
-    showView('results');
-  }
-
-  document.getElementById('btn-retake')?.addEventListener('click', () => {
-    showView('intro');
-  });
-</script>
+  </script>
+</Layout>
