@@ -2,17 +2,50 @@
 import Layout from '../layouts/Layout.astro'
 import { href } from '../lib/link'
 const faqs = [
-  { q: 'Where do sessions happen?', a: 'We can meet at the St. Paul Brantford Public Library Branch, your house, or even online (Google Meets). We confirm the exact meeting spot when we confirm your booking.' },
-  { q: 'How does payment work?', a: 'Cash, at the session. No deposit, nothing charged online, no card needed. Your first session is half price.' },
-  { q: 'What if I need to cancel?', a: 'Give us 24 hours notice and it is free. Inside 24 hours, or a no-show, we ask for half the session rate.' },
-  { q: 'Do you tutor groups?', a: 'Yes. Two or three friends can book one tutor together at the small group rate. For anything bigger, ask us first.' },
-  { q: 'Which grades do you teach?', a: 'Mostly grades 8 to 12. Coding and chess are open to younger students too. If you are unsure, just ask.' },
-  { q: 'Do parents need to stay?', a: 'That is up to you and your parents. Many students work fine on their own. Parents are always welcome to stay or to check in at the end.' },
-  { q: 'I am totally lost in class. Can you still help?', a: 'That is our specialty. We find the exact point where things stopped making sense and rebuild from there. Being behind is a starting point, not a problem.' },
-  { q: 'Test prep or homework help?', a: 'Both. Bring homework you are stuck on, or bring a test date and we will build a review plan around it.' },
-  { q: 'How fast do you confirm bookings?', a: 'Within a day, usually much faster. You will get a text or email confirming the time and place.' },
-  { q: 'Can I get the same tutor every week?', a: 'Yes, and we encourage it. Consistency is most of the battle. When you book, mention that you want a standing weekly slot.' },
-  { q: 'What should I bring?', a: 'Your textbook or notes, a recent quiz or test if you have one, and the specific problem or topic. Each subject page has a "what to bring" note.' },
+  { 
+    q: 'Where do sessions happen?', 
+    a: 'Usually at the St. Paul Brantford Public Library branch, at your house, or online over Google Meet. We confirm the exact spot when we confirm the booking.' 
+  },
+  { 
+    q: 'How does payment work?', 
+    a: 'Cash or e-Transfer at the session. Nothing charged online, no card needed. Your first session is half price.' 
+  },
+  { 
+    q: 'What if I need to cancel?', 
+    a: 'Give us 24 hours’ notice and it’s free. Inside 24 hours or a no-show, we ask for half the session rate.' 
+  },
+  { 
+    q: 'Do you tutor groups?', 
+    a: 'Yes. Two or three friends can book one tutor together and split the cost. For anything bigger, just ask us first.' 
+  },
+  { 
+    q: 'Which grades do you teach?', 
+    a: 'From kindergarten through Grade 11 (and some Grade 12 topics). If you’re not sure, just message us.' 
+  },
+  { 
+    q: 'Do parents need to stay?', 
+    a: 'Up to you and your parents. A lot of students work fine on their own. Parents are always welcome to stay or check in at the end.' 
+  },
+  { 
+    q: 'I’m completely lost in class. Can you still help?', 
+    a: 'Yes — that’s pretty common. We usually start by finding the exact point where things stopped making sense and rebuild from there. Being behind is just the starting point.' 
+  },
+  { 
+    q: 'Test prep or homework help?', 
+    a: 'Both. Bring the homework you’re stuck on, or bring a test date and we’ll build a review plan around it.' 
+  },
+  { 
+    q: 'How fast do you confirm bookings?', 
+    a: 'Within a day, usually faster. You’ll get a text or email confirming the time and place.' 
+  },
+  { 
+    q: 'Can I get the same tutor every week?', 
+    a: 'Yes, and we actually prefer that. Consistency helps a lot. When you book, just mention that you want a standing weekly slot.' 
+  },
+  { 
+    q: 'What should I bring?', 
+    a: 'Your textbook or notes, a recent quiz or test if you have one, and the specific problem or topic you’re stuck on. Each subject page has a short “what to bring” note.' 
+  },
 ]
 ---
 <Layout title="FAQ · Brantford Tutors" description="Answers to the questions parents and students ask most about our tutoring.">

@@ -8,24 +8,35 @@ const tutors = await getCollection('tutors')
 ---
 <Layout title="Brantford Tutors · Peer Tutoring by Students">
   <section class="hero container">
-    <h1>Helping Brantford students feel confident in the classroom.</h1>
-    <p class="lead">
-      We are Daniel, Ethan, and Liam, three local high school students offering affordable,
-      in-person and online tutoring. We help students understand the material not just memorize it.
-    </p>
-    <div class="hero-actions">
-      <a href={href('/book')} class="btn">Book a Session</a>
-      <a href={href('/tutors')} class="btn btn-ghost">Meet the Tutors</a>
-    </div>
-
-    <div class="stat-strip">
-      <div class="stat"><div class="stat-num">{tutors.length}</div><div class="stat-label">Tutors</div></div>
-      <div class="stat"><div class="stat-num">{subjects.length}</div><div class="stat-label">Subjects</div></div>
-      <div class="stat"><div class="stat-num">97%+</div><div class="stat-label">Our Average</div></div>
-      <div class="stat"><div class="stat-num">$0</div><div class="stat-label">Online fees</div></div>
+    <div class="hero-grid">
+      <div class="hero-text">
+        <h1>We’re three Grade 12 students in Brantford who are passionate about tutoring.</h1>
+        <p class="lead">
+          We’re three Grade 12 students in Brantford. We tutor the subjects we just finished — math, science, French, coding, and chess — and we try to explain them the way that actually made them click for us.
+        </p>
+        <div class="hero-actions">
+          <a href={href('/book')} class="btn">Book a Session</a>
+          <a href={href('/tutors')} class="btn btn-ghost">Meet the Tutors</a>
+        </div>
+      </div>
+      <div class="hero-photos" aria-hidden="true">
+        <div class="photo-cluster">
+          {tutors.map((t) => (
+            <div class="photo-orbit">
+              <div class="photo-orbit-inner">
+                <img
+                  src={t.data.photo}
+                  alt=""
+                  class="hero-avatar"
+                  loading="eager"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   </section>
-
   <section class="container">
     <p class="section-label">What we teach</p>
     <h2>Five subjects, one table.</h2>

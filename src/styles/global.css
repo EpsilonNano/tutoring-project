@@ -1,4 +1,4 @@
-/* ============ tokens — change these to retheme everything ============ */
+/* ============ tokens ============ */
 :root {
   --ink:          #000000;   /* warm near-black text */
   --paper:        #ffffff;   /* warm cream background */
@@ -11,7 +11,7 @@
   --border:       #013239;
 
   --font-display: 'Fraunces', Georgia, serif;
-  --font-body:    'Inter', system-ui, sans-serif;
+  --font-body:    'Geist', system-ui, sans-serif;
   --radius: 10px;
   --shadow: 0 1px 3px rgba(24,24,27,.06), 0 8px 24px rgba(24,24,27,.06);
 }
@@ -550,7 +550,7 @@ textarea.board-input { resize: vertical; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-family: var(--font-body, 'Inter', system-ui, sans-serif);
+  font-family: var(--font-body, 'Geist', system-ui, sans-serif);
   color: var(--ink, #000000);
 }
 
@@ -651,7 +651,7 @@ textarea.board-input { resize: vertical; }
   padding: 1rem 2rem;
   background: var(--warm, #38a8ac);
   color: #fff;
-  font-family: var(--font-body, 'Inter', system-ui, sans-serif);
+  font-family: var(--font-body, 'Geist', system-ui, sans-serif);
   font-weight: 700;
   border-radius: var(--radius, 10px);
   border: none;
@@ -678,7 +678,7 @@ textarea.board-input { resize: vertical; }
   background: transparent;
   border: 1.5px solid var(--border, #013239);
   color: var(--ink, #000000);
-  font-family: var(--font-body, 'Inter', system-ui, sans-serif);
+  font-family: var(--font-body, 'Geist', system-ui, sans-serif);
   font-weight: 700;
   border-radius: var(--radius, 10px);
   cursor: pointer;
@@ -697,7 +697,7 @@ textarea.board-input { resize: vertical; }
   background: var(--border, #013239);
   opacity: 0.4;
   color: #fff;
-  font-family: var(--font-body, 'Inter', system-ui, sans-serif);
+  font-family: var(--font-body, 'Geist', system-ui, sans-serif);
   font-weight: 700;
   border-radius: var(--radius, 10px);
   border: none;
@@ -733,7 +733,7 @@ textarea.board-input { resize: vertical; }
   border: 1.5px solid var(--border, #013239);
   border-radius: var(--radius, 10px);
   background: var(--paper-raised, #ffffff);
-  font-family: var(--font-body, 'Inter', system-ui, sans-serif);
+  font-family: var(--font-body, 'Geist', system-ui, sans-serif);
   font-weight: 700;
   font-size: 1.05rem;
   color: var(--ink, #000000);
@@ -830,7 +830,7 @@ textarea.board-input { resize: vertical; }
   border: 1px solid var(--border, #013239);
   border-radius: var(--radius, 10px);
   background: var(--paper-raised, #ffffff);
-  font-family: var(--font-body, 'Inter', system-ui, sans-serif);
+  font-family: var(--font-body, 'Geist', system-ui, sans-serif);
   font-size: 1rem;
   transition: all 0.15s;
   cursor: pointer;
@@ -1025,4 +1025,105 @@ textarea.board-input { resize: vertical; }
 }
 .results-actions .btn-secondary {
   width: auto;
+}
+
+/* ===== Hero with rotating photo cluster ===== */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 3rem;
+  align-items: center;
+}
+
+.hero-text h1 {
+  max-width: 18ch;
+}
+
+.hero-photos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 280px;
+}
+
+.photo-cluster {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  animation: spin-cluster 60s linear infinite;
+}
+
+.photo-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 110px;
+  height: 110px;
+  margin: -55px 0 0 -55px;
+  /* positioning only – no animation here */
+}
+
+/* Position the three photos in a triangle */
+.photo-orbit:nth-child(1) { transform: rotate(0deg) translate(0, -70px) rotate(0deg); }
+.photo-orbit:nth-child(2) { transform: rotate(120deg) translate(0, -70px) rotate(-120deg); }
+.photo-orbit:nth-child(3) { transform: rotate(240deg) translate(0, -70px) rotate(-240deg); }
+
+.photo-orbit-inner {
+  width: 100%;
+  height: 100%;
+  animation: counter-spin 60s linear infinite;
+}
+
+.hero-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--paper);
+  box-shadow: 0 4px 18px rgba(0,0,0,.12);
+  display: block;
+}
+
+/* The two animations */
+@keyframes spin-cluster {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes counter-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+/* Mobile: stack and slow the motion a bit */
+@media (max-width: 800px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .hero-photos {
+    order: -1;
+    height: 220px;
+  }
+
+  .photo-cluster {
+    width: 180px;
+    height: 180px;
+    animation-duration: 60s;
+  }
+
+  .photo-orbit {
+    width: 90px;
+    height: 90px;
+    margin: -45px 0 0 -45px;
+  }
+
+  .photo-orbit:nth-child(1) { transform: rotate(0deg) translate(0, -55px) rotate(0deg); }
+  .photo-orbit:nth-child(2) { transform: rotate(120deg) translate(0, -55px) rotate(-120deg); }
+  .photo-orbit:nth-child(3) { transform: rotate(240deg) translate(0, -55px) rotate(-240deg); }
+
+  .photo-orbit-inner {
+    animation-duration: 60s;
+  }
 }

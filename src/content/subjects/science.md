@@ -12,4 +12,4 @@ topics:
 bring: Bring your class notes and any lab or worksheet that is due soon.
 ---
 
-Science rewards the student who can picture what is actually happening, so that is where we start. We turn abstract units into things you can see and reason about, then practice the exact question styles your teacher uses. Memorization comes last, and by then most of it has already stuck.
+Science makes a lot more sense when you can actually picture what’s happening instead of just memorizing the unit. We start there; turning abstract ideas into something you can see and reason about, then practice the kinds of questions your teacher actually asks. The memorization part gets easier once the picture is clear.

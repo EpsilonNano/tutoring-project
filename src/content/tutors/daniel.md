@@ -10,4 +10,8 @@ blurb: Strong across math, science, French, and coding. Enjoys helping students 
 photo: /images/tutors/daniel.jpg
 ---
 
-Daniel is heading into Grade 12 with an average above 95% and a tutor's patience for every subject we teach. He is equally happy working through French verb tenses or debugging a first Python program with you. Students who work with him tend to come back, because he will explain the same idea two or three different ways until one of them finally clicks.
+I’m Daniel. I’m heading into Grade 12 with an average above 96%, and I’ve ended up tutoring pretty much everything we offer.
+
+I’m fine sitting with the same French verb tense or the same algebra step for twenty minutes if that’s what it takes for it to click. Some people need it explained three different ways. That’s normal. I’d rather take the extra time than watch someone pretend they get it.
+
+My goal as a tutor is to make sure you are not moving on because you are worried "that I've asked the same multiple times", but that you actually understand the material.

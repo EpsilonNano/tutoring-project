@@ -11,4 +11,4 @@ topics:
 bring: Bring your course reader or workbook, and one thing you would like to say out loud.
 ---
 
-Most French classes move fast and assume the grammar landed the first time. We slow it down. You will leave understanding why a sentence is built the way it is, and you will spend real time speaking, mistakes included, until it stops feeling like a performance.
+Most French classes move quickly and assume the grammar stuck the first time. We slow it down. You’ll leave understanding why a sentence is built the way it is, and you’ll spend real time speaking (mistakes included) until it stops feeling like a performance.

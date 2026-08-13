@@ -11,4 +11,4 @@ topics:
 bring: Bring your textbook, a recent quiz or test, and the one problem that is stuck.
 ---
 
-Math is the subject students ask for most, and the one where confidence falls apart fastest. We rebuild it by working real problems side by side, finding the exact step where things stopped making sense, and moving forward from there. No speed drills and no shame.
+Math is the subject students ask for most, and it’s also the one where confidence disappears the fastest. We usually start by finding the exact step where things stopped making sense, then work forward from there with real problems. No speed drills, no shame, and no pretending you already understand something you don’t.
