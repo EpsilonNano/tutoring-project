@@ -12,12 +12,12 @@ import Layout from "../layouts/Layout.astro";
     <div id="view-intro" class="test-view text-center">
       <div class="test-card">
         <h1 class="test-title">How ready are you for next year's math?</h1>
-        <p class="test-subtitle">Take our free 10-15 minute assessment to find out what you're ready for — and what might be worth reviewing before school starts.</p>
+        <p class="test-subtitle">Take our free 10-15 minute assessment to find out what you're ready for, and what might be worth reviewing before school starts.</p>
         
         <div class="test-features">
           <div class="feature-box">
             <h3>10-15 mins</h3>
-            <p>Respects your time.</p>
+            <p>Get results quickly.</p>
           </div>
           <div class="feature-box">
             <h3>Grades 1-12</h3>
@@ -47,12 +47,12 @@ import Layout from "../layouts/Layout.astro";
     <!-- STATE 3: Instructions -->
     <div id="view-instructions" class="test-view hidden">
       <div class="test-card text-center">
-        <h2 class="test-heading">A few things before you start</h2>
+        <h2 class="test-heading">A few things before you start...</h2>
         <ul class="instruction-list">
-          <li><span>✅</span> Take your time on each question.</li>
-          <li><span>✅</span> Don't use outside help or calculators (Grades 1-8).</li>
-          <li><span>✅</span> Most questions take under a minute.</li>
-          <li><span>✅</span> Results are an informal estimate of skills tested.</li>
+          <li><span>•</span> Take your time on each question.</li>
+          <li><span>•</span> Don't use outside help or calculators (Grades 1-8).</li>
+          <li><span>•</span> Most questions take under a minute.</li>
+          <li><span>•</span> Results are an informal estimate of skills tested.</li>
         </ul>
         <button id="btn-begin-test" class="btn-primary btn-large">Begin Assessment</button>
       </div>
@@ -78,7 +78,7 @@ import Layout from "../layouts/Layout.astro";
       </div>
 
       <div class="next-wrapper">
-        <button id="btn-next" class="btn-next" disabled>Next Question →</button>
+        <button id="btn-next" class="btn-next" disabled>Next Question</button>
       </div>
     </div>
 
@@ -134,6 +134,7 @@ import Layout from "../layouts/Layout.astro";
   let currentQuestion: MathQuestion | null = null;
   let selectedOptionIndex: number | null = null;
   let hasAnswered = false;
+  let isLockedIn = false; // Tracks if "Check Answer" has been clicked
 
   const views = {
     intro: document.getElementById('view-intro'),
@@ -202,6 +203,7 @@ import Layout from "../layouts/Layout.astro";
 
     selectedOptionIndex = null;
     hasAnswered = false;
+    isLockedIn = false; // Reset lock-in state
     showView('question');
     
     const counter = document.getElementById('question-counter');
@@ -223,27 +225,29 @@ import Layout from "../layouts/Layout.astro";
       });
     }
 
+    // Reset button to "Check Answer" state
+    btnNext.innerText = "Check Answer";
     btnNext.disabled = true;
     btnNext.classList.remove('enabled');
   }
 
   function selectOption(clickedBtn: HTMLButtonElement, index: number) {
-    if (hasAnswered || !currentQuestion) return;
+    if (isLockedIn || !currentQuestion) return; // Prevent changing after lock-in
     
-    hasAnswered = true;
     selectedOptionIndex = index;
-    const isCorrect = index === currentQuestion.correctAnswerIndex;
+    hasAnswered = true;
 
+    // Highlight selected option, un-highlight others
     const optionButtons = document.querySelectorAll('.option-btn') as NodeListOf<HTMLButtonElement>;
     optionButtons.forEach((btn, idx) => {
-      btn.disabled = true;
-      if (idx === currentQuestion!.correctAnswerIndex) {
-        btn.classList.add('correct');
-      } else if (idx === index && !isCorrect) {
-        btn.classList.add('incorrect');
+      if (idx === index) {
+        btn.classList.add('selected');
+      } else {
+        btn.classList.remove('selected');
       }
     });
 
+    // Enable the "Check Answer" button
     btnNext.disabled = false;
     btnNext.classList.add('enabled');
   }
@@ -251,11 +255,34 @@ import Layout from "../layouts/Layout.astro";
   btnNext.addEventListener('click', () => {
     if (selectedOptionIndex === null || !currentQuestion) return;
 
-    const isCorrect = selectedOptionIndex === currentQuestion.correctAnswerIndex;
-    state = updateStateAfterAnswer(state, currentQuestion, isCorrect);
-    
-    sessionStorage.setItem('brantfordMathTestState', JSON.stringify(state));
+    // STEP 1: Lock in & reveal right/wrong feedback
+    if (!isLockedIn) {
+      isLockedIn = true;
+      const isCorrect = selectedOptionIndex === currentQuestion.correctAnswerIndex;
 
+      // Remove selection outline and reveal right/wrong styles
+      const optionButtons = document.querySelectorAll('.option-btn') as NodeListOf<HTMLButtonElement>;
+      optionButtons.forEach((btn, idx) => {
+        btn.disabled = true;
+        btn.classList.remove('selected');
+
+        if (idx === currentQuestion!.correctAnswerIndex) {
+          btn.classList.add('correct');
+        } else {
+          btn.classList.add('incorrect');
+        }
+      });
+
+      // Save response to state
+      state = updateStateAfterAnswer(state, currentQuestion, isCorrect);
+      sessionStorage.setItem('brantfordMathTestState', JSON.stringify(state));
+
+      // Update button to advance
+      btnNext.innerText = "Next Question";
+      return;
+    }
+
+    // STEP 2: Advance to next question or finish test
     if (state.askedQuestionIds.length >= MAX_QUESTIONS) {
       finishTest();
     } else {

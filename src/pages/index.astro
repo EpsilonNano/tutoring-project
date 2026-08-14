@@ -12,7 +12,7 @@ const tutors = await getCollection('tutors')
       <div class="hero-text">
         <h1>We’re three Grade 12 students in Brantford who are passionate about tutoring.</h1>
         <p class="lead">
-          We’re three Grade 12 students in Brantford. We tutor the subjects we just finished — math, science, French, coding, and chess — and we try to explain them the way that actually made them click for us.
+          We offer peer help in the subjects we just finished, including math, science, French, coding, and chess. Our goal is simple: explain concepts using the exact approach that made them finally click for us.
         </p>
         <div class="hero-actions">
           <a href={href('/book')} class="btn">Book a Session</a>
@@ -37,9 +37,20 @@ const tutors = await getCollection('tutors')
       </div>
     </div>
   </section>
+
+  <!-- Free Math Test Callout -->
+  <section class="container math-callout-section">
+    <div class="card" style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+      <div>
+        <h3 style="margin: 0;">Unsure where to start with math?</h3>
+        <p style="margin: 0.25rem 0 0 0;">Take our free self-assessment to find your strengths and focus areas.</p>
+      </div>
+      <a href={href('/math-test')} class="btn">Take Free Math Test</a>
+    </div>
+  </section>
+
   <section class="container">
-    <p class="section-label">What we teach</p>
-    <h2>Five subjects, one table.</h2>
+    <h2>Explore what we teach.</h2>
     <div class="card-grid" style="margin-top: 1.5rem;">
       {subjects.map((s) => (
         <a href={href(`/subjects/${s.id}`)} class="card">

@@ -96,10 +96,33 @@ section { padding-block: 3.5rem; }
 .card p { color: var(--muted); margin-top: 0.4rem; font-size: 0.95rem; }
 
 /* ============ hero ============ */
-.hero { padding-block: 5rem 3rem; }
+.hero { 
+  padding-block: 3rem 0rem;
+}
 .hero h1 { max-width: 18ch; }
-.hero .lead { font-size: 1.15rem; color: var(--muted); max-width: 52ch; margin-top: 1rem; }
-.hero-actions { display: flex; gap: 0.8rem; margin-top: 2rem; flex-wrap: wrap; }
+.hero .lead { 
+  font-size: 1.15rem; 
+  color: var(--muted); 
+  max-width: 52ch; 
+  margin-top: 1rem;
+}
+.hero-actions { 
+  display: flex; 
+  gap: 0.8rem; 
+  margin-top: 1rem;
+  flex-wrap: wrap; 
+}
+
+/* ============ callout section ============ */
+.math-callout-section {
+  padding-block: 0 !important; /* Overrides section default padding */
+  margin-block: 3rem 3rem;     /* Controls spacing above & below the banner */
+}
+
+/* Removes top padding on the section immediately following the callout */
+.math-callout-section + section {
+  padding-top: 0;
+}
 
 /* ============ footer ============ */
 .site-footer {
@@ -853,16 +876,35 @@ textarea.board-input { resize: vertical; }
   flex: 1;
 }
 
+/* Styling for correct & wrong options after an answer is chosen */
 .option-btn.correct {
-  background: #ecfdf5 !important;
-  border-color: #10b981 !important;
-  color: #065f46 !important;
+  background: var(--paper-raised, #ffffff) !important;
+  border: 3px solid #10b981 !important; /* Bold green outline */
+  color: var(--ink, #000000) !important;
+  opacity: 1 !important;
 }
-.option-btn.incorrect {
-  background: #fef2f2 !important;
-  border-color: #ef4444 !important;
-  color: #991b1b !important;
+
+.option-btn.incorrect,
+.option-btn.faded {
+  background: var(--paper-raised, #ffffff) !important;
+  border-color: var(--border, #013239) !important;
+  opacity: 0.35 !important; /* Greys/fades out the entire button container */
+  color: var(--muted, #013239) !important;
 }
+
+/* Styling for option selected before checking */
+.option-btn.selected {
+  border: 1px solid var(--accent, #38a8ac) !important;
+  background: rgba(56, 168, 172, 0.08) !important;
+  color: var(--accent, #38a8ac) !important; /* changes main text */
+}
+
+/* Ensure inner elements also inherit the accent colour */
+.option-btn.selected .option-letter,
+.option-btn.selected .option-text {
+  color: var(--accent, #38a8ac) !important;
+}
+
 .option-btn:disabled {
   cursor: default;
 }

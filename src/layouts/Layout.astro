@@ -11,6 +11,9 @@ const {
   title,
   description = 'Affordable in-person tutoring in Math, Science, French, Coding, and Chess — by students, for students.',
 } = Astro.props
+
+const canonical = new URL(Astro.url.pathname, Astro.site || 'https://brantfordtutors.ca').toString()
+const ogImage = new URL('/og-image.jpg', Astro.site || 'https://brantfordtutors.ca').toString()
 ---
 <html lang="en">
   <head>
@@ -18,6 +21,22 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="Brantford Tutors" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonical} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
