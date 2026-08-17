@@ -10,8 +10,8 @@ blurb: Strong across math, science, French, and coding. Enjoys helping students 
 photo: /images/tutors/daniel.jpg
 ---
 
-I’m Daniel. I’m heading into Grade 12 with an average above 96%, and I’ve ended up tutoring pretty much everything we offer.
+I’m Daniel. I’m heading into Grade 12 with an average above 96%, and love to help students understand what they are learning.
 
-I’m fine sitting with the same French verb tense or the same algebra step for twenty minutes if that’s what it takes for it to click. Some people need it explained three different ways. That’s normal. I’d rather take the extra time than watch someone pretend they get it.
+I’m can stick with the same French verb tense or the same algebra step for twenty minutes and explain concepts many ways if that’s what it takes for it to click.
 
-My goal as a tutor is to make sure you are not moving on because you are worried "that I've asked the same multiple times", but that you actually understand the material.
+We'll work together to make sure you feel completely confident in what you're doing!
