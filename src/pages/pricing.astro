@@ -10,30 +10,61 @@ import { href } from '../lib/link'
       We’re students too. You pay at the session with cash or e-Transfer.
     </p>
 
-    <div class="rate-card">
-      <!-- CHANGE THESE PRICES before launch. They are placeholders. -->
-      <div class="rate-row">
-        <div><span class="rate-name">One-on-one, 1 hour</span><span class="rate-desc">Any subject, just you and your tutor.</span></div>
-        <span class="rate-dots"></span>
-        <span class="rate-price">$25</span>
-      </div>
-      <div class="rate-row">
-        <div><span class="rate-name">One-on-one, 90 minutes</span><span class="rate-desc">For deeper work or exam review.</span></div>
-        <span class="rate-dots"></span>
-        <span class="rate-price">$35</span>
-      </div>
-      <div class="rate-row">
-        <div><span class="rate-name">Small group, per student</span><span class="rate-desc">Two or three friends, one tutor, split the cost.</span></div>
-        <span class="rate-dots"></span>
-        <span class="rate-price">$15<small>/hr</small></span>
-      </div>
-    </div>
-
-    <div class="callout">
+    <!-- First session half‑price callout -->
+    <div class="callout" style="margin-top: 2rem;">
       <span class="callout-num">50%</span>
       <p><strong>Your first session is half price.</strong> Try us out. If it is not a fit, it barely cost you anything.</p>
     </div>
 
+    <!-- Pricing cards -->
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <h3 class="plan-name">Small Group</h3>
+        <div class="plan-price">$15<small>/hr per person</small></div>
+        <div class="plan-desc">Great budget option for friends studying together.</div>
+        <a href={href('/book')} class="btn plan-btn" style="margin-bottom: 1rem;">Book Now</a>
+        <ul class="plan-features" style="margin-top: auto;">
+          <li>Any subject</li>
+          <li>Flexible scheduling</li>
+          <li>No online fees</li>
+          <li>Group study setup (2–3 students)</li>
+        </ul>
+      </div>
+
+      <div class="pricing-card" style="display: flex; flex-direction: column; height: 100%;">
+        <h3 class="plan-name">1‑on‑1 Hour</h3>
+        <div class="plan-price">$25<small>/hr</small></div>
+        <div class="plan-desc">Dedicated, individual attention focused entirely on you.</div>
+        <a href={href('/book')} class="btn plan-btn" style="margin-bottom: 1rem;">Book Now</a>
+        <ul class="plan-features" style="margin-top: auto;">
+          <li>Any subject</li>
+          <li>Flexible scheduling</li>
+          <li>No online fees</li>
+          <li>100% solo focus (1-on-1)</li>
+          <li>Customized lesson pacing</li>
+        </ul>
+      </div>
+
+      <div class="pricing-card featured" style="display: flex; flex-direction: column; height: 100%;">
+        <span class="popular-badge">Most popular</span>
+        <h3 class="plan-name">1‑on‑1 Extended</h3>
+        <div class="plan-price">$35<small>/90 min</small></div>
+        <div class="plan-desc">Extended time for deep understanding and major exam prep.</div>
+        <a href={href('/book')} class="btn plan-btn" style="margin-bottom: 1rem;">Book Now</a>
+        <ul class="plan-features" style="margin-top: auto;">
+          <li>Any subject</li>
+          <li>Flexible scheduling</li>
+          <li>No online fees</li>
+          <li>100% solo focus (1-on-1)</li>
+          <li>Customized lesson pacing</li>
+          <li>Full 90-minute extended session</li>
+          <li>In-depth test & exam review</li>
+          <li>Complex topic masterclass</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Cancellations -->
     <div class="cancellation-section" style="margin-top: 3rem;">
       <h2>Cancellations</h2>
       <p class="lead" style="margin-top: 0.5rem;">
