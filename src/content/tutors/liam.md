@@ -3,7 +3,7 @@ name: Liam
 order: 2
 grade: Grade 12
 average: 97%+
-accent: amber
+accent: sage
 subjects: [math, science, coding]
 specialties: [Geometry, Game Design, Algebra, Chemistry, Physics, Python, Godot, Trigonometry]
 blurb: Focused on science, math, and coding. Loves building projects that connect what is taught in school to the real world.

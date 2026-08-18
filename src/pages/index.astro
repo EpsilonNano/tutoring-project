@@ -4,8 +4,63 @@ import { getCollection } from 'astro:content'
 import { href } from '../lib/link'
 
 const subjects = (await getCollection('subjects')).sort((a, b) => a.data.order - b.data.order)
-const tutors = await getCollection('tutors')
+const tutors = (await getCollection('tutors')).sort((a, b) => a.data.order - b.data.order)
+
+const steps = [
+  {
+    n: '01',
+    title: 'Book online',
+    text: 'Pick a subject, a day, and a tutor in about a minute. We confirm by text or email within a day.',
+  },
+  {
+    n: '02',
+    title: 'Meet and learn',
+    text: 'Sessions happen at the St. Paul library branch, at your home, or online over Google Meet.',
+  },
+  {
+    n: '03',
+    title: 'Pay at the session',
+    text: 'Cash or e-Transfer when you are done. No card on file, and your first session is half price.',
+  },
+]
+
+const testimonials = [
+  {
+    quote: 'We break down complex topics step-by-step, finding the exact spots where you got stuck and rebuilding your understanding from the ground up.',
+    by: 'Step-by-Step Breakdown',
+  },
+  {
+    quote: 'Learn at your own pace in a friendly, comfortable environment where you can ask any question without feeling rushed or judged.',
+    by: 'Zero-Judgment Zone',
+  },
+  {
+    quote: 'Target specific weaknesses, master tricky homework problems, and build practical strategies for upcoming tests and exams.',
+    by: 'Targeted Exam Prep',
+  },
+]
+
+const rates = [
+  { name: 'Small Group', desc: '2–3 friends learning together', price: '$15', per: '/hr per person' },
+  { name: '1-on-1 Hour', desc: 'Individual attention, any subject', price: '$25', per: '/hr' },
+  { name: '1-on-1 Extended', desc: 'Deep work and exam prep', price: '$35', per: '/90 min' },
+]
+
+const faqTeaser = [
+  {
+    q: 'Where do sessions happen?',
+    a: 'Usually at the St. Paul Brantford Public Library branch, at your house, or online over Google Meet.',
+  },
+  {
+    q: 'How does payment work?',
+    a: 'Cash or e-Transfer at the session. Nothing charged online, no card needed. Your first session is half price.',
+  },
+  {
+    q: 'What if I need to cancel?',
+    a: 'Give us 24 hours’ notice and it is free. Inside 24 hours or a no-show, we ask for half the session rate.',
+  },
+]
 ---
+
 <Layout title="Brantford Tutors · Peer Tutoring by Students">
   <section class="hero container">
     <div class="hero-grid">
@@ -49,6 +104,22 @@ const tutors = await getCollection('tutors')
     </div>
   </section>
 
+  <!-- How it works -->
+  <section class="container">
+    <p class="section-label">How it works</p>
+    <h2>Booking takes about a minute.</h2>
+    <div class="card-grid" style="margin-top: 1.5rem;">
+      {steps.map((s) => (
+        <div class="card">
+          <span class="card-num">{s.n}</span>
+          <h3>{s.title}</h3>
+          <p>{s.text}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Subjects -->
   <section class="container">
     <h2>Explore what we teach.</h2>
     <div class="card-grid" style="margin-top: 1.5rem;">
@@ -61,4 +132,140 @@ const tutors = await getCollection('tutors')
       ))}
     </div>
   </section>
+
+  <!-- Tutors preview -->
+  <section class="container">
+    <p class="section-label">Meet the tutors</p>
+    <h2>Three Grade 12 students with 97%+ averages.</h2>
+    <div class="tutor-panels">
+      {tutors.map((t) => (
+        <a href={href(`/tutors/${t.id}`)} class={`tutor-panel ac-${t.data.accent}`}>
+          {t.data.photo ? (
+            <img src={t.data.photo} alt={t.data.name} class="avatar" loading="lazy" />
+          ) : (
+            <div class="avatar">{t.data.name.charAt(0)}</div>
+          )}
+          <div>
+            <h3>{t.data.name}</h3>
+            <p class="meta">{t.data.grade} · <strong>{t.data.average} average</strong></p>
+            <p style="margin-top: .6rem;">{t.data.blurb}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+    <p style="margin-top: 1.5rem;">
+      <a href={href('/tutors')}>Full tutor profiles →</a>
+    </p>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="container">
+    <p class="section-label">The student experience</p>
+    <h2>What to expect.</h2>
+    <div class="quotes">
+      {testimonials.map((t) => (
+        <figure class="quote-card">
+          <blockquote>{t.quote}</blockquote>
+          <figcaption>— {t.by}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+
+  <!-- Pricing + FAQ teaser -->
+  <section class="container">
+    <p class="section-label">Good to know</p>
+    <h2>Simple pricing, straight answers.</h2>
+    <div class="split" style="margin-top: 2rem;">
+      <div>
+        <h3 style="margin-bottom: .4rem;">Session rates</h3>
+        <div class="rate-card" style="margin-top: 1rem;">
+          {rates.map((r) => (
+            <div class="rate-row">
+              <div>
+                <span class="rate-name">{r.name}</span>
+                <span class="rate-desc">{r.desc}</span>
+              </div>
+              <span class="rate-dots"></span>
+              <span class="rate-price">{r.price}<small>{r.per}</small></span>
+            </div>
+          ))}
+        </div>
+        <p style="margin-top: 1.2rem;">
+          <a href={href('/pricing')}>Full pricing details →</a>
+        </p>
+      </div>
+      <div>
+        <h3 style="margin-bottom: .4rem;">Common questions</h3>
+        <div class="faq-list" style="margin-top: 1rem;">
+          {faqTeaser.map((f) => (
+            <details class="faq-item">
+              <summary>{f.q}</summary>
+              <div class="faq-body"><p>{f.a}</p></div>
+            </details>
+          ))}
+        </div>
+        <p style="margin-top: 1.2rem;">
+          <a href={href('/faq')}>All questions →</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA band -->
+  <section class="cta-band">
+    <div class="container">
+      <h2>First session, half price.</h2>
+      <p>Book in about a minute. We confirm within a day, and you pay at the session.</p>
+      <a href={href('/book')} class="btn">Book a Session</a>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  /* --- Testimonials: slightly tilted quote cards --- */
+  .quotes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.4rem;
+    margin-top: 2rem;
+  }
+  .quote-card {
+    background: var(--paper-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.7rem 1.6rem;
+    box-shadow: var(--shadow);
+    transition: transform .2s ease;
+  }
+  .quote-card:nth-child(odd) { transform: rotate(-1.2deg); }
+  .quote-card:nth-child(even) { transform: rotate(1deg); }
+  .quote-card:hover { transform: rotate(0deg) translateY(-3px); }
+  .quote-card blockquote {
+    font-family: var(--font-display);
+    font-size: 1.06rem;
+    line-height: 1.55;
+  }
+  .quote-card figcaption {
+    margin-top: 1rem;
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* --- Full-width closing band --- */
+  .cta-band {
+    background: var(--accent-dark);
+    text-align: center;
+    padding-block: 4.5rem;
+  }
+  .cta-band h2 { color: #fff; }
+  .cta-band p {
+    color: rgba(255, 255, 255, .78);
+    font-size: 1.1rem;
+    max-width: 46ch;
+    margin: .7rem auto 1.8rem;
+  }
+</style>
