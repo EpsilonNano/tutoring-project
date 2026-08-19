@@ -10,6 +10,7 @@ topics:
   - Analyzing your own games
   - Tournament preparation
 bring: Bring nothing but curiosity. We have boards and a clock.
+photo: /images/subjects/chess.jpg
 ---
 
 Chess improves fastest when you understand the ideas behind the moves instead of memorizing lines. We play, we pause, and we talk through the position together. You will learn to spot tactics quickly and to build plans when the board looks quiet.

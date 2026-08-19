@@ -23,12 +23,10 @@ const tutorsFor = (id: string) => tutors.filter((t) => t.data.subjects.some((s) 
 
           <div class="subject-media" aria-hidden="true">
             <img
-              src={`https://picsum.photos/seed/${s.id}/640/400`}
+              src={s.data.photo ?? `https://picsum.photos/seed/${s.id}/640/400`}
               alt=""
               loading="lazy"
               decoding="async"
-              width="640"
-              height="400"
               class="subject-image"
             />
           </div>

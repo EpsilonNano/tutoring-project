@@ -23,6 +23,15 @@ const teaching = (await getCollection('tutors'))
     <h1>{subject.data.title}</h1>
     <p class="lead" style="margin-top: .8rem;">{subject.data.tagline}</p>
 
+    {subject.data.photo && (
+      <img
+        src={subject.data.photo}
+        alt={subject.data.title}
+        class="subject-hero"
+        loading="eager"
+      />
+    )}
+
     <div class="split" style="margin-top: 2.5rem;">
       <div>
         <div class="prose"><Content /></div>
@@ -63,3 +72,14 @@ const teaching = (await getCollection('tutors'))
     </div>
   </section>
 </Layout>
+
+<style>
+  .subject-hero {
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+</style>

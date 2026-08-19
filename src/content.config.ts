@@ -25,6 +25,7 @@ const subjects = defineCollection({
     levels: z.string(),
     topics: z.array(z.string()),
     bring: z.string(),
+    photo: z.string().nullish(),
   }),
 })
 
