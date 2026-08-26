@@ -124,39 +124,31 @@ const faqTeaser = [
     </div>
   </section>
 
-  <!-- Subjects – formatted infinite gallery -->
+  <!-- Subjects – formatted scroll-snap gallery -->
   <section class="container subject-gallery-section">
     <h2>Explore what we teach.</h2>
 
     <div class="gallery-wrapper">
       <div class="gallery-track">
-        {[0, 1].map((copy) => (
-          <div
-            class="gallery-group"
-            aria-hidden={copy === 1 ? 'true' : undefined}
+        {subjects.map((s) => (
+          <a
+            href={href(`/subjects/${s.id}`)}
+            class="gallery-card"
+            data-subject={s.id}
           >
-            {subjects.map((s) => (
-              <a
-                href={href(`/subjects/${s.id}`)}
-                class="gallery-card"
-                data-subject={s.id}
-                tabindex={copy === 1 ? '-1' : undefined}
-              >
-                <img
-                  src={s.data.photo ?? `https://picsum.photos/seed/${s.id}/640/400`}
-                  alt={s.data.title}
-                  loading="lazy"
-                  decoding="async"
-                  class="gallery-image"
-                />
-                <div class="gallery-card-body">
-                  <span class="card-num">{String(s.data.order).padStart(2, '0')}</span>
-                  <h3>{s.data.title}</h3>
-                  <p>{s.data.tagline}</p>
-                </div>
-              </a>
-            ))}
-          </div>
+            <img
+              src={s.data.photo ?? `https://picsum.photos/seed/${s.id}/640/400`}
+              alt={s.data.title}
+              loading="lazy"
+              decoding="async"
+              class="gallery-image"
+            />
+            <div class="gallery-card-body">
+              <span class="card-num">{String(s.data.order).padStart(2, '0')}</span>
+              <h3>{s.data.title}</h3>
+              <p>{s.data.tagline}</p>
+            </div>
+          </a>
         ))}
       </div>
     </div>
@@ -261,7 +253,7 @@ const faqTeaser = [
 </Layout>
 
 <style>
-  /* --- Testimonials: slightly tilted quote cards --- */
+  /* --- Testimonials: straightened quote cards --- */
   .quotes {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -278,20 +270,13 @@ const faqTeaser = [
     transition: transform .2s ease;
   }
 
-  .quote-card:nth-child(odd) {
-    transform: rotate(-1.2deg);
-  }
-
-  .quote-card:nth-child(even) {
-    transform: rotate(1deg);
-  }
-
+  /* Removed rotation transforms */
   .quote-card:hover {
-    transform: rotate(0deg) translateY(-3px);
+    transform: translateY(-3px);
   }
 
   .quote-card blockquote {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: 1.06rem;
     line-height: 1.55;
   }
@@ -323,9 +308,8 @@ const faqTeaser = [
     margin: .7rem auto 1.8rem;
   }
 
-  /* --- Subject gallery – formatted CSS-only carousel --- */
+  /* --- Subject gallery – Scroll-Snap Row --- */
   .subject-gallery-section {
-    overflow: hidden;
     padding-block: 2rem 1rem;
   }
 
@@ -336,36 +320,33 @@ const faqTeaser = [
   .gallery-wrapper {
     position: relative;
     margin-top: 1.5rem;
-    overflow: hidden;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
     border-radius: var(--radius);
     padding-block: 0.5rem;
-    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    display: flex;
+  }
+
+  /* Clean scrollbar styling */
+  .gallery-wrapper::-webkit-scrollbar {
+    height: 6px;
+  }
+  .gallery-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .gallery-wrapper::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 99px;
   }
 
   .gallery-track {
     display: flex;
-    width: max-content;
-    animation: gallery-scroll 45s linear infinite;
-    will-change: transform;
-  }
-
-  .gallery-wrapper:hover .gallery-track,
-  .gallery-wrapper:focus-within .gallery-track {
-    animation-play-state: paused;
-  }
-
-  .gallery-group {
-    display: flex;
     gap: 1.2rem;
-    padding-right: 1.2rem;
-  }
-
-  .gallery-group[aria-hidden="true"] {
-    pointer-events: none;
+    padding-right: 1.2rem; /* space at end of track */
   }
 
   .gallery-card {
+    scroll-snap-align: start;
     flex: 0 0 260px;
     display: flex;
     flex-direction: column;
@@ -429,50 +410,9 @@ const faqTeaser = [
     overflow: hidden;
   }
 
-  @keyframes gallery-scroll {
-    from {
-      transform: translateX(0);
-    }
-
-    to {
-      transform: translateX(-50%);
-    }
-  }
-
   @media (max-width: 640px) {
-    .gallery-group {
-      gap: 1rem;
-      padding-right: 1rem;
-    }
-
     .gallery-card {
       flex-basis: 210px;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
-    .gallery-wrapper {
-      overflow-x: auto;
-      scroll-snap-type: x proximity;
-      -webkit-mask-image: none;
-      mask-image: none;
-    }
-
-    .gallery-track {
-      animation: none;
-      width: auto;
-    }
-
-    .gallery-group[aria-hidden="true"] {
-      display: none;
-    }
-
-    .gallery-group {
-      padding-right: 0;
-    }
-
-    .gallery-card {
-      scroll-snap-align: start;
     }
   }
 </style>

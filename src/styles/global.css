@@ -37,7 +37,7 @@
   --border:       color-mix(in srgb, var(--ink) 14%, transparent);
 
   /* Type */
-  --font-display: 'Fraunces', Georgia, serif;
+  --font-display: 'Geist', system-ui, sans-serif;
   --font-body:    'Geist', system-ui, sans-serif;
 
   /* Surfaces */
@@ -216,12 +216,16 @@ section { padding-block: 3.5rem; }
   height: 280px;
 }
 
-/* The three tutor photos orbit slowly as a group while counter-rotating to stay upright */
+/* The three tutor photos sit static, and orbit gently when hovered */
 .photo-cluster {
   position: relative;
   width: 220px;
   height: 220px;
-  animation: spin-cluster 60s linear infinite;
+  animation: spin-cluster 20s linear infinite;
+  animation-play-state: paused; /* Paused by default */
+}
+.hero-photos:hover .photo-cluster {
+  animation-play-state: running; /* Spins on hover */
 }
 .photo-orbit {
   position: absolute;
@@ -237,7 +241,11 @@ section { padding-block: 3.5rem; }
 .photo-orbit-inner {
   width: 100%;
   height: 100%;
-  animation: counter-spin 60s linear infinite;
+  animation: counter-spin 20s linear infinite;
+  animation-play-state: paused; /* Paused by default */
+}
+.hero-photos:hover .photo-orbit-inner {
+  animation-play-state: running; /* Counter-spins on hover */
 }
 .hero-avatar {
   width: 100%;
@@ -455,8 +463,7 @@ section { padding-block: 3.5rem; }
 
 /* ============ 17. 404 ============ */
 .notfound { text-align: center; padding-block: 5rem 4rem; }
-.notfound .big { font-family: var(--font-display); font-size: clamp(6rem, 18vw, 11rem); font-weight: 700; color: var(--border); line-height: 1; }
-.notfound .big span { color: var(--warm); }
+.notfound .big { font-family: var(--font-display); font-size: clamp(6rem, 18vw, 11rem); font-weight: 700; color: var(--border); line-height: 1; letter-spacing: -0.04em; }
 
 /* ============ 18. Booking board (/book) ============ */
 .board-wrap { padding-block: 3.5rem; }
