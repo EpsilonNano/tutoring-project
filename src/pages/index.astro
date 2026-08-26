@@ -110,10 +110,12 @@ const faqTeaser = [
 
   <!-- How it works -->
   <section class="container">
-    <p class="section-label">How it works</p>
-    <h2>Booking takes about a minute.</h2>
+    <h2 class="dual-h2">
+      <span class="dual-h2-main">How it works</span>
+      <span class="dual-h2-sub">Booking takes about a minute.</span>
+    </h2>
 
-    <div class="card-grid" style="margin-top: 1.5rem;">
+    <div class="card-grid">
       {steps.map((s) => (
         <div class="card">
           <span class="card-num">{s.n}</span>
@@ -126,7 +128,9 @@ const faqTeaser = [
 
   <!-- Subjects – formatted scroll-snap gallery -->
   <section class="container subject-gallery-section">
-    <h2>Explore what we teach.</h2>
+    <h2 class="dual-h2">
+      <span class="dual-h2-main">Explore what we teach</span>
+    </h2>
 
     <div class="gallery-wrapper">
       <div class="gallery-track">
@@ -156,8 +160,10 @@ const faqTeaser = [
 
   <!-- Tutors preview -->
   <section class="container">
-    <p class="section-label">Meet the tutors</p>
-    <h2>Three Grade 12 students with 97%+ averages.</h2>
+    <h2 class="dual-h2">
+      <span class="dual-h2-main">Meet the tutors</span>
+      <span class="dual-h2-sub">Three Grade 12 students with 97%+ averages.</span>
+    </h2>
 
     <div class="tutor-panels">
       {tutors.map((t) => (
@@ -176,15 +182,15 @@ const faqTeaser = [
       ))}
     </div>
 
-    <p style="margin-top: 1.5rem;">
-      <a href={href('/tutors')}>Full tutor profiles →</a>
-    </p>
+    <a href={href('/tutors')} class="inline-cta">Full tutor profiles <span class="arrow">↗</span></a>
   </section>
 
   <!-- Testimonials -->
   <section class="container">
-    <p class="section-label">The student experience</p>
-    <h2>What to expect.</h2>
+    <h2 class="dual-h2">
+      <span class="dual-h2-main">The student experience</span>
+      <span class="dual-h2-sub">What to expect.</span>
+    </h2>
 
     <div class="quotes">
       {testimonials.map((t) => (
@@ -198,10 +204,12 @@ const faqTeaser = [
 
   <!-- Pricing + FAQ teaser -->
   <section class="container">
-    <p class="section-label">Good to know</p>
-    <h2>Simple pricing, straight answers.</h2>
+    <h2 class="dual-h2">
+      <span class="dual-h2-main">Good to know</span>
+      <span class="dual-h2-sub">Simple pricing, straight answers.</span>
+    </h2>
 
-    <div class="split" style="margin-top: 2rem;">
+    <div class="split">
       <div>
         <h3 style="margin-bottom: .4rem;">Session rates</h3>
 
@@ -218,9 +226,7 @@ const faqTeaser = [
           ))}
         </div>
 
-        <p style="margin-top: 1.2rem;">
-          <a href={href('/pricing')}>Full pricing details →</a>
-        </p>
+        <a href={href('/pricing')} class="inline-cta">Full pricing details <span class="arrow">↗</span></a>
       </div>
 
       <div>
@@ -235,9 +241,7 @@ const faqTeaser = [
           ))}
         </div>
 
-        <p style="margin-top: 1.2rem;">
-          <a href={href('/faq')}>All questions →</a>
-        </p>
+        <a href={href('/faq')} class="inline-cta">All questions <span class="arrow">↗</span></a>
       </div>
     </div>
   </section>
@@ -253,12 +257,61 @@ const faqTeaser = [
 </Layout>
 
 <style>
+  /* --- Dual Heading Style --- */
+  .dual-h2 {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0 0 1.5rem 0;
+  }
+  .dual-h2-main {
+    display: block;
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .dual-h2-sub {
+    display: block;
+    color: rgba(28, 27, 26, 0.5); /* Clean, muted grey */
+    font-weight: 700;
+  }
+
+  /* --- Modern Inline CTA Button --- */
+  .inline-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: var(--ink);
+    padding: 0.6rem 1rem;
+    border-radius: 9999px;
+    border: 1px solid var(--border);
+    background: var(--paper-raised);
+    transition: all 0.2s ease;
+    margin-top: 1.5rem;
+  }
+  .inline-cta:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .inline-cta .arrow {
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: transform 0.2s ease;
+  }
+  .inline-cta:hover .arrow {
+    transform: translate(2px, -2px); /* Pop-up arrow effect */
+  }
+
   /* --- Testimonials: straightened quote cards --- */
   .quotes {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1.4rem;
-    margin-top: 2rem;
+    margin-top: 0;
   }
 
   .quote-card {
@@ -270,7 +323,6 @@ const faqTeaser = [
     transition: transform .2s ease;
   }
 
-  /* Removed rotation transforms */
   .quote-card:hover {
     transform: translateY(-3px);
   }
@@ -313,13 +365,8 @@ const faqTeaser = [
     padding-block: 2rem 1rem;
   }
 
-  .subject-gallery-section h2 {
-    margin: 0;
-  }
-
   .gallery-wrapper {
     position: relative;
-    margin-top: 1.5rem;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     border-radius: var(--radius);
@@ -327,7 +374,6 @@ const faqTeaser = [
     display: flex;
   }
 
-  /* Clean scrollbar styling */
   .gallery-wrapper::-webkit-scrollbar {
     height: 6px;
   }
