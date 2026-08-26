@@ -13,11 +13,38 @@ const current = Astro.url.pathname
 <header class="site-nav">
   <div class="container nav-inner">
     <a href={href('/')} class="wordmark">Brantford Tutors<span class="dot">.</span></a>
-    <nav>
+    
+    <button id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+
+    <nav id="nav-menu" class="nav-menu">
       {links.map((l) => (
         <a href={href(l.path)} class:list={{ active: current.startsWith(href(l.path)) }}>{l.text}</a>
       ))}
-      <a href={href('/book')} class="btn btn-small">Book a Session</a>
+      <a href={href('/book')} class="btn btn-small nav-cta">Book a Session</a>
     </nav>
   </div>
 </header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('nav-menu');
+  
+  toggle?.addEventListener('click', () => {
+    const isOpen = menu?.classList.toggle('is-open');
+    toggle.classList.toggle('is-active', isOpen);
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  // Close menu when a link is clicked (good for mobile UX)
+  menu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      menu.classList.remove('is-open');
+      toggle?.classList.remove('is-active');
+      toggle?.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>

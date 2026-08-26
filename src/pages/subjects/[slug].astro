@@ -16,98 +16,267 @@ const teaching = (await getCollection('tutors'))
   .filter((t) => t.data.subjects.some((s) => s === subject.id))
 ---
 <Layout title={`${subject.data.title} Tutoring · Brantford Tutors`}>
-  <section class="container">
+  
+  <!-- HERO: Centered, airy -->
+  <section class="subject-hero container">
     <a href={href('/subjects')} class="back-link">← All subjects</a>
+    <h1>{subject.data.title}</h1>
+    <p class="subject-tagline">{subject.data.tagline}</p>
+    
+    {subject.data.photo && (
+      <img
+        src={subject.data.photo}
+        alt={subject.data.title}
+        class="subject-hero-img"
+        loading="eager"
+      />
+    )}
+  </section>
 
-    <div class="subject-header">
-      <div class="subject-header-text">
-        <p class="num" style="font-size: 3rem;">{String(subject.data.order).padStart(2, '0')}</p>
-        <h1>{subject.data.title}</h1>
-        <p class="lead" style="margin-top: .8rem;">{subject.data.tagline}</p>
+  <!-- BODY: Clean, centered reading column -->
+  <section class="subject-body container">
+    <div class="prose"><Content /></div>
+
+    <div class="topics-section">
+      <h2>What we cover</h2>
+      <div class="topic-grid">
+        {subject.data.topics.map((topic) => (
+          <div class="topic-card">{topic}</div>
+        ))}
       </div>
-
-      {subject.data.photo && (
-        <img
-          src={subject.data.photo}
-          alt={subject.data.title}
-          class="subject-hero"
-          loading="eager"
-        />
-      )}
     </div>
 
-    <div class="split" style="margin-top: 2.5rem;">
-      <div>
-        <div class="prose"><Content /></div>
-
-        <h2 style="margin-top: 2.5rem;">What we cover</h2>
-        <ul class="topics">
-          {subject.data.topics.map((topic) => <li>{topic}</li>)}
-        </ul>
-
-        <div style="margin-top: 2rem; display: grid; gap: .8rem;">
-          <p><strong>Good for:</strong> {subject.data.levels}</p>
-          <p><strong>What to bring:</strong> {subject.data.bring}</p>
-        </div>
-
-        <div style="margin-top: 2.5rem;">
-          <a href={href(`/book?subject=${subject.id}`)} class="btn">Book {subject.data.title}</a>
-        </div>
+    <div class="info-grid">
+      <div class="info-box">
+        <span class="info-label">Good for</span>
+        <p>{subject.data.levels}</p>
       </div>
+      <div class="info-box">
+        <span class="info-label">What to bring</span>
+        <p>{subject.data.bring}</p>
+      </div>
+    </div>
+  </section>
 
-      <aside>
-        <p class="section-label">Your tutors for {subject.data.title}</p>
-        <div class="mini-tutors" style="grid-template-columns: 1fr;">
-          {teaching.map((t) => (
-            <a href={href(`/tutors/${t.id}`)} class={`mini-tutor ac-${t.data.accent}`}>
-              {t.data.photo ? (
-                <img src={t.data.photo} alt={t.data.name} class="avatar avatar-sm" loading="lazy" />
-              ) : (
-                <div class="avatar avatar-sm">{t.data.name.charAt(0)}</div>
-              )}
-              <div>
-                <strong>{t.data.name}</strong>
-                <p class="meta">{t.data.blurb}</p>
-              </div>
-            </a>
-          ))}
-        </div>
-      </aside>
+  <!-- TUTORS: Full-width, no borders -->
+  <section class="subject-tutors-section">
+    <div class="container">
+      <h2>Your {subject.data.title} tutors</h2>
+      <div class="tutors-grid">
+        {teaching.map((t) => (
+          <a href={href(`/tutors/${t.id}`)} class="tutor-card">
+            {t.data.photo ? (
+              <img src={t.data.photo} alt={t.data.name} class="avatar avatar-sm" loading="lazy" />
+            ) : (
+              <div class="avatar avatar-sm">{t.data.name.charAt(0)}</div>
+            )}
+            <div class="tutor-info">
+              <strong>{t.data.name}</strong>
+              <p>{t.data.blurb}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA: Centered and soft -->
+  <section class="subject-cta-section">
+    <div class="container cta-inner">
+      <h2>Ready to tackle {subject.data.title}?</h2>
+      <a href={href(`/book?subject=${subject.id}`)} class="btn btn-big">Book {subject.data.title}</a>
     </div>
   </section>
 </Layout>
 
 <style>
-  .subject-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2.5rem;
-  }
-
-  .subject-header-text {
-    flex: 1;
-    min-width: 0;
-  }
-
+  /* --- Hero Section --- */
   .subject-hero {
-    width: 320px;
-    flex-shrink: 0;
-    aspect-ratio: 4 / 3;
+    text-align: center;
+    padding-top: 2rem;
+  }
+  
+  .subject-hero .back-link {
+    display: inline-block;
+    margin-bottom: 2rem;
+    text-decoration: none;
+    color: var(--muted);
+    font-weight: 700;
+    font-size: .9rem;
+  }
+  
+  .subject-hero h1 {
+    font-size: clamp(2.8rem, 6vw, 4rem);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin: 0;
+  }
+  
+  .subject-tagline {
+    font-size: 1.25rem;
+    color: var(--muted);
+    max-width: 600px;
+    margin: 1rem auto 0;
+    line-height: 1.5;
+  }
+  
+  .subject-hero-img {
+    width: 100%;
+    max-width: 900px;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
+    border-radius: 24px;
+    margin: 3rem auto 0;
+    display: block;
+    background: color-mix(in srgb, var(--border) 20%, transparent);
   }
 
-  @media (max-width: 800px) {
-    .subject-header {
-      flex-direction: column;
-      align-items: stretch;
-    }
+  /* --- Body Content --- */
+  .subject-body {
+    max-width: 760px;
+    padding-block: 4rem;
+  }
+  
+  .subject-body .prose {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--ink);
+  }
 
-    .subject-hero {
-      width: 100%;
-      max-width: 420px;
+  /* --- Topics Grid (Borderless Cards) --- */
+  .topics-section {
+    margin-top: 4rem;
+  }
+  
+  .topics-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+  
+  .topic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  
+  .topic-card {
+    background: var(--paper-raised);
+    border: 1px solid transparent;
+    border-radius: 16px;
+    padding: 1.2rem 1.4rem;
+    font-weight: 500;
+    color: var(--ink);
+    transition: background 0.2s ease;
+  }
+  
+  .topic-card:hover {
+    background: rgba(56, 168, 172, 0.05);
+  }
+
+  /* --- Info Boxes --- */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  
+  .info-box {
+    background: var(--paper-raised);
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
+  
+  .info-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  
+  .info-box p {
+    margin: 0;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  /* --- Tutors Section (no borders) --- */
+  .subject-tutors-section {
+    background: var(--paper);
+    padding-block: 4rem;
+    /* borders removed */
+  }
+  
+  .subject-tutors-section h2 {
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+  }
+  
+  .tutors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .tutor-card {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    background: var(--paper-raised);
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .tutor-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+  
+  .tutor-info strong {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .tutor-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* --- CTA Section --- */
+  .subject-cta-section {
+    padding-block: 5rem;
+    text-align: center;
+  }
+  
+  .cta-inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .subject-cta-section h2 {
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  /* --- Responsive --- */
+  @media (max-width: 640px) {
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+    .subject-hero-img {
+      border-radius: 16px;
     }
   }
 </style>
