@@ -43,7 +43,7 @@ const testimonials = [
 ]
 
 const rates = [
-  { name: 'Small Group', desc: '2–3 friends learning together', price: '$15', per: '/hr per person' },
+  { name: 'Small Group', desc: '2 to 3 friends learning together', price: '$15', per: '/hr per person' },
   { name: '1-on-1 Hour', desc: 'Individual attention, any subject', price: '$25', per: '/hr' },
   { name: '1-on-1 Extended', desc: 'Deep work and exam prep', price: '$35', per: '/90 min' },
 ]
@@ -126,7 +126,7 @@ const faqTeaser = [
     </div>
   </section>
 
-  <!-- Subjects – formatted scroll-snap gallery -->
+  <!-- Subjects - formatted scroll-snap gallery -->
   <section class="container subject-gallery-section">
     <h2 class="dual-h2">
       <span class="dual-h2-main">Explore what we teach</span>
@@ -196,7 +196,7 @@ const faqTeaser = [
       {testimonials.map((t) => (
         <figure class="quote-card">
           <blockquote>{t.quote}</blockquote>
-          <figcaption>— {t.by}</figcaption>
+          <figcaption>{t.by}</figcaption>
         </figure>
       ))}
     </div>
@@ -360,7 +360,7 @@ const faqTeaser = [
     margin: .7rem auto 1.8rem;
   }
 
-  /* --- Subject gallery – Scroll-Snap Row --- */
+  /* --- Subject gallery - Scroll-Snap Row --- */
   .subject-gallery-section {
     padding-block: 2rem 1rem;
   }

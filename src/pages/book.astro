@@ -96,12 +96,12 @@ const boardData = JSON.stringify({
       <!-- Receipt + contact + submit -->
       <div class="board-footer">
         <div class="receipt" id="receipt">
-          <div class="sum-row"><span>Subject</span><span class="dots"></span><strong id="r-subject">—</strong></div>
-          <div class="sum-row"><span>Length</span><span class="dots"></span><strong id="r-duration">—</strong></div>
-          <div class="sum-row"><span>Day</span><span class="dots"></span><strong id="r-date">—</strong></div>
-          <div class="sum-row"><span>Start time</span><span class="dots"></span><strong id="r-time">—</strong></div>
-          <div class="sum-row"><span>Tutor</span><span class="dots"></span><strong id="r-tutor">—</strong></div>
-          <div class="sum-row sum-total"><span>Price</span><span class="dots"></span><strong id="r-price">—</strong></div>
+          <div class="sum-row"><span>Subject</span><span class="dots"></span><strong id="r-subject">Not selected</strong></div>
+          <div class="sum-row"><span>Length</span><span class="dots"></span><strong id="r-duration">Not selected</strong></div>
+          <div class="sum-row"><span>Day</span><span class="dots"></span><strong id="r-date">Not selected</strong></div>
+          <div class="sum-row"><span>Start time</span><span class="dots"></span><strong id="r-time">Not selected</strong></div>
+          <div class="sum-row"><span>Tutor</span><span class="dots"></span><strong id="r-tutor">Not selected</strong></div>
+          <div class="sum-row sum-total"><span>Price</span><span class="dots"></span><strong id="r-price">Not selected</strong></div>
         </div>
 
         <div class="contact-fields">
@@ -279,7 +279,7 @@ const boardData = JSON.stringify({
     }
 
     // ================================================================
-    // THE DEEP CHECK — the heart of the system
+    // THE DEEP CHECK - the heart of the system
     // Returns true if at least one complete booking is still possible
     // given the partial state p.
     // ================================================================
@@ -509,12 +509,12 @@ const boardData = JSON.stringify({
       const tutor = tutors.find((t) => t.id === state.tutor)
       const date = dates.find((d) => d.iso === state.date)
 
-      $('r-subject').textContent = subj ? subj.title : '—'
-      $('r-duration').textContent = state.duration ? `${state.duration} minutes` : '—'
-      $('r-date').textContent = date ? `${date.dowFull.slice(0, 3)}, ${date.month} ${date.dayNum}` : '—'
-      $('r-time').textContent = state.time != null ? fmtTime(state.time) : '—'
-      $('r-tutor').textContent = tutor ? tutor.name : '—'
-      $('r-price').textContent = state.duration ? `$${config.prices[String(state.duration)]}` : '—'
+      $('r-subject').textContent = subj ? subj.title : 'Not selected'
+      $('r-duration').textContent = state.duration ? `${state.duration} minutes` : 'Not selected'
+      $('r-date').textContent = date ? `${date.dowFull.slice(0, 3)}, ${date.month} ${date.dayNum}` : 'Not selected'
+      $('r-time').textContent = state.time != null ? fmtTime(state.time) : 'Not selected'
+      $('r-tutor').textContent = tutor ? tutor.name : 'Not selected'
+      $('r-price').textContent = state.duration ? `$${config.prices[String(state.duration)]}` : 'Not selected'
 
       // Gather required field values
       const name = nameInput.value.trim()
@@ -609,7 +609,7 @@ const boardData = JSON.stringify({
       bookBtn.classList.add('is-sending')
 
       const body = {
-        _subject: `New booking — ${subj.title}, ${dateShort}, ${timeLabel}`,
+        _subject: `New booking - ${subj.title}, ${dateShort}, ${timeLabel}`,
         _template: 'table',
         _captcha: 'false',
         _honey: honey,
@@ -620,8 +620,8 @@ const boardData = JSON.stringify({
         'Tutor': tutor.name,
         'Student Name': name,
         'Phone': phone,
-        'Email': email || '—',
-        'Notes': notes || '—',
+        'Email': email || 'Not provided',
+        'Notes': notes || 'None',
       }
 
       try {

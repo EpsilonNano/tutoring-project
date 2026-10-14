@@ -114,13 +114,13 @@ export function calculateResults(state: TestState): TestResult {
   
   if (overallScore >= 80) {
     readiness = "Strongly Prepared";
-    estimatedLevel = `Grade ${state.targetGrade}–${Math.min(12, state.targetGrade + 1)}`;
+    estimatedLevel = `Grade ${state.targetGrade} to ${Math.min(12, state.targetGrade + 1)}`;
   } else if (overallScore >= 65) {
     readiness = "Mostly Prepared";
     estimatedLevel = `Around Grade ${state.targetGrade}`;
   } else if (overallScore >= 50) {
     readiness = "Some Review Recommended";
-    estimatedLevel = `Grade ${Math.max(1, state.targetGrade - 1)}–${state.targetGrade}`;
+    estimatedLevel = `Grade ${Math.max(1, state.targetGrade - 1)} to ${state.targetGrade}`;
   }
 
   return {

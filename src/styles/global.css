@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Brantford Tutors — global stylesheet
+   Brantford Tutors - global stylesheet
 
    Contents
    1.  Design tokens
@@ -11,7 +11,7 @@
    7.  Site footer
    8.  Cards
    9.  Avatars, chips & accent themes
-   10. Home — hero & photo cluster
+   10. Home - hero & photo cluster
    11. Tutors
    12. Subjects
    13. Pricing
@@ -29,7 +29,7 @@
   --ink:          #1c1b1a; /* primary text */
   --paper:        #faf8f4; /* page background */
   --paper-raised: #ffffff; /* cards & inputs */
-  --accent:       #38a8ac; /* brand teal — matches logo & print materials, do not change */
+  --accent:       #38a8ac; /* brand teal - matches logo & print materials, do not change */
   --accent-dark:  #00666b; /* darker teal for hovers and filled states */
   --warm:         #e8a33d; /* amber highlights */
   --warm-dark:    #b97a1a;
@@ -344,7 +344,7 @@ section { padding-block: 3.5rem; }
 .meta { color: var(--muted); font-size: .95rem; margin-top: .25rem; }
 .meta strong { color: var(--ink); }
 
-/* ============ 10. Home — hero & photo cluster ============ */
+/* ============ 10. Home - hero & photo cluster ============ */
 .hero { padding-block: 3rem 0; }
 .hero h1 { max-width: 18ch; }
 .hero .lead { max-width: 52ch; margin-top: 1rem; }
@@ -734,7 +734,7 @@ section { padding-block: 3.5rem; }
 .board-input:focus { outline: 2px solid var(--accent); outline-offset: 2px; border-color: var(--accent); }
 textarea.board-input { resize: vertical; }
 
-/* Honeypot field — hidden from humans, bots fill it in */
+/* Honeypot field - hidden from humans, bots fill it in */
 .hp-field { position: absolute; left: -9999px; opacity: 0; height: 0; overflow: hidden; }
 
 .ack-row {
