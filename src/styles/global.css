@@ -572,6 +572,75 @@ section { padding-block: 3.5rem; }
 }
 
 /* ============ 14. Resources ============ */
+.math-test-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  margin-top: 1.8rem;
+  padding: 1.3rem 1.5rem;
+  background: var(--paper-raised);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--ink);
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.math-test-banner:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+  border-color: var(--accent);
+}
+.math-test-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+.math-test-banner-text strong {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+}
+.math-test-banner-text span:last-child {
+  color: var(--muted);
+  font-size: .95rem;
+}
+.math-test-badge {
+  align-self: flex-start;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--accent-dark);
+  background: rgba(56, 168, 172, .1);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  padding: .2em .8em;
+  border-radius: 999px;
+  margin-bottom: .35rem;
+}
+.math-test-cta {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-weight: 700;
+  font-size: .95rem;
+  color: #fff;
+  background: var(--accent);
+  padding: .65em 1.4em;
+  border-radius: 9999px;
+  transition: background .15s ease, transform .15s ease;
+  white-space: nowrap;
+}
+.math-test-banner:hover .math-test-cta {
+  background: var(--accent-dark);
+}
+@media (max-width: 640px) {
+  .math-test-banner { flex-direction: column; align-items: flex-start; }
+  .math-test-cta { width: 100%; justify-content: center; }
+}
 .anchor-nav { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.8rem; }
 .anchor-nav a { text-decoration: none; font-size: .85rem; font-weight: 700; padding: .45em 1.1em; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); background: var(--paper-raised); transition: color .15s, border-color .15s, transform .15s; }
 .anchor-nav a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
@@ -955,10 +1024,41 @@ textarea.board-input { resize: vertical; }
 .question-counter {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: 0.875rem;
   font-weight: 700;
   color: var(--muted);
   margin-bottom: 0.5rem;
+}
+/* Live right/wrong tally, above the progress bar on the right */
+.score-tally {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+}
+.tally {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: .35em .75em;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--paper-raised);
+  min-width: 3.2rem;
+  justify-content: center;
+}
+.tally-correct {
+  color: #065f46;
+  border-color: #a7f3d0;
+  background: #ecfdf5;
+}
+.tally-wrong {
+  color: #991b1b;
+  border-color: #fecaca;
+  background: #fef2f2;
 }
 .progress-bar {
   width: 100%;
@@ -1021,6 +1121,38 @@ textarea.board-input { resize: vertical; }
   border-color: var(--border) !important;
   opacity: 0.35 !important;
   color: var(--muted) !important;
+}
+/* The answer the user picked when it was wrong stays fully visible with a red outline */
+.option-btn.picked-wrong {
+  background: #fef2f2 !important;
+  border: 3px solid #dc2626 !important;
+  opacity: 1 !important;
+  color: #991b1b !important;
+}
+.option-btn.picked-wrong .option-letter,
+.option-btn.picked-wrong .option-text {
+  color: #991b1b !important;
+}
+/* Small ✓ / ✕ badge pinned to the right of a revealed answer */
+.option-mark {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  font-size: .85rem;
+  font-weight: 800;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.mark-correct {
+  background: #10b981;
+  color: #fff;
+}
+.mark-wrong {
+  background: #dc2626;
+  color: #fff;
 }
 
 /* Selection state before checking */

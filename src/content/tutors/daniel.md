@@ -6,7 +6,7 @@ average: 97%+
 accent: sage
 subjects: [math, science, french, coding, chess]
 specialties: [Algebra, Biology, Chemistry, Physics, French, Python]
-blurb: Strong across math, science, French, and coding. Enjoys helping students work through problems and find a better way to understand the material.
+blurb: I teach math, science, French, and coding. I like working through problems with you until we find a way that actually clicks.
 photo: /images/tutors/daniel.jpg
 ---
 

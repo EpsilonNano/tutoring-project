@@ -6,7 +6,7 @@ average: 97%+
 accent: sage
 subjects: [math, science, french, coding, chess]
 specialties: [Calculus, Algebra, Biology, Chemistry, Physics, French, Python]
-blurb: Experienced across all five subjects, with a focus on math and science. Brings a structured approach to solving problems and preparing for tests.
+blurb: I teach all five subjects, mostly math and science. I like to keep things structured so problem-solving and test prep feel clear.
 photo: /images/tutors/ethan.jpg
 ---
 

@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import { href } from '../lib/link'
 const sections = [
   { id: 'math', label: 'Math' },
   { id: 'science', label: 'Science' },
@@ -16,6 +17,15 @@ const sections = [
     <p class="lead" style="margin-top: 1rem;">
       Everything here is free and has earned its place.
     </p>
+
+    <a href={href('/math-test')} class="math-test-banner">
+      <div class="math-test-banner-text">
+        <span class="math-test-badge">Free · 10–15 min</span>
+        <strong>Not sure where you stand in math?</strong>
+        <span>Take our free math readiness test to find your strengths and what to review next.</span>
+      </div>
+      <span class="math-test-cta">Take the test <span aria-hidden="true">→</span></span>
+    </a>
 
     <nav class="anchor-nav">
       {sections.map((s) => <a href={`#${s.id}`}>{s.label}</a>)}

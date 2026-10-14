@@ -63,6 +63,10 @@ import Layout from "../layouts/Layout.astro";
       <div class="question-header">
         <div class="question-counter">
           <span id="question-counter">Question 1</span>
+          <span class="score-tally" aria-live="polite" aria-label="Score so far">
+            <span id="tally-correct" class="tally tally-correct" title="Correct"><span aria-hidden="true">✓</span> 0</span>
+            <span id="tally-wrong" class="tally tally-wrong" title="Incorrect"><span aria-hidden="true">✕</span> 0</span>
+          </span>
         </div>
         <div class="progress-bar">
           <div id="progress-bar" class="progress-fill" style="width: 0%"></div>
@@ -193,6 +197,15 @@ import Layout from "../layouts/Layout.astro";
     loadNextQuestion();
   });
 
+  function updateTally() {
+    const correct = state.responses.filter((r) => r.isCorrect).length;
+    const wrong = state.responses.filter((r) => !r.isCorrect).length;
+    const tallyCorrect = document.getElementById('tally-correct');
+    const tallyWrong = document.getElementById('tally-wrong');
+    if (tallyCorrect) tallyCorrect.innerHTML = `<span aria-hidden="true">✓</span> ${correct}`;
+    if (tallyWrong) tallyWrong.innerHTML = `<span aria-hidden="true">✕</span> ${wrong}`;
+  }
+
   function loadNextQuestion() {
     currentQuestion = getNextQuestion(state);
     
@@ -213,6 +226,7 @@ import Layout from "../layouts/Layout.astro";
     if (counter) counter.innerText = `Question ${state.askedQuestionIds.length + 1} of ${MAX_QUESTIONS}`;
     if (progressBar) progressBar.style.width = `${((state.askedQuestionIds.length) / MAX_QUESTIONS) * 100}%`;
     if (questionText) questionText.innerHTML = currentQuestion.question;
+    updateTally();
 
     if (optionsContainer) {
       optionsContainer.innerHTML = '';
@@ -268,6 +282,18 @@ import Layout from "../layouts/Layout.astro";
 
         if (idx === currentQuestion!.correctAnswerIndex) {
           btn.classList.add('correct');
+          const mark = document.createElement('span');
+          mark.className = 'option-mark mark-correct';
+          mark.setAttribute('aria-hidden', 'true');
+          mark.textContent = '✓';
+          btn.appendChild(mark);
+        } else if (idx === selectedOptionIndex) {
+          btn.classList.add('incorrect', 'picked-wrong');
+          const mark = document.createElement('span');
+          mark.className = 'option-mark mark-wrong';
+          mark.setAttribute('aria-hidden', 'true');
+          mark.textContent = '✕';
+          btn.appendChild(mark);
         } else {
           btn.classList.add('incorrect');
         }
@@ -276,6 +302,7 @@ import Layout from "../layouts/Layout.astro";
       // Save response to state
       state = updateStateAfterAnswer(state, currentQuestion, isCorrect);
       sessionStorage.setItem('brantfordMathTestState', JSON.stringify(state));
+      updateTally();
 
       // Update button to advance
       btnNext.innerText = "Next Question";

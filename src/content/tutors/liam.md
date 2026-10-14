@@ -6,7 +6,7 @@ average: 97%+
 accent: sage
 subjects: [math, science, coding]
 specialties: [Geometry, Game Design, Algebra, Chemistry, Physics, Python, Godot, Trigonometry]
-blurb: Focused on science, math, and coding. Loves building projects that connect what is taught in school to the real world.
+blurb: I'm into science, math, and coding. I love building projects that connect what we learn in school to the real world.
 photo: /images/tutors/liam.jpg
 ---
 
