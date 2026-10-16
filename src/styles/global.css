@@ -450,9 +450,11 @@ section { padding-block: 3.5rem; }
 .callout strong { color: #fff; }
 
 .policy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 1.5rem; }
-.policy { background: var(--paper-raised); border: 1px solid var(--border); border-left: 4px solid var(--ac, var(--accent)); border-radius: var(--radius); padding: 1.6rem; }
-.policy h3 { margin-bottom: .5rem; font-size: 1.2rem; }
-.policy p { color: var(--muted); font-size: .95rem; }
+.policy { background: var(--ink); border-radius: var(--radius); padding: 1.4rem 1.6rem; }
+.policy h3 { margin-bottom: .5rem; font-size: 1.2rem; color: #fff; }
+.policy p { color: #cfccc4; font-size: .95rem; }
+.policy a { color: var(--warm); font-weight: 700; text-decoration: none; }
+.policy a:hover { color: #fff; }
 
 /* Menu-style rate list */
 .rate-card { margin-top: 2rem; background: var(--paper-raised); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem 2rem; }
@@ -534,20 +536,15 @@ section { padding-block: 3.5rem; }
   justify-content: space-between;
   gap: 1.2rem;
   margin-top: 1.8rem;
-  padding: 1.3rem 1.5rem;
-  background: var(--paper-raised);
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--accent);
+  padding: 1.4rem 1.6rem;
+  background: var(--ink);
   border-radius: var(--radius);
   text-decoration: none;
-  color: var(--ink);
-  box-shadow: var(--shadow);
-  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  color: var(--paper);
+  transition: background .15s ease;
 }
 .math-test-banner:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
-  border-color: var(--accent);
+  background: #242322;
 }
 .math-test-banner-text {
   display: flex;
@@ -558,9 +555,10 @@ section { padding-block: 3.5rem; }
   font-family: var(--font-display);
   font-size: 1.15rem;
   letter-spacing: -0.01em;
+  color: #fff;
 }
 .math-test-banner-text span:last-child {
-  color: var(--muted);
+  color: #cfccc4;
   font-size: .95rem;
 }
 .math-test-badge {
@@ -569,9 +567,8 @@ section { padding-block: 3.5rem; }
   font-weight: 700;
   letter-spacing: .06em;
   text-transform: uppercase;
-  color: var(--accent-dark);
-  background: rgba(56, 168, 172, .1);
-  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  color: var(--warm);
+  border: 1px solid rgba(232, 163, 61, .45);
   padding: .2em .8em;
   border-radius: 999px;
   margin-bottom: .35rem;
@@ -583,15 +580,16 @@ section { padding-block: 3.5rem; }
   gap: .4rem;
   font-weight: 700;
   font-size: .95rem;
-  color: #fff;
-  background: var(--accent);
+  color: var(--ink);
+  background: #fff;
   padding: .65em 1.4em;
   border-radius: 9999px;
-  transition: background .15s ease, transform .15s ease;
+  transition: background .15s ease;
   white-space: nowrap;
 }
 .math-test-banner:hover .math-test-cta {
-  background: var(--accent-dark);
+  background: var(--warm);
+  color: #fff;
 }
 @media (max-width: 640px) {
   .math-test-banner { flex-direction: column; align-items: flex-start; }

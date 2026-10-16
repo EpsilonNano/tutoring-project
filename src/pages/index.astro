@@ -89,13 +89,14 @@ const faqTeaser = [
 
   <!-- Free Math Test Callout -->
   <section class="container math-callout-section">
-    <div class="card" style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
-      <div>
-        <h3 style="margin: 0;">Not sure where you stand in math?</h3>
-        <p style="margin: 0.25rem 0 0 0;">Answer 12 questions and see what to review next. Free, about 10-15 min.</p>
+    <a href={href('/math-test')} class="math-test-banner">
+      <div class="math-test-banner-text">
+        <span class="math-test-badge">Free · 10-15 min</span>
+        <strong>Not sure where you stand in math?</strong>
+        <span>Answer 12 questions and see what to review next.</span>
       </div>
-      <a href={href('/math-test')} class="btn">Take the free check</a>
-    </div>
+      <span class="math-test-cta">Take the free check</span>
+    </a>
   </section>
 
   <!-- How it works -->
