@@ -1,7 +1,7 @@
 ---
 title: Science
 order: 2
-tagline: Biology, chemistry, and physics made easier to understand.
+tagline: Bio, chem and physics. We sketch it out then practice test style questions.
 levels: Kindergarten to Grade 11
 topics:
   - Biology, from cells to genetics

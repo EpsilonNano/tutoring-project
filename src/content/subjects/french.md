@@ -1,7 +1,7 @@
 ---
 title: French
 order: 3
-tagline: Improve your grammar, speaking, reading, and writing skills.
+tagline: Verb tenses, reading and speaking. Lots of out loud practice.
 levels: Kindergarten to Grade 12, beginner to advanced
 topics:
   - Core grammar and verb tenses

@@ -3,7 +3,6 @@ import Layout from '../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
 import { href } from '../lib/link'
 
-const subjects = (await getCollection('subjects')).sort((a, b) => a.data.order - b.data.order)
 const tutors = (await getCollection('tutors')).sort((a, b) => a.data.order - b.data.order)
 
 const steps = [
@@ -15,51 +14,48 @@ const steps = [
   {
     n: '02',
     title: 'Meet and learn',
-    text: 'Sessions happen at the St. Paul library branch, at your home, or online over Google Meet.',
+    text: 'Sessions happen at the St Paul library branch, at your home, or online over Google Meet.',
   },
   {
     n: '03',
     title: 'Pay at the session',
-    text: 'Cash or e-Transfer when you are done. No card on file, and your first session is half price.',
+    text: 'Cash or Etransfer when you are done. No card on file, and your first session is half price.',
   },
 ]
 
-const testimonials = [
+const howWeTeach = [
   {
-    quote:
-      'We break down complex topics step-by-step, finding the exact spots where you got stuck and rebuilding your understanding from the ground up.',
-    by: 'Step-by-Step Breakdown',
+    title: 'Find the stuck spot',
+    text: 'We start where it stopped making sense and work forward with your homework.',
   },
   {
-    quote:
-      'Learn at your own pace in a friendly, comfortable environment where you can ask any question without feeling rushed or judged.',
-    by: 'Zero-Judgment Zone',
+    title: 'Ask anything',
+    text: 'No rushing. If the first explanation did not land we try a second way.',
   },
   {
-    quote:
-      'Target specific weaknesses, master tricky homework problems, and build practical strategies for upcoming tests and exams.',
-    by: 'Targeted Exam Prep',
+    title: 'Practice for the test',
+    text: 'We do similar problems and past test style questions so you walk in ready.',
   },
 ]
 
 const rates = [
   { name: 'Small Group', desc: '2 to 3 friends learning together', price: '$15', per: '/hr per person' },
-  { name: '1-on-1 Hour', desc: 'Individual attention, any subject', price: '$25', per: '/hr' },
-  { name: '1-on-1 Extended', desc: 'Deep work and exam prep', price: '$35', per: '/90 min' },
+  { name: 'Private Hour', desc: 'One student, any subject', price: '$25', per: '/hr' },
+  { name: 'Private 90 min', desc: 'More time for review and exam prep', price: '$35', per: '/90 min' },
 ]
 
 const faqTeaser = [
   {
     q: 'Where do sessions happen?',
-    a: 'Usually at the St. Paul Brantford Public Library branch, at your house, or online over Google Meet.',
+    a: 'Usually at the St Paul Brantford Public Library branch, at your house, or online over Google Meet.',
   },
   {
     q: 'How does payment work?',
-    a: 'Cash or e-Transfer at the session. Nothing charged online, no card needed. Your first session is half price.',
+    a: 'Cash or Etransfer at the session. Nothing charged online, no card needed. Your first session is half price.',
   },
   {
     q: 'What if I need to cancel?',
-    a: 'Give us 24 hours’ notice and it is free. Inside 24 hours or a no-show, we ask for half the session rate.',
+    a: 'Give us 24 hours notice and it is free. Inside 24 hours or a no show, we ask for half the session rate.',
   },
 ]
 ---
@@ -79,20 +75,14 @@ const faqTeaser = [
       </div>
 
       <div class="hero-photos" aria-hidden="true">
-        <div class="photo-cluster">
-          {tutors.map((t) => (
-            <div class="photo-orbit">
-              <div class="photo-orbit-inner">
-                <img
-                  src={t.data.photo}
-                  alt=""
-                  class="hero-avatar"
-                  loading="eager"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+        {tutors.map((t) => (
+          <img
+            src={t.data.photo}
+            alt=""
+            class="hero-avatar"
+            loading="eager"
+          />
+        ))}
       </div>
     </div>
   </section>
@@ -101,19 +91,16 @@ const faqTeaser = [
   <section class="container math-callout-section">
     <div class="card" style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
       <div>
-        <h3 style="margin: 0;">Unsure where to start with math?</h3>
-        <p style="margin: 0.25rem 0 0 0;">Take our free self-assessment to find your strengths and focus areas.</p>
+        <h3 style="margin: 0;">Not sure where you stand in math?</h3>
+        <p style="margin: 0.25rem 0 0 0;">Answer 12 questions and see what to review next. Free, about 10 min.</p>
       </div>
-      <a href={href('/math-test')} class="btn">Take Free Math Test</a>
+      <a href={href('/math-test')} class="btn">Take the free check</a>
     </div>
   </section>
 
   <!-- How it works -->
   <section class="container">
-    <h2 class="dual-h2">
-      <span class="dual-h2-main">How it works</span>
-      <span class="dual-h2-sub">Booking takes about a minute.</span>
-    </h2>
+    <h2>How it works</h2>
 
     <div class="card-grid">
       {steps.map((s) => (
@@ -126,44 +113,16 @@ const faqTeaser = [
     </div>
   </section>
 
-  <!-- Subjects - formatted scroll-snap gallery -->
-  <section class="container subject-gallery-section">
-    <h2 class="dual-h2">
-      <span class="dual-h2-main">Explore what we teach</span>
-    </h2>
-
-    <div class="gallery-wrapper">
-      <div class="gallery-track">
-        {subjects.map((s) => (
-          <a
-            href={href(`/subjects/${s.id}`)}
-            class="gallery-card"
-            data-subject={s.id}
-          >
-            <img
-              src={s.data.photo ?? `https://picsum.photos/seed/${s.id}/640/400`}
-              alt={s.data.title}
-              loading="lazy"
-              decoding="async"
-              class="gallery-image"
-            />
-            <div class="gallery-card-body">
-              <span class="card-num">{String(s.data.order).padStart(2, '0')}</span>
-              <h3>{s.data.title}</h3>
-              <p>{s.data.tagline}</p>
-            </div>
-          </a>
-        ))}
-      </div>
-    </div>
+  <!-- Subjects -->
+  <section class="container">
+    <h2>Explore what we teach</h2>
+    <p class="lead">Math, Science, French, Coding and Chess. See levels and what to bring for each one.</p>
+    <p style="margin-top: 1rem;"><a href={href('/subjects')} class="text-link">See all subjects</a></p>
   </section>
 
   <!-- Tutors preview -->
   <section class="container">
-    <h2 class="dual-h2">
-      <span class="dual-h2-main">Meet the tutors</span>
-      <span class="dual-h2-sub">Three Grade 12 students with 97%+ averages.</span>
-    </h2>
+    <h2>Meet the tutors</h2>
 
     <div class="tutor-panels">
       {tutors.map((t) => (
@@ -182,32 +141,26 @@ const faqTeaser = [
       ))}
     </div>
 
-    <a href={href('/tutors')} class="inline-cta">Full tutor profiles <span class="arrow">↗</span></a>
+    <p style="margin-top: 1rem;"><a href={href('/tutors')} class="text-link">See tutor profiles</a></p>
   </section>
 
-  <!-- Testimonials -->
+  <!-- How we teach -->
   <section class="container">
-    <h2 class="dual-h2">
-      <span class="dual-h2-main">The student experience</span>
-      <span class="dual-h2-sub">What to expect.</span>
-    </h2>
+    <h2>How we teach</h2>
 
     <div class="quotes">
-      {testimonials.map((t) => (
-        <figure class="quote-card">
-          <blockquote>{t.quote}</blockquote>
-          <figcaption>{t.by}</figcaption>
-        </figure>
+      {howWeTeach.map((t) => (
+        <div class="quote-card">
+          <h3>{t.title}</h3>
+          <p>{t.text}</p>
+        </div>
       ))}
     </div>
   </section>
 
   <!-- Pricing + FAQ teaser -->
   <section class="container">
-    <h2 class="dual-h2">
-      <span class="dual-h2-main">Good to know</span>
-      <span class="dual-h2-sub">Simple pricing, straight answers.</span>
-    </h2>
+    <h2>Good to know</h2>
 
     <div class="split">
       <div>
@@ -226,7 +179,7 @@ const faqTeaser = [
           ))}
         </div>
 
-        <a href={href('/pricing')} class="inline-cta">Full pricing details <span class="arrow">↗</span></a>
+        <p style="margin-top: 1rem;"><a href={href('/pricing')} class="text-link">See pricing</a></p>
       </div>
 
       <div>
@@ -241,7 +194,7 @@ const faqTeaser = [
           ))}
         </div>
 
-        <a href={href('/faq')} class="inline-cta">All questions <span class="arrow">↗</span></a>
+        <p style="margin-top: 1rem;"><a href={href('/faq')} class="text-link">See all questions</a></p>
       </div>
     </div>
   </section>
@@ -249,64 +202,26 @@ const faqTeaser = [
   <!-- Final CTA band -->
   <section class="cta-band">
     <div class="container">
-      <h2>First session, half price.</h2>
-      <p>Book in about a minute. We confirm within a day, and you pay at the session.</p>
+      <h2>First session is half price.</h2>
+      <p>Pick a subject and time. We confirm within a day. Pay in person at the session.</p>
       <a href={href('/book')} class="btn">Book a Session</a>
     </div>
   </section>
 </Layout>
 
 <style>
-  /* --- Dual Heading Style --- */
-  .dual-h2 {
-    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-    margin: 0 0 1.5rem 0;
-  }
-  .dual-h2-main {
-    display: block;
-    color: var(--ink);
-    font-weight: 700;
-  }
-  .dual-h2-sub {
-    display: block;
-    color: rgba(28, 27, 26, 0.5); /* Clean, muted grey */
-    font-weight: 700;
-  }
-
-  /* --- Modern Inline CTA Button --- */
-  .inline-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
+  .text-link {
     font-weight: 700;
     font-size: 0.95rem;
-    text-decoration: none;
     color: var(--ink);
-    padding: 0.6rem 1rem;
-    border-radius: 9999px;
-    border: 1px solid var(--border);
-    background: var(--paper-raised);
-    transition: all 0.2s ease;
-    margin-top: 1.5rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
-  .inline-cta:hover {
-    border-color: var(--accent);
+  .text-link:hover {
     color: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
-  }
-  .inline-cta .arrow {
-    font-size: 1.1rem;
-    line-height: 1;
-    transition: transform 0.2s ease;
-  }
-  .inline-cta:hover .arrow {
-    transform: translate(2px, -2px); /* Pop-up arrow effect */
   }
 
-  /* --- Testimonials: straightened quote cards --- */
+  /* --- How we teach cards --- */
   .quotes {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -327,22 +242,19 @@ const faqTeaser = [
     transform: translateY(-3px);
   }
 
-  .quote-card blockquote {
-    font-family: var(--font-body);
-    font-size: 1.06rem;
+  .quote-card h3 {
+    font-size: 1.1rem;
+    margin: 0 0 0.4rem 0;
+  }
+
+  .quote-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1rem;
     line-height: 1.55;
   }
 
-  .quote-card figcaption {
-    margin-top: 1rem;
-    font-size: .8rem;
-    font-weight: 700;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  /* --- Full-width closing band --- */
+  /* --- Closing band --- */
   .cta-band {
     background: var(--accent-dark);
     text-align: center;
@@ -358,107 +270,5 @@ const faqTeaser = [
     font-size: 1.1rem;
     max-width: 46ch;
     margin: .7rem auto 1.8rem;
-  }
-
-  /* --- Subject gallery - Scroll-Snap Row --- */
-  .subject-gallery-section {
-    padding-block: 2rem 1rem;
-  }
-
-  .gallery-wrapper {
-    position: relative;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    border-radius: var(--radius);
-    padding-block: 0.5rem;
-    display: flex;
-  }
-
-  .gallery-wrapper::-webkit-scrollbar {
-    height: 6px;
-  }
-  .gallery-wrapper::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .gallery-wrapper::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 99px;
-  }
-
-  .gallery-track {
-    display: flex;
-    gap: 1.2rem;
-    padding-right: 1.2rem; /* space at end of track */
-  }
-
-  .gallery-card {
-    scroll-snap-align: start;
-    flex: 0 0 260px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background: var(--paper-raised);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    color: var(--ink);
-    text-decoration: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .gallery-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.10);
-  }
-
-  .gallery-image {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    height: auto;
-    object-fit: cover;
-    background: color-mix(in srgb, var(--border) 30%, transparent);
-  }
-
-  .gallery-card-body {
-    display: grid;
-    gap: 0.35rem;
-    padding: 1rem 1.2rem 1.2rem;
-    flex: 1;
-    align-content: start;
-  }
-
-  .gallery-card-body .card-num {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--warm);
-    line-height: 1;
-  }
-
-  .gallery-card-body h3 {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    font-weight: 600;
-  }
-
-  .gallery-card-body p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 0.92rem;
-    line-height: 1.45;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    overflow: hidden;
-  }
-
-  @media (max-width: 640px) {
-    .gallery-card {
-      flex-basis: 210px;
-    }
   }
 </style>

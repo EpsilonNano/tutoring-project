@@ -1,7 +1,7 @@
 ---
 title: Coding
 order: 4
-tagline: Learn programming by building real projects from scratch.
+tagline: Python, Godot and Scratch. You type, you build, you fix errors.
 levels: Grade 4 to Grade 12, beginner to advanced
 topics:
   - Game development with Godot

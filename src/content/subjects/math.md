@@ -1,7 +1,7 @@
 ---
 title: Math
 order: 1
-tagline: Learn subjects from algebra to calculus.
+tagline: Algebra, trig, functions and calculus. Bring the problem that stopped you.
 levels: Kindergarten to Grade 12
 topics:
   - Geometry and trigonometry

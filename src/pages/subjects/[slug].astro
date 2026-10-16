@@ -33,32 +33,22 @@ const teaching = (await getCollection('tutors'))
     )}
   </section>
 
-  <!-- BODY: Clean, centered reading column -->
+  <!-- BODY -->
   <section class="subject-body container">
     <div class="prose"><Content /></div>
 
-    <div class="topics-section">
-      <h2>What we cover</h2>
-      <div class="topic-grid">
-        {subject.data.topics.map((topic) => (
-          <div class="topic-card">{topic}</div>
-        ))}
-      </div>
-    </div>
+    <h2>What we cover</h2>
+    <ul class="topic-list">
+      {subject.data.topics.map((topic) => (
+        <li>{topic}</li>
+      ))}
+    </ul>
 
-    <div class="info-grid">
-      <div class="info-box">
-        <span class="info-label">Good for</span>
-        <p>{subject.data.levels}</p>
-      </div>
-      <div class="info-box">
-        <span class="info-label">What to bring</span>
-        <p>{subject.data.bring}</p>
-      </div>
-    </div>
+    <p class="subject-meta">Good for {subject.data.levels}.</p>
+    <p class="subject-meta">{subject.data.bring}</p>
   </section>
 
-  <!-- TUTORS: Full-width, no borders -->
+  <!-- TUTORS -->
   <section class="subject-tutors-section">
     <div class="container">
       <h2>Your {subject.data.title} tutors</h2>
@@ -80,10 +70,10 @@ const teaching = (await getCollection('tutors'))
     </div>
   </section>
 
-  <!-- CTA: Centered and soft -->
+  <!-- CTA -->
   <section class="subject-cta-section">
     <div class="container cta-inner">
-      <h2>Ready to tackle {subject.data.title}?</h2>
+      <h2>Want help with {subject.data.title}?</h2>
       <a href={href(`/book?subject=${subject.id}`)} class="btn btn-big">Book {subject.data.title}</a>
     </div>
   </section>
@@ -143,65 +133,17 @@ const teaching = (await getCollection('tutors'))
     color: var(--ink);
   }
 
-  /* --- Topics Grid (Borderless Cards) --- */
-  .topics-section {
-    margin-top: 4rem;
-  }
-  
-  .topics-section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    letter-spacing: -0.02em;
-  }
-  
-  .topic-grid {
+  .topic-list {
+    list-style: disc;
+    padding-left: 1.4rem;
+    margin: 1rem 0 2rem 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1rem;
-  }
-  
-  .topic-card {
-    background: var(--paper-raised);
-    border: 1px solid transparent;
-    border-radius: 16px;
-    padding: 1.2rem 1.4rem;
-    font-weight: 500;
-    color: var(--ink);
-    transition: background 0.2s ease;
-  }
-  
-  .topic-card:hover {
-    background: rgba(56, 168, 172, 0.05);
+    gap: 0.4rem;
   }
 
-  /* --- Info Boxes --- */
-  .info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-top: 3rem;
-  }
-  
-  .info-box {
-    background: var(--paper-raised);
-    border-radius: 16px;
-    padding: 1.5rem;
-  }
-  
-  .info-label {
-    display: block;
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--accent);
-    margin-bottom: 0.5rem;
-  }
-  
-  .info-box p {
-    margin: 0;
-    color: var(--ink);
-    line-height: 1.5;
+  .subject-meta {
+    color: var(--muted);
+    margin: 0.6rem 0;
   }
 
   /* --- Tutors Section (no borders) --- */
@@ -272,9 +214,6 @@ const teaching = (await getCollection('tutors'))
 
   /* --- Responsive --- */
   @media (max-width: 640px) {
-    .info-grid {
-      grid-template-columns: 1fr;
-    }
     .subject-hero-img {
       border-radius: 16px;
     }

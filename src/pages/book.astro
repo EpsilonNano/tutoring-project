@@ -111,7 +111,7 @@ const boardData = JSON.stringify({
           </div>
           <div class="field-row">
             <label for="f-phone">Phone number <span class="req">*</span></label>
-            <input type="tel" id="f-phone" class="board-input" placeholder="e.g. (519) 555-0123" autocomplete="tel" />
+            <input type="tel" id="f-phone" class="board-input" placeholder="e.g. (519) 555 0123" autocomplete="tel" />
           </div>
           <div class="field-row">
             <label for="f-email">Email <span class="opt">(optional)</span></label>
@@ -137,7 +137,7 @@ const boardData = JSON.stringify({
 
         <label class="ack-row" for="f-cancel-ack">
           <input type="checkbox" id="f-cancel-ack" class="ack-box" />
-          <span>I understand that payment is by <strong>cash or e‑Transfer</strong> at the session, and that if I cancel within <strong>24 hours</strong> of the confirmed time, I will still be charged <strong>50%</strong>.</span>
+          <span>I understand that payment is by <strong>cash or Etransfer</strong> at the session, and that if I cancel within <strong>24 hours</strong> of the confirmed time, I will still be charged <strong>50%</strong>.</span>
         </label>
 
         <p class="board-status" id="statusLine"></p>
@@ -279,7 +279,7 @@ const boardData = JSON.stringify({
     }
 
     // ================================================================
-    // THE DEEP CHECK - the heart of the system
+    // THE DEEP CHECK : the heart of the system
     // Returns true if at least one complete booking is still possible
     // given the partial state p.
     // ================================================================
@@ -609,7 +609,7 @@ const boardData = JSON.stringify({
       bookBtn.classList.add('is-sending')
 
       const body = {
-        _subject: `New booking - ${subj.title}, ${dateShort}, ${timeLabel}`,
+        _subject: `New booking: ${subj.title}, ${dateShort}, ${timeLabel}`,
         _template: 'table',
         _captcha: 'false',
         _honey: honey,
@@ -666,7 +666,7 @@ const boardData = JSON.stringify({
           <p class="lead">${summary}</p>
           <p class="done-note">
             One of us will text <strong id="done-phone"></strong> within a day to confirm.
-            Pay cash or e-Transfer at the session.
+            Pay cash or Etransfer at the session.
           </p>
           <button class="btn btn-ghost" id="againBtn">Make another booking</button>
         </div>

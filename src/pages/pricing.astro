@@ -2,15 +2,15 @@
 import Layout from '../layouts/Layout.astro'
 import { href } from '../lib/link'
 ---
-<Layout title="Pricing · Brantford Tutors" description="Simple cash pricing for one-on-one and small group tutoring. No online fees, no card on file.">
+<Layout title="Pricing · Brantford Tutors" description="Simple pricing for private and small group tutoring. Pay at the session. No card on file.">
   <section class="container">
     <p class="section-label">Pricing</p>
     <h1>Simple and affordable.</h1>
     <p class="lead" style="margin-top: 1rem;">
-      Simply pay at the session with cash or e-Transfer.
+      Pay at the session with cash or Etransfer.
     </p>
 
-    <!-- First session half‑price callout -->
+    <!-- First session callout -->
     <div class="callout" style="margin-top: 2rem;">
       <span class="callout-num">50%</span>
       <p><strong>Your first session is half price.</strong> Try us out. If it is not a fit, it barely cost you anything.</p>
@@ -21,45 +21,43 @@ import { href } from '../lib/link'
       <div class="pricing-card">
         <h3 class="plan-name">Small Group</h3>
         <div class="plan-price">$15<small>/hr per person</small></div>
-        <div class="plan-desc">Great budget option for friends studying together.</div>
+        <div class="plan-desc">For 2 to 3 friends in one session.</div>
         <a href={href('/book')} class="btn plan-btn" style="margin-bottom: 1rem;">Book Now</a>
         <ul class="plan-features" style="margin-top: auto;">
           <li>Any subject</li>
-          <li>Flexible scheduling</li>
-          <li>No online fees</li>
-          <li>Group study setup (2 to 3 students)</li>
+          <li>You pick the time</li>
+          <li>Pay at the session</li>
+          <li>Same price for each student</li>
         </ul>
       </div>
 
       <div class="pricing-card" style="display: flex; flex-direction: column; height: 100%;">
-        <h3 class="plan-name">1‑on‑1 Hour</h3>
+        <h3 class="plan-name">Private Hour</h3>
         <div class="plan-price">$25<small>/hr</small></div>
-        <div class="plan-desc">Dedicated, individual attention focused entirely on you.</div>
+        <div class="plan-desc">One student. We work on what you bring.</div>
         <a href={href('/book')} class="btn plan-btn" style="margin-bottom: 1rem;">Book Now</a>
         <ul class="plan-features" style="margin-top: auto;">
           <li>Any subject</li>
-          <li>Flexible scheduling</li>
-          <li>No online fees</li>
-          <li>100% solo focus (1-on-1)</li>
-          <li>Customized lesson pacing</li>
+          <li>You pick the time</li>
+          <li>Pay at the session</li>
+          <li>Full attention on you</li>
+          <li>Good for weekly help</li>
         </ul>
       </div>
 
       <div class="pricing-card featured" style="display: flex; flex-direction: column; height: 100%;">
-        <span class="popular-badge">Best deep learning</span>
-        <h3 class="plan-name">1‑on‑1 Extended</h3>
+        <span class="popular-badge">Popular for exam weeks</span>
+        <h3 class="plan-name">Private 90 min</h3>
         <div class="plan-price">$35<small>/90 min</small></div>
-        <div class="plan-desc">Extended time for deep understanding and major exam prep.</div>
+        <div class="plan-desc">One student. More time for tests and review.</div>
         <a href={href('/book')} class="btn plan-btn" style="margin-bottom: 1rem;">Book Now</a>
         <ul class="plan-features" style="margin-top: auto;">
           <li>Any subject</li>
-          <li>Flexible scheduling</li>
-          <li>No online fees</li>
-          <li>100% solo focus (1-on-1)</li>
-          <li>Customized lesson pacing</li>
-          <li>Full 90-minute extended session</li>
-          <li>In-depth test & exam review</li>
-          <li>Complex topic masterclass</li>
+          <li>You pick the time</li>
+          <li>Pay at the session</li>
+          <li>Full attention on you</li>
+          <li>Good for exam weeks</li>
+          <li>Time for past questions</li>
         </ul>
       </div>
     </div>
@@ -68,7 +66,7 @@ import { href } from '../lib/link'
     <div class="cancellation-section" style="margin-top: 3rem;">
       <h2>Cancellations</h2>
       <p class="lead" style="margin-top: 0.5rem;">
-        Need to reschedule? Give us at least 24 hours' notice and you won't be charged a thing. Cancellations within 24 hours or no-shows are billed at 50% of the session rate. Just text or email us as soon as your plans change!
+        Need a new time? Give us at least 24 hours notice and you pay nothing. Late cancel or no show is half the session rate. Text or email us as soon as plans change.
       </p>
     </div>
 

@@ -6,10 +6,10 @@ average: 97%+
 accent: sage
 subjects: [math, science, french, coding, chess]
 specialties: [Calculus, Algebra, Biology, Chemistry, Physics, French, Python]
-blurb: I teach all five subjects, mostly math and science. I like to keep things structured so problem-solving and test prep feel clear.
+blurb: I teach all five subjects, mostly math and science. I keep sessions structured so test prep feels clear.
 photo: /images/tutors/ethan.jpg
 ---
 
-Hello, I'm Ethan! I'm currently in grade 12 and I love science, math, coding, and game development! From making a headset to help visually impaired individuals navigate using LiDAR and sonar, or creating a strong chess engine in Scratch, I'm always eager to learn new things and help others succeed in their studies!
+Hello, I am Ethan. I am in Grade 12. I tutor mostly math and science, plus French, coding and chess.
 
-I currently tutor math, science, french, coding and chess, and my mission as a tutor is not just to help students memorize the material, but to help them understand why it works.
+I built a headset that uses light and sound sensors to help with navigation, and a chess program in Scratch. In sessions we list what is due, work the hardest part first, and end with a short plan for what to practice next.

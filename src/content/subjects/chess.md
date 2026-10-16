@@ -1,7 +1,7 @@
 ---
 title: Chess
 order: 5
-tagline: Master openings, tactics, endgames, and strategic thinking.
+tagline: Openings, tactics and endgames. Play with us and review your games.
 levels: All ages welcome, complete beginner to 1500 elo
 topics:
   - Opening principles, not memorization

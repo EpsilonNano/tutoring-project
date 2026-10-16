@@ -6,10 +6,10 @@ average: 97%+
 accent: sage
 subjects: [math, science, coding]
 specialties: [Geometry, Game Design, Algebra, Chemistry, Physics, Python, Godot, Trigonometry]
-blurb: I'm into science, math, and coding. I love building projects that connect what we learn in school to the real world.
+blurb: I tutor math, science and coding. We fix the stuck step with a few similar problems.
 photo: /images/tutors/liam.jpg
 ---
 
-Hi, I'm Liam! I'm a Grade 12 student passionate about science, engineering, and computer science. I've spent years building projects with code and electronics, from programming games to creating science experiments and engineering projects. These experiences have taught me how to approach difficult problems, troubleshoot mistakes, and explain ideas clearly.
+Hi, I am Liam. I am in Grade 12. I tutor math, science and coding.
 
-I tutor math, science, and coding. My goal as a tutor is to help students not just get the right answer, but understand why it works.
+At school I like physics and functions. Outside school I build small games in Godot and Python and wire up simple electronics. In a session we find the exact step where you got stuck, fix it with a few similar problems, then check with a quick quiz from your own homework.
