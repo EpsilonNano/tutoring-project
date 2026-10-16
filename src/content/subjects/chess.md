@@ -4,7 +4,7 @@ order: 5
 tagline: Openings, tactics and endgames. Play with us and review your games.
 levels: All ages welcome, complete beginner to 1500 elo
 topics:
-  - Opening principles, not memorization
+  - Opening ideas you can reuse
   - Tactics and pattern recognition
   - Endgame technique
   - Analyzing your own games

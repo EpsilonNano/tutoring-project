@@ -13,7 +13,7 @@ import Layout from "../layouts/Layout.astro";
       <div class="test-card">
         <h1 class="test-title">How ready are you for math next year?</h1>
         <p class="test-subtitle">Answer 12 questions in about 10-15 min. See what is solid and what to review.</p>
-        <p class="test-hint">No sign up. For students entering Grades 1-12.</p>
+        <p class="test-hint">For students entering Grades 1-12.</p>
         <button id="btn-start" class="btn-primary btn-large">Start the check</button>
       </div>
     </div>
@@ -34,9 +34,8 @@ import Layout from "../layouts/Layout.astro";
       <div class="test-card text-center">
         <h2 class="test-heading">A quick note before you start</h2>
         <ul class="instruction-list">
-          <li><span>•</span> Do your best with no help or calculator.</li>
+          <li><span>•</span> Work alone. No calculator.</li>
           <li><span>•</span> Most questions take under a minute.</li>
-          <li><span>•</span> This is practice, not a school test.</li>
         </ul>
         <button id="btn-begin-test" class="btn-primary btn-large">Start questions</button>
       </div>
@@ -77,7 +76,7 @@ import Layout from "../layouts/Layout.astro";
           <h2 class="test-heading">Your result</h2>
           <p class="score-number"><span id="result-score">0</span>% <span class="score-label"><span id="result-readiness"></span></span></p>
           <p class="estimated-level">Level: <span id="result-level" class="level-value"></span></p>
-          <p class="disclaimer">Practice only. Not a school test. Based on these questions alone.</p>
+          <p class="disclaimer">Based on these 12 questions.</p>
         </div>
 
         <div class="results-simple">
@@ -312,7 +311,7 @@ import Layout from "../layouts/Layout.astro";
     if(results.strengths.length > 0) {
       results.strengths.forEach(s => ulStrengths.innerHTML += `<li>${s}</li>`);
     } else {
-      ulStrengths.innerHTML = `<li class="text-gray-500 italic">Keep practicing to build distinct strengths!</li>`;
+      ulStrengths.innerHTML = `<li class="text-gray-500 italic">Solid across the board.</li>`;
     }
 
     const ulReview = document.getElementById('list-review')!;
@@ -320,16 +319,16 @@ import Layout from "../layouts/Layout.astro";
     if(results.reviewAreas.length > 0) {
       results.reviewAreas.forEach(s => ulReview.innerHTML += `<li>${s}</li>`);
     } else {
-      ulReview.innerHTML = `<li class="text-gray-500 italic">No major review areas detected!</li>`;
+      ulReview.innerHTML = `<li class="text-gray-500 italic">Nothing to flag yet.</li>`;
     }
 
     const recText = document.getElementById('result-recommendation')!;
     if (results.overallScore >= 80) {
-      recText.innerText = "You're in a great position for the upcoming year. A quick review before school starts should be enough to keep things fresh.";
+      recText.innerText = "Solid. A quick review keeps it fresh.";
     } else if (results.overallScore >= 60) {
-      recText.innerText = "You understand many of the fundamentals, but reviewing the areas above before school starts would give you a stronger start.";
+      recText.innerText = "Good base. Review the list above for a stronger start.";
     } else {
-      recText.innerText = "You have some important gaps worth addressing before the school year begins. Focusing on the areas above is a great place to start.";
+      recText.innerText = "Start with the list above. One topic at a time.";
     }
 
     showView('results');

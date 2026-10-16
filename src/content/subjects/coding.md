@@ -13,4 +13,4 @@ bring: Bring a laptop if you have one. We can share ours if you do not.
 photo: /images/subjects/coding.jpg
 ---
 
-Programming is learned by writing code, not by watching someone else do it. We teach you how to read error messages without panicking and make sure the fundamentals actually stick before moving on. We'll teach you the skills to fix errors, so you will able to do it yourself at home and school!
+You type the code. We read error messages together and fix them until the basics stick.

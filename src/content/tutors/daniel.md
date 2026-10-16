@@ -12,4 +12,4 @@ photo: /images/tutors/daniel.jpg
 
 I am Daniel. I am in Grade 12. I tutor math, science, French and coding.
 
-If a verb tense or an algebra step is not clicking, we stay on it. I will explain it three or four different ways until one sticks. Bring your notes and the last quiz. We will go through it line by line.
+We stay on a verb tense or an algebra step until it clicks. I will explain it three or four different ways until one sticks. Bring your notes and the last quiz. We will go through it line by line.
